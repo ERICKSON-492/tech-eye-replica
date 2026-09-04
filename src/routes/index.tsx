@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Header, TopBar, Footer, SectionHeading } from "@/components/site-chrome";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { Footer, Header, SectionHeading, TopBar } from "@/components/site-chrome";
+import { services as serviceCatalog } from "@/lib/services";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -43,57 +44,20 @@ const highlights = [
   },
 ];
 
-const services = [
-  {
-    n: "01",
-    title: "Stainless Steel Fabrication",
-    text: "Railings, stairs, gates, grills, architectural and decorative metal works.",
-    img: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    n: "02",
-    title: "Aluminium Works",
-    text: "Doors, windows, curtain walls, shop fronts, shutters and railings.",
-    img: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    n: "03",
-    title: "Frameless with Spigot",
-    text: "Sleek, modern glass installation secured with premium stainless steel spigots for a clean, unobstructed finish.",
-    img: "http://eyetechengineering.co.ke/wp-content/uploads/2026/08/frameless-with-spigot.jpg",
-  },
-  {
-    n: "04",
-    title: "Glass & Curtain Wall",
-    text: "Glass partitions, curtain walls, structural glazing and custom glass work.",
-    img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    n: "05",
-    title: "Frameless Shower Cubicles & Doors",
-    text: "Frameless doors, shower enclosures, mirrors and designer glass.",
-    img: "http://eyetechengineering.co.ke/wp-content/uploads/2026/08/WhatsApp-Image-2026-08-23-at-12.53.58-AM.jpeg",
-  },
-  {
-    n: "06",
-    title: "Glass Railings & Balustrades",
-    text: "Modern staircase and balcony railing systems for contemporary spaces.",
-    img: "http://eyetechengineering.co.ke/wp-content/uploads/2026/08/e4f1024b-5f16-4672-8f87-6a48f586a2b5.png",
-  },
-  {
-    n: "07",
-    title: "Commercial Kitchen Supplies & Fabrication",
-    text: "From preparation to cooking and service, we create efficient kitchen solutions built around your operation.",
-    img: "http://eyetechengineering.co.ke/wp-content/uploads/2026/08/9e298e6f-d583-47e1-975f-7401bc862d8d.png",
-  },
-];
-
 const values = [
   { icon: "✓", title: "Quality", text: "High-quality materials and professional workmanship." },
   { icon: "◆", title: "Security", text: "Strong, reliable and practical fabrication solutions." },
   { icon: "◇", title: "Beauty", text: "Designs created to enhance homes and commercial spaces." },
-  { icon: "♙", title: "Experienced Team", text: "Skilled engineers, designers, tradesmen and technicians." },
-  { icon: "◷", title: "Reliable Delivery", text: "Professional project coordination from fabrication to installation." },
+  {
+    icon: "♙",
+    title: "Experienced Team",
+    text: "Skilled engineers, designers, tradesmen and technicians.",
+  },
+  {
+    icon: "◷",
+    title: "Reliable Delivery",
+    text: "Professional project coordination from fabrication to installation.",
+  },
 ];
 
 const projects = [
@@ -111,7 +75,7 @@ const projects = [
   {
     n: "03",
     title: "Balustrades",
-    img: "http://eyetechengineering.co.ke/wp-content/uploads/2026/08/WhatsApp-Image-2026-08-23-at-12.53.58-AM.jpeg",
+    img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=85",
   },
   {
     n: "04",
@@ -130,9 +94,7 @@ function Index() {
     <div className="min-h-screen bg-background">
       <TopBar />
       <Header />
-
       <main id="main">
-        {/* Hero */}
         <section className="relative isolate overflow-hidden">
           <img
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=85"
@@ -150,19 +112,19 @@ function Index() {
               <span className="block text-gold">Fabricated with Strength</span>
             </h1>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-white/75">
-              Steel, aluminium and glass fabrication and supplies for residential,
-              commercial and public projects across Kenya.
+              Steel, aluminium and glass fabrication and supplies for residential, commercial and
+              public projects across Kenya.
             </p>
             <div className="mt-9 flex flex-wrap gap-4">
               <a
                 href="#ey-services"
-                className="bg-gold px-7 py-3.5 text-sm font-bold text-navy-deep transition-colors hover:bg-gold-bright"
+                className="bg-gold px-7 py-3.5 text-sm font-bold text-navy-deep hover:bg-gold-bright"
               >
                 Our Services →
               </a>
               <a
                 href="#ey-projects"
-                className="border border-white/40 px-7 py-3.5 text-sm font-bold text-white transition-colors hover:bg-white hover:text-navy"
+                className="border border-white/40 px-7 py-3.5 text-sm font-bold text-white hover:bg-white hover:text-navy"
               >
                 View Our Work
               </a>
@@ -170,22 +132,22 @@ function Index() {
           </div>
         </section>
 
-        {/* Highlights */}
         <section className="border-b border-border bg-white">
           <div className="mx-auto grid max-w-6xl divide-y divide-border px-4 md:grid-cols-3 md:divide-x md:divide-y-0">
-            {highlights.map((h) => (
-              <div key={h.title} className="px-0 py-10 md:px-8">
+            {highlights.map((highlight) => (
+              <div key={highlight.title} className="px-0 py-10 md:px-8">
                 <span className="flex h-11 w-11 items-center justify-center rounded-full bg-surface text-lg text-navy">
-                  {h.icon}
+                  {highlight.icon}
                 </span>
-                <h3 className="mt-5 text-lg font-bold text-navy">{h.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{h.text}</p>
+                <h2 className="mt-5 text-lg font-bold text-navy">{highlight.title}</h2>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {highlight.text}
+                </p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* About */}
         <section className="bg-surface py-20">
           <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 lg:grid-cols-2">
             <div className="relative">
@@ -210,14 +172,13 @@ function Index() {
                 }
               />
               <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-                Eyetech Engineering &amp; Supplies was established in 2022 in Nairobi as a
-                growing engineering and fabrication company specializing in steel, aluminium
-                and glass works.
+                Eyetech Engineering &amp; Supplies was established in 2022 in Nairobi as a growing
+                engineering and fabrication company specializing in steel, aluminium and glass
+                works.
               </p>
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                We work with homeowners, businesses, architects, contractors and institutions
-                to transform ideas and designs into practical, durable and attractive
-                installations.
+                We work with homeowners, businesses, architects, contractors and institutions to
+                transform ideas and designs into practical, durable and attractive installations.
               </p>
               <ul className="mt-6 space-y-2 text-sm text-navy">
                 {[
@@ -225,16 +186,16 @@ function Index() {
                   "Aluminium doors and windows",
                   "Glass partitions and installations",
                   "Architectural and decorative metal works",
-                ].map((i) => (
-                  <li key={i} className="flex items-start gap-3">
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-3">
                     <span className="text-gold">◆</span>
-                    {i}
+                    {item}
                   </li>
                 ))}
               </ul>
               <Link
                 to="/about-us"
-                className="mt-8 inline-block bg-navy px-7 py-3.5 text-sm font-bold text-white transition-colors hover:bg-navy-deep"
+                className="mt-8 inline-block bg-navy px-7 py-3.5 text-sm font-bold text-white hover:bg-navy-deep"
               >
                 Discover Our Company →
               </Link>
@@ -242,39 +203,44 @@ function Index() {
           </div>
         </section>
 
-        {/* Services */}
         <section id="ey-services" className="scroll-mt-24 bg-white py-20">
           <div className="mx-auto max-w-6xl px-4">
             <SectionHeading
               eyebrow="What We Do"
               title="Our Engineering & Fabrication Services"
-              intro="Comprehensive steel, aluminium, glass and architectural solutions for residential, commercial and public projects."
+              intro="Explore detailed service pages for steel, aluminium, glass, kitchen and architectural fabrication solutions."
             />
             <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {services.map((s) => (
-                <article key={s.title} className="group border border-border bg-white">
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <img
-                      src={s.img}
-                      alt={s.title}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <span className="absolute left-0 top-0 bg-gold px-3 py-1.5 text-xs font-black text-navy-deep">
-                      {s.n}
-                    </span>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-lg font-bold text-navy">{s.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.text}</p>
-                  </div>
+              {serviceCatalog.map((service) => (
+                <article key={service.slug} className="group border border-border bg-white">
+                  <Link to="/services/$slug" params={{ slug: service.slug }} className="block">
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      <img
+                        src={service.hero}
+                        alt={service.heroAlt}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <span className="absolute left-0 top-0 bg-gold px-3 py-1.5 text-xs font-black text-navy-deep">
+                        {service.number}
+                      </span>
+                    </div>
+                    <div className="p-6">
+                      <h2 className="text-lg font-bold text-navy">{service.title}</h2>
+                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                        {service.description}
+                      </p>
+                      <span className="mt-5 inline-flex text-sm font-bold text-navy group-hover:text-gold">
+                        View service details →
+                      </span>
+                    </div>
+                  </Link>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Values */}
         <section className="bg-navy py-20">
           <div className="mx-auto max-w-6xl px-4">
             <SectionHeading
@@ -284,18 +250,17 @@ function Index() {
               light
             />
             <div className="mt-12 grid gap-px bg-white/10 sm:grid-cols-2 lg:grid-cols-5">
-              {values.map((v) => (
-                <div key={v.title} className="bg-navy p-6">
-                  <span className="text-2xl text-gold">{v.icon}</span>
-                  <h3 className="mt-4 text-base font-bold text-white">{v.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/60">{v.text}</p>
+              {values.map((value) => (
+                <div key={value.title} className="bg-navy p-6">
+                  <span className="text-2xl text-gold">{value.icon}</span>
+                  <h2 className="mt-4 text-base font-bold text-white">{value.title}</h2>
+                  <p className="mt-2 text-sm leading-relaxed text-white/60">{value.text}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Projects */}
         <section id="ey-projects" className="scroll-mt-24 bg-surface py-20">
           <div className="mx-auto max-w-6xl px-4">
             <SectionHeading
@@ -304,37 +269,34 @@ function Index() {
               intro="Explore the type of architectural, fabrication and installation work we deliver."
             />
             <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {projects.map((p) => (
+              {projects.map((project) => (
                 <figure
-                  key={p.n}
-                  className={`group relative overflow-hidden ${p.wide ? "lg:col-span-2 lg:row-span-2" : ""}`}
+                  key={project.n}
+                  className={`group relative overflow-hidden ${project.wide ? "lg:col-span-2 lg:row-span-2" : ""}`}
                 >
                   <img
-                    src={p.img}
-                    alt={p.title}
+                    src={project.img}
+                    alt={project.title}
                     loading="lazy"
-                    className={`w-full object-cover transition-transform duration-500 group-hover:scale-105 ${
-                      p.wide ? "h-full min-h-72" : "h-64"
-                    }`}
+                    className={`w-full object-cover transition-transform duration-500 group-hover:scale-105 ${project.wide ? "h-full min-h-72" : "h-64"}`}
                   />
                   <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/90 to-transparent p-5">
-                    <span className="text-xs font-bold text-gold">{p.n}</span>
-                    <p className="text-base font-bold text-white">{p.title}</p>
+                    <span className="text-xs font-bold text-gold">{project.n}</span>
+                    <p className="text-base font-bold text-white">{project.title}</p>
                   </figcaption>
                 </figure>
               ))}
             </div>
             <Link
               to="/contact"
-              className="mt-10 inline-block bg-navy px-7 py-3.5 text-sm font-bold text-white transition-colors hover:bg-navy-deep"
+              className="mt-10 inline-block bg-navy px-7 py-3.5 text-sm font-bold text-white hover:bg-navy-deep"
             >
               Talk to Us →
             </Link>
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="relative isolate overflow-hidden bg-navy-deep py-20">
+        <section className="bg-navy-deep py-20">
           <div className="mx-auto max-w-3xl px-4 text-center">
             <span className="eyebrow justify-center text-gold">Start Your Project</span>
             <h2 className="mt-4 text-3xl font-black leading-tight text-white sm:text-4xl">
@@ -345,14 +307,13 @@ function Index() {
             </p>
             <Link
               to="/contact"
-              className="mt-8 inline-block bg-gold px-8 py-3.5 text-sm font-bold text-navy-deep transition-colors hover:bg-gold-bright"
+              className="mt-8 inline-block bg-gold px-8 py-3.5 text-sm font-bold text-navy-deep hover:bg-gold-bright"
             >
               Get a Quote →
             </Link>
           </div>
         </section>
       </main>
-
       <Footer />
     </div>
   );

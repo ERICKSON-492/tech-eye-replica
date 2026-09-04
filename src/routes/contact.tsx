@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Header, TopBar, Footer, SectionHeading } from "@/components/site-chrome";
+import { Footer, Header, SectionHeading, TopBar } from "@/components/site-chrome";
+import { QuoteForm } from "@/components/quote-form";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
@@ -29,7 +30,6 @@ function ContactPage() {
     <div className="min-h-screen bg-background">
       <TopBar />
       <Header />
-
       <main id="main">
         <section className="bg-navy-deep py-20">
           <div className="mx-auto max-w-6xl px-4">
@@ -45,19 +45,21 @@ function ContactPage() {
             </p>
           </div>
         </section>
-
         <section className="bg-white py-20">
-          <div className="mx-auto grid max-w-6xl gap-12 px-4 lg:grid-cols-2">
+          <div className="mx-auto grid max-w-6xl gap-12 px-4 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
             <div>
               <SectionHeading
                 eyebrow="Get In Touch"
                 title="Talk to Our Team"
-                intro="Call us, send a WhatsApp message or write to us about your project and we will get back to you."
+                intro="Call us, send a WhatsApp message or share your project details and we will help you plan the next step."
               />
               <ul className="mt-8 space-y-5 text-sm">
                 <li>
                   <p className="text-xs font-bold uppercase tracking-widest text-gold">Phone</p>
-                  <a href="tel:+254717614427" className="text-base font-semibold text-navy">
+                  <a
+                    href="tel:+254717614427"
+                    className="text-base font-semibold text-navy hover:text-gold"
+                  >
                     +254 717 614 427
                   </a>
                 </li>
@@ -67,7 +69,7 @@ function ContactPage() {
                     href="https://wa.me/254717614427"
                     target="_blank"
                     rel="noreferrer"
-                    className="text-base font-semibold text-navy"
+                    className="text-base font-semibold text-navy hover:text-gold"
                   >
                     Message us on WhatsApp
                   </a>
@@ -77,54 +79,15 @@ function ContactPage() {
                   <p className="text-base font-semibold text-navy">Nairobi, Kenya</p>
                 </li>
               </ul>
-            </div>
-
-            <form
-              className="border border-border bg-surface p-6 sm:p-8"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const f = e.currentTarget as HTMLFormElement;
-                const data = new FormData(f);
-                const text = `Hello Eyetech, I'm ${data.get("name")} (${data.get("phone")}). ${data.get("message")}`;
-                window.open(
-                  `https://wa.me/254717614427?text=${encodeURIComponent(text)}`,
-                  "_blank",
-                );
-              }}
-            >
-              <h2 className="text-lg font-bold text-navy">Request a Quote</h2>
-              <div className="mt-5 space-y-4">
-                <input
-                  name="name"
-                  required
-                  placeholder="Your name"
-                  className="w-full border border-border bg-white px-4 py-3 text-sm outline-none focus:border-gold"
-                />
-                <input
-                  name="phone"
-                  required
-                  placeholder="Phone number"
-                  className="w-full border border-border bg-white px-4 py-3 text-sm outline-none focus:border-gold"
-                />
-                <textarea
-                  name="message"
-                  required
-                  rows={5}
-                  placeholder="Tell us about your project"
-                  className="w-full border border-border bg-white px-4 py-3 text-sm outline-none focus:border-gold"
-                />
-                <button
-                  type="submit"
-                  className="w-full bg-navy px-6 py-3.5 text-sm font-bold text-white transition-colors hover:bg-navy-deep"
-                >
-                  Send via WhatsApp →
-                </button>
+              <div className="mt-10 border-l-2 border-gold bg-surface p-5 text-sm leading-relaxed text-muted-foreground">
+                Helpful information includes your project location, drawings, approximate
+                dimensions, reference images and preferred timeline.
               </div>
-            </form>
+            </div>
+            <QuoteForm />
           </div>
         </section>
       </main>
-
       <Footer />
     </div>
   );
