@@ -100,7 +100,7 @@ function Index() {
         <HeroCarousel />
         <CaseStudyStrip />
 
-        <section className="border-b border-border bg-white">
+        <section className="motion-section border-b border-border bg-white">
           <div className="mx-auto grid max-w-6xl divide-y divide-border px-4 md:grid-cols-3 md:divide-x md:divide-y-0">
             {highlights.map((highlight) => (
               <div key={highlight.title} className="px-0 py-10 md:px-8">
@@ -116,7 +116,7 @@ function Index() {
           </div>
         </section>
 
-        <section className="bg-surface py-20">
+        <section className="motion-section bg-surface py-20">
           <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 lg:grid-cols-2">
             <div className="relative">
               <img
@@ -171,7 +171,7 @@ function Index() {
           </div>
         </section>
 
-        <section id="ey-services" className="scroll-mt-24 bg-white py-20">
+        <section id="ey-services" className="motion-section scroll-mt-24 bg-white py-20">
           <div className="mx-auto max-w-6xl px-4">
             <SectionHeading
               eyebrow="What We Do"
@@ -180,14 +180,17 @@ function Index() {
             />
             <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {serviceCatalog.map((service) => (
-                <article key={service.slug} className="group border border-border bg-white">
+                <article
+                  key={service.slug}
+                  className="motion-card group border border-border bg-white"
+                >
                   <Link to="/services/$slug" params={{ slug: service.slug }} className="block">
                     <div className="relative aspect-[4/3] overflow-hidden">
                       <img
                         src={service.hero}
                         alt={service.heroAlt}
                         loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="motion-image h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <span className="absolute left-0 top-0 bg-gold px-3 py-1.5 text-xs font-black text-navy-deep">
                         {service.number}
@@ -209,7 +212,7 @@ function Index() {
           </div>
         </section>
 
-        <section className="bg-navy py-20">
+        <section className="motion-section bg-navy py-20">
           <div className="mx-auto max-w-6xl px-4">
             <SectionHeading
               eyebrow="Why Eyetech"
@@ -229,7 +232,7 @@ function Index() {
           </div>
         </section>
 
-        <section id="ey-projects" className="scroll-mt-24 bg-surface py-20">
+        <section id="ey-projects" className="motion-section scroll-mt-24 bg-surface py-20">
           <div className="mx-auto max-w-6xl px-4">
             <SectionHeading
               eyebrow="Our Work"
@@ -264,7 +267,7 @@ function Index() {
           </div>
         </section>
 
-        <section className="bg-navy-deep py-20">
+        <section className="motion-section bg-navy-deep py-20">
           <div className="mx-auto max-w-3xl px-4 text-center">
             <span className="eyebrow justify-center text-gold">Start Your Project</span>
             <h2 className="mt-4 text-3xl font-black leading-tight text-white sm:text-4xl">

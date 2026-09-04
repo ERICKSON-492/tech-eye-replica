@@ -9,14 +9,14 @@ export function TopBar() {
   return (
     <div className="bg-gold text-navy-deep">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-3 px-4 py-2 text-sm font-medium">
-        <a href={`tel:${PHONE.replace(/\s/g, "")}`} className="hover:underline">
+        <a href={`tel:${PHONE.replace(/\s/g, "")}`} className="motion-link hover:underline">
           ☎ {PHONE}
         </a>
         <a
           href={WHATSAPP}
           target="_blank"
           rel="noreferrer"
-          className="rounded-sm bg-navy px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:bg-navy-deep"
+          className="motion-link rounded-sm bg-navy px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:bg-navy-deep"
         >
           WhatsApp
         </a>
@@ -39,7 +39,7 @@ export function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
         <Link
           to="/"
-          className="flex items-center gap-3"
+          className="motion-link flex items-center gap-3"
           aria-label="Eyetech Engineering & Supplies home"
         >
           <span className="flex h-9 w-9 items-center justify-center bg-navy text-sm font-black text-gold">
@@ -58,14 +58,14 @@ export function Header() {
               activeOptions={{ exact: link.to === "/" }}
               activeProps={{ className: "text-navy" }}
               inactiveProps={{ className: "text-muted-foreground" }}
-              className="text-xs font-bold uppercase tracking-widest transition-colors hover:text-navy"
+              className="motion-link text-xs font-bold uppercase tracking-widest transition-colors hover:text-navy"
             >
               {link.label}
             </Link>
           ))}
           <Link
             to="/contact"
-            className="bg-navy px-4 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-navy-deep"
+            className="motion-link bg-navy px-4 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-navy-deep"
           >
             Get a Quote
           </Link>
@@ -76,7 +76,7 @@ export function Header() {
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
-          className="text-navy md:hidden"
+          className="motion-link flex min-h-11 min-w-11 items-center justify-center text-navy md:hidden"
         >
           <span className="block h-0.5 w-6 bg-current" />
           <span className="mt-1.5 block h-0.5 w-6 bg-current" />
@@ -87,14 +87,14 @@ export function Header() {
       {open && (
         <nav
           aria-label="Mobile navigation"
-          className="border-t border-border bg-white px-4 py-3 md:hidden"
+          className="motion-menu border-t border-border bg-white px-4 py-3 md:hidden"
         >
           {links.map((link) => (
             <Link
               key={link.to}
               to={link.to}
               onClick={() => setOpen(false)}
-              className="block border-b border-border py-3 text-xs font-bold uppercase tracking-widest text-navy"
+              className="motion-link block min-h-11 border-b border-border py-3 text-xs font-bold uppercase tracking-widest text-navy"
             >
               {link.label}
             </Link>
@@ -103,7 +103,7 @@ export function Header() {
             <Link
               to="/contact"
               onClick={() => setOpen(false)}
-              className="bg-navy px-4 py-3 text-center text-xs font-bold uppercase tracking-widest text-white"
+              className="motion-link bg-navy px-4 py-3 text-center text-xs font-bold uppercase tracking-widest text-white"
             >
               Get a Quote
             </Link>
@@ -111,7 +111,7 @@ export function Header() {
               href={WHATSAPP}
               target="_blank"
               rel="noreferrer"
-              className="border border-navy px-4 py-3 text-center text-xs font-bold uppercase tracking-widest text-navy"
+              className="motion-link border border-navy px-4 py-3 text-center text-xs font-bold uppercase tracking-widest text-navy"
             >
               WhatsApp Us
             </a>
@@ -137,22 +137,22 @@ export function Footer() {
           <h4 className="eyebrow text-gold">Quick Links</h4>
           <ul className="mt-4 space-y-2 text-sm">
             <li>
-              <Link to="/" className="hover:text-gold">
+              <Link to="/" className="motion-link hover:text-gold">
                 Home
               </Link>
             </li>
             <li>
-              <Link to="/services" className="hover:text-gold">
+              <Link to="/services" className="motion-link hover:text-gold">
                 All Services
               </Link>
             </li>
             <li>
-              <Link to="/about-us" className="hover:text-gold">
+              <Link to="/about-us" className="motion-link hover:text-gold">
                 About Us
               </Link>
             </li>
             <li>
-              <Link to="/contact" className="hover:text-gold">
+              <Link to="/contact" className="motion-link hover:text-gold">
                 Contact
               </Link>
             </li>
@@ -163,7 +163,7 @@ export function Footer() {
           <ul className="mt-4 grid gap-2 text-sm">
             {serviceLinks.slice(0, 4).map((link) => (
               <li key={link.to}>
-                <Link to={link.to} className="hover:text-gold">
+                <Link to={link.to} className="motion-link hover:text-gold">
                   {link.label}
                 </Link>
               </li>
@@ -175,12 +175,17 @@ export function Footer() {
           <ul className="mt-4 space-y-2 text-sm">
             <li>Nairobi, Kenya</li>
             <li>
-              <a href="tel:+254717614427" className="hover:text-gold">
+              <a href="tel:+254717614427" className="motion-link hover:text-gold">
                 {PHONE}
               </a>
             </li>
             <li>
-              <a href={WHATSAPP} target="_blank" rel="noreferrer" className="hover:text-gold">
+              <a
+                href={WHATSAPP}
+                target="_blank"
+                rel="noreferrer"
+                className="motion-link hover:text-gold"
+              >
                 WhatsApp us
               </a>
             </li>

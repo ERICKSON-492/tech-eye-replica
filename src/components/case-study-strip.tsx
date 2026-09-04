@@ -70,7 +70,7 @@ export function CaseStudyStrip() {
 
   return (
     <section
-      className="border-b border-border bg-white py-16 sm:py-20"
+      className="motion-section border-b border-border bg-white py-16 sm:py-20"
       aria-labelledby="proof-heading"
     >
       <div className="mx-auto max-w-6xl px-4">
@@ -135,14 +135,14 @@ export function CaseStudyStrip() {
           {visibleStudies.map((study, index) => (
             <article
               key={study.title}
-              className="group overflow-hidden border border-border bg-white transition-shadow duration-300 hover:shadow-xl active:scale-[0.99] motion-reduce:transition-none"
+              className="motion-card group overflow-hidden border border-border bg-white transition-shadow duration-300 hover:shadow-xl active:scale-[0.99] motion-reduce:transition-none"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <img
                   src={study.image}
                   alt={study.alt}
                   loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
+                  className="motion-image h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
                 />
                 <span className="absolute left-0 top-0 bg-gold px-3 py-1.5 text-xs font-black text-navy-deep">
                   0{index + 1}
@@ -161,7 +161,7 @@ export function CaseStudyStrip() {
                 </p>
                 <Link
                   to={study.href}
-                  className="mt-5 inline-flex min-h-11 items-center text-sm font-bold text-navy transition-colors hover:text-gold focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
+                  className="motion-link mt-5 inline-flex min-h-11 items-center text-sm font-bold text-navy transition-colors hover:text-gold focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
                 >
                   {study.linkLabel} →
                 </Link>
@@ -170,14 +170,14 @@ export function CaseStudyStrip() {
           ))}
         </div>
 
-        <div className="mt-8 flex flex-col gap-4 border border-gold/40 bg-gold/10 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div className="motion-card mt-8 flex flex-col gap-4 border border-gold/40 bg-gold/10 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <p className="text-sm leading-relaxed text-navy">
             <strong>Have a similar project in mind?</strong> Send us your dimensions, drawings or
             reference images and we can help define the next step.
           </p>
           <Link
             to="/contact"
-            className="inline-flex min-h-11 shrink-0 items-center justify-center bg-navy px-5 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-navy-deep focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
+            className="motion-link inline-flex min-h-11 shrink-0 items-center justify-center bg-navy px-5 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-navy-deep focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
           >
             Request a quote →
           </Link>

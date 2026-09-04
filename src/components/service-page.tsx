@@ -37,7 +37,7 @@ export function ServicePage({ service }: { service: Service }) {
       <TopBar />
       <Header />
       <main id="main">
-        <section className="bg-navy-deep py-12 sm:py-16">
+        <section className="motion-section bg-navy-deep py-12 sm:py-16">
           <div className="mx-auto max-w-6xl px-4">
             <nav aria-label="Breadcrumb" className="text-xs font-medium text-white/60">
               <Link to="/" className="hover:text-gold">
@@ -69,7 +69,7 @@ export function ServicePage({ service }: { service: Service }) {
                 <div className="mt-8 flex flex-wrap gap-3">
                   <a
                     href="#quote"
-                    className="bg-gold px-6 py-3.5 text-sm font-bold text-navy-deep transition-colors hover:bg-gold-bright"
+                    className="motion-link bg-gold px-6 py-3.5 text-sm font-bold text-navy-deep transition-colors hover:bg-gold-bright"
                   >
                     Request a Quote →
                   </a>
@@ -77,7 +77,7 @@ export function ServicePage({ service }: { service: Service }) {
                     href="https://wa.me/254717614427"
                     target="_blank"
                     rel="noreferrer"
-                    className="border border-white/40 px-6 py-3.5 text-sm font-bold text-white transition-colors hover:bg-white hover:text-navy"
+                    className="motion-link border border-white/40 px-6 py-3.5 text-sm font-bold text-white transition-colors hover:bg-white hover:text-navy"
                   >
                     WhatsApp Us
                   </a>
@@ -97,7 +97,7 @@ export function ServicePage({ service }: { service: Service }) {
           </div>
         </section>
 
-        <section className="border-b border-border bg-white">
+        <section className="motion-section border-b border-border bg-white">
           <div className="mx-auto grid max-w-6xl divide-y divide-border px-4 md:grid-cols-3 md:divide-x md:divide-y-0">
             {[
               ["2022", "Established in Nairobi"],
@@ -112,7 +112,7 @@ export function ServicePage({ service }: { service: Service }) {
           </div>
         </section>
 
-        <section className="bg-surface py-20">
+        <section className="motion-section bg-surface py-20">
           <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 lg:grid-cols-2">
             <div>
               <SectionHeading
@@ -128,7 +128,7 @@ export function ServicePage({ service }: { service: Service }) {
               </p>
               <a
                 href="#quote"
-                className="mt-8 inline-flex bg-navy px-7 py-3.5 text-sm font-bold text-white transition-colors hover:bg-navy-deep"
+                className="motion-link mt-8 inline-flex bg-navy px-7 py-3.5 text-sm font-bold text-white transition-colors hover:bg-navy-deep"
               >
                 Talk to an expert →
               </a>
@@ -142,7 +142,7 @@ export function ServicePage({ service }: { service: Service }) {
           </div>
         </section>
 
-        <section className="bg-white py-20">
+        <section className="motion-section bg-white py-20">
           <div className="mx-auto max-w-6xl px-4">
             <SectionHeading
               eyebrow="What we provide"
@@ -151,7 +151,7 @@ export function ServicePage({ service }: { service: Service }) {
             />
             <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {service.offerings.map((offering, index) => (
-                <article key={offering} className="border border-border bg-white p-6">
+                <article key={offering} className="motion-card border border-border bg-white p-6">
                   <span className="text-3xl font-black text-gold">0{index + 1}</span>
                   <h3 className="mt-5 text-base font-bold text-navy">{offering}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -163,7 +163,7 @@ export function ServicePage({ service }: { service: Service }) {
           </div>
         </section>
 
-        <section className="bg-surface py-20">
+        <section className="motion-section bg-surface py-20">
           <div className="mx-auto max-w-6xl px-4">
             <SectionHeading
               eyebrow="Applications"
@@ -172,7 +172,7 @@ export function ServicePage({ service }: { service: Service }) {
             />
             <div className="mt-12 grid gap-4 md:grid-cols-3">
               {service.applications.map((application, index) => (
-                <div key={application} className="border border-border bg-white p-7">
+                <div key={application} className="motion-card border border-border bg-white p-7">
                   <span className="text-xs font-black uppercase tracking-[0.2em] text-gold">
                     0{index + 1}
                   </span>
@@ -187,7 +187,7 @@ export function ServicePage({ service }: { service: Service }) {
           </div>
         </section>
 
-        <section className="bg-white py-20">
+        <section className="motion-section bg-white py-20">
           <div className="mx-auto max-w-6xl px-4">
             <SectionHeading
               eyebrow="Options and specifications"
@@ -196,7 +196,10 @@ export function ServicePage({ service }: { service: Service }) {
             />
             <div className="mt-12 grid gap-4 md:grid-cols-3">
               {service.options.map((option) => (
-                <div key={option.label} className="border-l-2 border-gold bg-surface p-6">
+                <div
+                  key={option.label}
+                  className="motion-card border-l-2 border-gold bg-surface p-6"
+                >
                   <h3 className="text-base font-bold text-navy">{option.label}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {option.detail}
@@ -207,7 +210,7 @@ export function ServicePage({ service }: { service: Service }) {
           </div>
         </section>
 
-        <section className="bg-navy py-20">
+        <section className="motion-section bg-navy py-20">
           <div className="mx-auto max-w-6xl px-4">
             <SectionHeading
               eyebrow="Our process"
@@ -217,7 +220,7 @@ export function ServicePage({ service }: { service: Service }) {
             />
             <div className="mt-12 grid gap-px bg-white/10 md:grid-cols-5">
               {process.map((step) => (
-                <div key={step.number} className="bg-navy p-6">
+                <div key={step.number} className="motion-card bg-navy p-6">
                   <span className="text-2xl font-black text-gold">{step.number}</span>
                   <h3 className="mt-5 text-base font-bold text-white">{step.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-white/60">{step.text}</p>
@@ -227,7 +230,7 @@ export function ServicePage({ service }: { service: Service }) {
           </div>
         </section>
 
-        <section className="bg-surface py-20">
+        <section className="motion-section bg-surface py-20">
           <div className="mx-auto max-w-6xl px-4">
             <SectionHeading
               eyebrow="Selected work"
@@ -236,13 +239,13 @@ export function ServicePage({ service }: { service: Service }) {
             />
             <div className="mt-12 grid gap-5 md:grid-cols-3">
               {service.projects.map((project, index) => (
-                <article key={project.title} className="group overflow-hidden bg-white">
+                <article key={project.title} className="motion-card group overflow-hidden bg-white">
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <img
                       src={project.image}
                       alt={project.title}
                       loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="motion-image h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <span className="absolute left-0 top-0 bg-gold px-3 py-1.5 text-xs font-black text-navy-deep">
                       0{index + 1}
@@ -258,7 +261,7 @@ export function ServicePage({ service }: { service: Service }) {
           </div>
         </section>
 
-        <section className="bg-white py-20">
+        <section className="motion-section bg-white py-20">
           <div className="mx-auto max-w-6xl px-4">
             <SectionHeading
               eyebrow="Why Eyetech"
@@ -293,7 +296,7 @@ export function ServicePage({ service }: { service: Service }) {
           </div>
         </section>
 
-        <section className="bg-surface py-20">
+        <section className="motion-section bg-surface py-20">
           <div className="mx-auto max-w-4xl px-4">
             <SectionHeading
               eyebrow="Frequently asked questions"

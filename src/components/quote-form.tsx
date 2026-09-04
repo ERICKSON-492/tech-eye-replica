@@ -13,7 +13,7 @@ export function QuoteForm({ initialService = "", compact = false }: QuoteFormPro
 
   return (
     <form
-      className={`border border-border bg-surface ${compact ? "p-6" : "p-6 sm:p-8"}`}
+      className={`motion-section border border-border bg-surface ${compact ? "p-6" : "p-6 sm:p-8"}`}
       onSubmit={(event) => {
         event.preventDefault();
         const form = event.currentTarget;
@@ -170,7 +170,7 @@ export function QuoteForm({ initialService = "", compact = false }: QuoteFormPro
         </div>
         <button
           type="submit"
-          className="w-full bg-navy px-6 py-3.5 text-sm font-bold text-white transition-colors hover:bg-navy-deep focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
+          className="motion-link w-full bg-navy px-6 py-3.5 text-sm font-bold text-white transition-colors hover:bg-navy-deep focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
         >
           Send via WhatsApp →
         </button>
@@ -178,7 +178,7 @@ export function QuoteForm({ initialService = "", compact = false }: QuoteFormPro
           <p
             role="status"
             aria-live="polite"
-            className="border border-gold/50 bg-gold/10 p-3 text-sm text-navy"
+            className="motion-card border border-gold/50 bg-gold/10 p-3 text-sm text-navy"
           >
             Your WhatsApp message has been prepared. We look forward to discussing your project.
           </p>

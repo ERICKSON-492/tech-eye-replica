@@ -32,7 +32,7 @@ function AboutPage() {
       <Header />
 
       <main id="main">
-        <section className="relative isolate overflow-hidden bg-navy-deep py-20">
+        <section className="motion-section relative isolate overflow-hidden bg-navy-deep py-20">
           <div className="mx-auto max-w-6xl px-4">
             <span className="eyebrow text-gold">
               <span className="h-px w-8 bg-gold" />
@@ -44,27 +44,23 @@ function AboutPage() {
           </div>
         </section>
 
-        <section className="bg-white py-20">
+        <section className="motion-section bg-white py-20">
           <div className="mx-auto grid max-w-6xl items-start gap-12 px-4 lg:grid-cols-2">
             <div>
-              <SectionHeading
-                eyebrow="Our Story"
-                title="Turning Designs Into Solid Reality"
-              />
+              <SectionHeading eyebrow="Our Story" title="Turning Designs Into Solid Reality" />
               <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-                Eyetech Engineering &amp; Supplies was established in 2022 in Nairobi as a
-                growing engineering and fabrication company specializing in steel, aluminium
-                and glass works.
+                Eyetech Engineering &amp; Supplies was established in 2022 in Nairobi as a growing
+                engineering and fabrication company specializing in steel, aluminium and glass
+                works.
               </p>
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                We work with homeowners, businesses, architects, contractors and institutions
-                to transform ideas and designs into practical, durable and attractive
-                installations — from design and fabrication through to supply, installation
-                and project completion.
+                We work with homeowners, businesses, architects, contractors and institutions to
+                transform ideas and designs into practical, durable and attractive installations —
+                from design and fabrication through to supply, installation and project completion.
               </p>
               <Link
                 to="/contact"
-                className="mt-8 inline-block bg-gold px-7 py-3.5 text-sm font-bold text-navy-deep transition-colors hover:bg-gold-bright"
+                className="motion-link mt-8 inline-block bg-gold px-7 py-3.5 text-sm font-bold text-navy-deep transition-colors hover:bg-gold-bright"
               >
                 Talk to Us →
               </Link>
@@ -73,24 +69,39 @@ function AboutPage() {
               src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1200&q=85"
               alt="Stainless steel fabrication work"
               loading="lazy"
-              className="w-full object-cover"
+              className="motion-image w-full object-cover"
             />
           </div>
         </section>
 
-        <section className="bg-surface py-20">
+        <section className="motion-section bg-surface py-20">
           <div className="mx-auto max-w-6xl px-4">
             <SectionHeading eyebrow="What Guides Us" title="Built Around Quality" />
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {[
                 { title: "Quality", text: "High-quality materials and professional workmanship." },
-                { title: "Security", text: "Strong, reliable and practical fabrication solutions." },
-                { title: "Beauty", text: "Designs created to enhance homes and commercial spaces." },
-                { title: "Experienced Team", text: "Skilled engineers, designers, tradesmen and technicians." },
-                { title: "Reliable Delivery", text: "Professional project coordination from fabrication to installation." },
-                { title: "Lasting Relationships", text: "We focus on trust, quality products and reliable service." },
+                {
+                  title: "Security",
+                  text: "Strong, reliable and practical fabrication solutions.",
+                },
+                {
+                  title: "Beauty",
+                  text: "Designs created to enhance homes and commercial spaces.",
+                },
+                {
+                  title: "Experienced Team",
+                  text: "Skilled engineers, designers, tradesmen and technicians.",
+                },
+                {
+                  title: "Reliable Delivery",
+                  text: "Professional project coordination from fabrication to installation.",
+                },
+                {
+                  title: "Lasting Relationships",
+                  text: "We focus on trust, quality products and reliable service.",
+                },
               ].map((v) => (
-                <div key={v.title} className="border border-border bg-white p-6">
+                <div key={v.title} className="motion-card border border-border bg-white p-6">
                   <h3 className="text-base font-bold text-navy">{v.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{v.text}</p>
                 </div>

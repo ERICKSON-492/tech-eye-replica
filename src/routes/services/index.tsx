@@ -29,7 +29,7 @@ function ServicesIndex() {
       <TopBar />
       <Header />
       <main id="main">
-        <section className="bg-navy-deep py-20">
+        <section className="motion-section bg-navy-deep py-20">
           <div className="mx-auto max-w-6xl px-4">
             <span className="eyebrow text-gold">
               <span className="h-px w-8 bg-gold" />
@@ -47,13 +47,13 @@ function ServicesIndex() {
             <div className="mt-8 flex flex-wrap gap-3">
               <a
                 href="#service-list"
-                className="bg-gold px-6 py-3.5 text-sm font-bold text-navy-deep hover:bg-gold-bright"
+                className="motion-link bg-gold px-6 py-3.5 text-sm font-bold text-navy-deep hover:bg-gold-bright"
               >
                 Explore services →
               </a>
               <Link
                 to="/contact"
-                className="border border-white/40 px-6 py-3.5 text-sm font-bold text-white hover:bg-white hover:text-navy"
+                className="motion-link border border-white/40 px-6 py-3.5 text-sm font-bold text-white hover:bg-white hover:text-navy"
               >
                 Request a quote
               </Link>
@@ -61,7 +61,7 @@ function ServicesIndex() {
           </div>
         </section>
 
-        <section id="service-list" className="scroll-mt-24 bg-white py-20">
+        <section id="service-list" className="motion-section scroll-mt-24 bg-white py-20">
           <div className="mx-auto max-w-6xl px-4">
             <SectionHeading
               eyebrow="Our services"
@@ -72,14 +72,14 @@ function ServicesIndex() {
               {services.map((service) => (
                 <article
                   key={service.slug}
-                  className="group overflow-hidden border border-border bg-white"
+                  className="motion-card group overflow-hidden border border-border bg-white"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <img
                       src={service.hero}
                       alt={service.heroAlt}
                       loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="motion-image h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <span className="absolute left-0 top-0 bg-gold px-3 py-1.5 text-xs font-black text-navy-deep">
                       {service.number}
@@ -93,7 +93,7 @@ function ServicesIndex() {
                     <Link
                       to="/services/$slug"
                       params={{ slug: service.slug }}
-                      className="mt-6 inline-flex text-sm font-bold text-navy hover:text-gold"
+                      className="motion-link mt-6 inline-flex text-sm font-bold text-navy hover:text-gold"
                     >
                       View service details →
                     </Link>
@@ -104,7 +104,7 @@ function ServicesIndex() {
           </div>
         </section>
 
-        <section className="bg-surface py-20">
+        <section className="motion-section bg-surface py-20">
           <div className="mx-auto max-w-6xl px-4">
             <div className="grid gap-10 lg:grid-cols-[1fr_0.8fr] lg:items-center">
               <div>
@@ -115,34 +115,34 @@ function ServicesIndex() {
                 />
                 <Link
                   to="/contact"
-                  className="mt-8 inline-flex bg-navy px-7 py-3.5 text-sm font-bold text-white hover:bg-navy-deep"
+                  className="motion-link mt-8 inline-flex bg-navy px-7 py-3.5 text-sm font-bold text-white hover:bg-navy-deep"
                 >
                   Talk to our team →
                 </Link>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="border border-border bg-white p-6">
+                <div className="motion-card border border-border bg-white p-6">
                   <span className="text-2xl font-black text-gold">01</span>
                   <h3 className="mt-4 font-bold text-navy">Design and planning</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     Discuss drawings, dimensions and project requirements.
                   </p>
                 </div>
-                <div className="border border-border bg-white p-6">
+                <div className="motion-card border border-border bg-white p-6">
                   <span className="text-2xl font-black text-gold">02</span>
                   <h3 className="mt-4 font-bold text-navy">Fabrication and supply</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     Prepare and finish the agreed solution.
                   </p>
                 </div>
-                <div className="border border-border bg-white p-6">
+                <div className="motion-card border border-border bg-white p-6">
                   <span className="text-2xl font-black text-gold">03</span>
                   <h3 className="mt-4 font-bold text-navy">Installation</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     Coordinate delivery, installation and handover.
                   </p>
                 </div>
-                <div className="border border-border bg-white p-6">
+                <div className="motion-card border border-border bg-white p-6">
                   <span className="text-2xl font-black text-gold">04</span>
                   <h3 className="mt-4 font-bold text-navy">Project support</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">

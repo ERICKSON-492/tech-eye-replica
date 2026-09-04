@@ -31,7 +31,7 @@ function ContactPage() {
       <TopBar />
       <Header />
       <main id="main">
-        <section className="bg-navy-deep py-20">
+        <section className="motion-section bg-navy-deep py-20">
           <div className="mx-auto max-w-6xl px-4">
             <span className="eyebrow text-gold">
               <span className="h-px w-8 bg-gold" />
@@ -45,7 +45,7 @@ function ContactPage() {
             </p>
           </div>
         </section>
-        <section className="bg-white py-20">
+        <section className="motion-section bg-white py-20">
           <div className="mx-auto grid max-w-6xl gap-12 px-4 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
             <div>
               <SectionHeading
@@ -58,7 +58,7 @@ function ContactPage() {
                   <p className="text-xs font-bold uppercase tracking-widest text-gold">Phone</p>
                   <a
                     href="tel:+254717614427"
-                    className="text-base font-semibold text-navy hover:text-gold"
+                    className="motion-link text-base font-semibold text-navy hover:text-gold"
                   >
                     +254 717 614 427
                   </a>
@@ -69,7 +69,7 @@ function ContactPage() {
                     href="https://wa.me/254717614427"
                     target="_blank"
                     rel="noreferrer"
-                    className="text-base font-semibold text-navy hover:text-gold"
+                    className="motion-link text-base font-semibold text-navy hover:text-gold"
                   >
                     Message us on WhatsApp
                   </a>
@@ -79,7 +79,7 @@ function ContactPage() {
                   <p className="text-base font-semibold text-navy">Nairobi, Kenya</p>
                 </li>
               </ul>
-              <div className="mt-10 border-l-2 border-gold bg-surface p-5 text-sm leading-relaxed text-muted-foreground">
+              <div className="motion-card mt-10 border-l-2 border-gold bg-surface p-5 text-sm leading-relaxed text-muted-foreground">
                 Helpful information includes your project location, drawings, approximate
                 dimensions, reference images and preferred timeline.
               </div>
