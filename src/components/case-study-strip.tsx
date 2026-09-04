@@ -1,7 +1,27 @@
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 
-const caseStudies = [
+const categories = ["All", "Glass & Railings", "Aluminium", "Stainless Steel"] as const;
+type Category = (typeof categories)[number];
+
+type CaseStudy = {
+  category: Exclude<Category, "All">;
+  eyebrow: string;
+  title: string;
+  description: string;
+  scope: string;
+  image: string;
+  alt: string;
+  href:
+    | "/services/glass-railings-balustrades"
+    | "/services/aluminium-works"
+    | "/services/stainless-steel-fabrication";
+  linkLabel: string;
+};
+
+const caseStudies: CaseStudy[] = [
   {
+    category: "Glass & Railings",
     eyebrow: "Residential project type",
     title: "Glass Balustrades & Open Staircases",
     description:
@@ -14,6 +34,7 @@ const caseStudies = [
     linkLabel: "Explore glass railings",
   },
   {
+    category: "Aluminium",
     eyebrow: "Commercial project type",
     title: "Aluminium Frontages & Glass Partitions",
     description:
@@ -26,6 +47,7 @@ const caseStudies = [
     linkLabel: "Explore aluminium works",
   },
   {
+    category: "Stainless Steel",
     eyebrow: "Custom fabrication",
     title: "Stainless-Steel Details Built to Fit",
     description:
@@ -40,6 +62,12 @@ const caseStudies = [
 ];
 
 export function CaseStudyStrip() {
+  const [activeCategory, setActiveCategory] = useState<Category>("All");
+  const visibleStudies =
+    activeCategory === "All"
+      ? caseStudies
+      : caseStudies.filter((study) => study.category === activeCategory);
+
   return (
     <section
       className="border-b border-border bg-white py-16 sm:py-20"
@@ -66,30 +94,61 @@ export function CaseStudyStrip() {
           </div>
           <Link
             to="/services"
-            className="inline-flex shrink-0 text-sm font-bold text-navy transition-colors hover:text-gold"
+            className="inline-flex min-h-11 shrink-0 items-center text-sm font-bold text-navy transition-colors hover:text-gold"
           >
             View all services →
           </Link>
         </div>
 
-        <div className="mt-10 grid gap-5 lg:grid-cols-3">
-          {caseStudies.map((study, index) => (
+        <div className="mt-8" aria-label="Filter project proof by service type">
+          <div
+            className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
+            role="group"
+          >
+            {categories.map((category) => {
+              const selected = category === activeCategory;
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  aria-pressed={selected}
+                  onClick={() => setActiveCategory(category)}
+                  className={`min-h-11 shrink-0 rounded-full border px-5 text-sm font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 ${selected ? "border-navy bg-navy text-white" : "border-border bg-white text-navy hover:border-navy"}`}
+                >
+                  {category}
+                </button>
+              );
+            })}
+          </div>
+          <p
+            className="mt-3 text-xs font-medium text-muted-foreground"
+            role="status"
+            aria-live="polite"
+          >
+            Showing {visibleStudies.length}{" "}
+            {visibleStudies.length === 1 ? "project type" : "project types"}
+            {activeCategory === "All" ? "" : ` for ${activeCategory}`}
+          </p>
+        </div>
+
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" aria-live="polite">
+          {visibleStudies.map((study, index) => (
             <article
               key={study.title}
-              className="group overflow-hidden border border-border bg-white transition-shadow duration-300 hover:shadow-xl"
+              className="group overflow-hidden border border-border bg-white transition-shadow duration-300 hover:shadow-xl active:scale-[0.99] motion-reduce:transition-none"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <img
                   src={study.image}
                   alt={study.alt}
                   loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
                 />
                 <span className="absolute left-0 top-0 bg-gold px-3 py-1.5 text-xs font-black text-navy-deep">
                   0{index + 1}
                 </span>
               </div>
-              <div className="p-6">
+              <div className="p-5 sm:p-6">
                 <span className="text-xs font-bold uppercase tracking-[0.18em] text-gold">
                   {study.eyebrow}
                 </span>
@@ -101,8 +160,8 @@ export function CaseStudyStrip() {
                   {study.scope}
                 </p>
                 <Link
-                  to={study.href as "/services/aluminium-works"}
-                  className="mt-5 inline-flex text-sm font-bold text-navy transition-colors hover:text-gold"
+                  to={study.href}
+                  className="mt-5 inline-flex min-h-11 items-center text-sm font-bold text-navy transition-colors hover:text-gold focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
                 >
                   {study.linkLabel} →
                 </Link>
@@ -118,7 +177,7 @@ export function CaseStudyStrip() {
           </p>
           <Link
             to="/contact"
-            className="inline-flex shrink-0 bg-navy px-5 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-navy-deep"
+            className="inline-flex min-h-11 shrink-0 items-center justify-center bg-navy px-5 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-navy-deep focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
           >
             Request a quote →
           </Link>

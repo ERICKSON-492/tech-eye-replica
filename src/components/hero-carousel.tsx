@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useRef } from "react";
 import { Link } from "@tanstack/react-router";
 
 type HeroSlide = {
@@ -62,6 +63,7 @@ const slides: HeroSlide[] = [
 export function HeroCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const touchStartX = useRef<number | null>(null);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -82,7 +84,20 @@ export function HeroCarousel() {
     <section
       aria-label="Eyetech featured services"
       aria-roledescription="carousel"
-      className="relative isolate min-h-[560px] overflow-hidden bg-navy-deep sm:min-h-[620px]"
+      className="relative isolate min-h-[560px] touch-pan-y overflow-hidden bg-navy-deep sm:min-h-[620px]"
+      onTouchStart={(event) => {
+        touchStartX.current = event.changedTouches[0]?.clientX ?? null;
+        setIsPaused(true);
+      }}
+      onTouchEnd={(event) => {
+        const startX = touchStartX.current;
+        const endX = event.changedTouches[0]?.clientX;
+        touchStartX.current = null;
+        if (startX === null || endX === undefined) return;
+        const distance = endX - startX;
+        if (Math.abs(distance) < 45) return;
+        showSlide(distance < 0 ? activeIndex + 1 : activeIndex - 1);
+      }}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
@@ -164,8 +179,12 @@ export function HeroCarousel() {
                 aria-selected={index === activeIndex}
                 aria-label={`Show slide ${index + 1}: ${slide.title}`}
                 onClick={() => showSlide(index)}
-                className={`h-1.5 transition-all focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-navy-deep ${index === activeIndex ? "w-12 bg-gold" : "w-6 bg-white/40 hover:bg-white/80"}`}
-              />
+                className="relative flex min-h-11 min-w-11 items-center justify-center focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-navy-deep"
+              >
+                <span
+                  className={`block h-1.5 transition-all ${index === activeIndex ? "w-10 bg-gold" : "w-6 bg-white/40 hover:bg-white/80"}`}
+                />
+              </button>
             ))}
           </div>
           <div className="flex gap-2">
@@ -173,7 +192,7 @@ export function HeroCarousel() {
               type="button"
               aria-label="Previous hero slide"
               onClick={() => showSlide(activeIndex - 1)}
-              className="flex h-10 w-10 items-center justify-center border border-white/40 text-lg text-white transition-colors hover:bg-white hover:text-navy focus:outline-none focus:ring-2 focus:ring-gold"
+              className="flex min-h-11 min-w-11 items-center justify-center border border-white/40 text-lg text-white transition-colors hover:bg-white hover:text-navy focus:outline-none focus:ring-2 focus:ring-gold"
             >
               ←
             </button>
@@ -181,7 +200,7 @@ export function HeroCarousel() {
               type="button"
               aria-label="Next hero slide"
               onClick={() => showSlide(activeIndex + 1)}
-              className="flex h-10 w-10 items-center justify-center border border-white/40 text-lg text-white transition-colors hover:bg-white hover:text-navy focus:outline-none focus:ring-2 focus:ring-gold"
+              className="flex min-h-11 min-w-11 items-center justify-center border border-white/40 text-lg text-white transition-colors hover:bg-white hover:text-navy focus:outline-none focus:ring-2 focus:ring-gold"
             >
               →
             </button>
