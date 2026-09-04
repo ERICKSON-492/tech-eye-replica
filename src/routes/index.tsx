@@ -1,4 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { CaseStudyStrip } from "@/components/case-study-strip";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { Footer, Header, SectionHeading, TopBar } from "@/components/site-chrome";
 import { services as serviceCatalog } from "@/lib/services";
@@ -97,6 +98,7 @@ function Index() {
       <Header />
       <main id="main">
         <HeroCarousel />
+        <CaseStudyStrip />
 
         <section className="border-b border-border bg-white">
           <div className="mx-auto grid max-w-6xl divide-y divide-border px-4 md:grid-cols-3 md:divide-x md:divide-y-0">
