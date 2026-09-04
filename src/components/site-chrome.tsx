@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { serviceLinks } from "@/lib/services";
 
 const PHONE = "+254 717 614 427";
@@ -71,17 +72,20 @@ export function Header() {
           </Link>
         </nav>
 
-        <button
-          type="button"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          onClick={() => setOpen((value) => !value)}
-          className="motion-link flex min-h-11 min-w-11 items-center justify-center text-navy md:hidden"
-        >
-          <span className="block h-0.5 w-6 bg-current" />
-          <span className="mt-1.5 block h-0.5 w-6 bg-current" />
-          <span className="mt-1.5 block h-0.5 w-6 bg-current" />
-        </button>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            type="button"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            onClick={() => setOpen((value) => !value)}
+            className="motion-link flex min-h-11 min-w-11 items-center justify-center text-navy md:hidden"
+          >
+            <span className="block h-0.5 w-6 bg-current" />
+            <span className="mt-1.5 block h-0.5 w-6 bg-current" />
+            <span className="mt-1.5 block h-0.5 w-6 bg-current" />
+          </button>
+        </div>
       </div>
 
       {open && (
