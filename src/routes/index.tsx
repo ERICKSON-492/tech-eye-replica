@@ -1,4 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { HeroCarousel } from "@/components/hero-carousel";
 import { Footer, Header, SectionHeading, TopBar } from "@/components/site-chrome";
 import { services as serviceCatalog } from "@/lib/services";
 
@@ -95,42 +96,7 @@ function Index() {
       <TopBar />
       <Header />
       <main id="main">
-        <section className="relative isolate overflow-hidden">
-          <img
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=85"
-            alt="Glass and steel high-rise buildings"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy-deep via-navy-deep/85 to-navy-deep/30" />
-          <div className="relative mx-auto max-w-6xl px-4 py-24 sm:py-32">
-            <span className="eyebrow text-gold">
-              <span className="h-px w-8 bg-gold" />
-              Eyetech Engineering &amp; Supplies
-            </span>
-            <h1 className="mt-6 max-w-3xl text-4xl font-black leading-[1.05] text-white sm:text-6xl">
-              Designed with Precision.{" "}
-              <span className="block text-gold">Fabricated with Strength</span>
-            </h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-white/75">
-              Steel, aluminium and glass fabrication and supplies for residential, commercial and
-              public projects across Kenya.
-            </p>
-            <div className="mt-9 flex flex-wrap gap-4">
-              <a
-                href="#ey-services"
-                className="bg-gold px-7 py-3.5 text-sm font-bold text-navy-deep hover:bg-gold-bright"
-              >
-                Our Services →
-              </a>
-              <a
-                href="#ey-projects"
-                className="border border-white/40 px-7 py-3.5 text-sm font-bold text-white hover:bg-white hover:text-navy"
-              >
-                View Our Work
-              </a>
-            </div>
-          </div>
-        </section>
+        <HeroCarousel />
 
         <section className="border-b border-border bg-white">
           <div className="mx-auto grid max-w-6xl divide-y divide-border px-4 md:grid-cols-3 md:divide-x md:divide-y-0">
