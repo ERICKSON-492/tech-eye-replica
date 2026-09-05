@@ -177,10 +177,20 @@ export function Footer() {
         <div>
           <h4 className="eyebrow text-gold">Get In Touch</h4>
           <ul className="mt-4 space-y-2 text-sm">
-            <li>Nairobi, Kenya</li>
+            <li>1st Floor B2, Elema Plaza, off North Airport Road, Pipeline, Embakasi, Nairobi</li>
             <li>
               <a href="tel:+254717614427" className="motion-link hover:text-gold">
                 {PHONE}
+              </a>
+            </li>
+            <li>
+              <a href="tel:+254759719147" className="motion-link hover:text-gold">
+                {PHONE_ALT}
+              </a>
+            </li>
+            <li>
+              <a href={`mailto:${EMAIL}`} className="motion-link hover:text-gold">
+                {EMAIL}
               </a>
             </li>
             <li>
@@ -195,6 +205,7 @@ export function Footer() {
             </li>
           </ul>
         </div>
+
       </div>
       <div className="border-t border-white/10 py-5 text-center text-xs">
         © {new Date().getFullYear()} Eyetech Engineering &amp; Supplies. All rights reserved.
