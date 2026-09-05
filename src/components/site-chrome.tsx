@@ -17,6 +17,16 @@ export function TopBar() {
           ☎ {PHONE}
         </a>
         <a
+          href={`tel:${PHONE_ALT.replace(/\s/g, "")}`}
+          className="motion-link hidden hover:underline sm:inline"
+        >
+          {PHONE_ALT}
+        </a>
+        <a href={`mailto:${EMAIL}`} className="motion-link hidden hover:underline md:inline">
+          {EMAIL}
+        </a>
+
+        <a
           href={WHATSAPP}
           target="_blank"
           rel="noreferrer"
