@@ -4,7 +4,10 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { serviceLinks } from "@/lib/services";
 
 const PHONE = "+254 717 614 427";
+const PHONE_ALT = "+254 759 719 147";
+const EMAIL = "eyetechengineering3@gmail.com";
 const WHATSAPP = "https://wa.me/254717614427";
+
 
 export function TopBar() {
   return (
@@ -13,6 +16,16 @@ export function TopBar() {
         <a href={`tel:${PHONE.replace(/\s/g, "")}`} className="motion-link hover:underline">
           ☎ {PHONE}
         </a>
+        <a
+          href={`tel:${PHONE_ALT.replace(/\s/g, "")}`}
+          className="motion-link hidden hover:underline sm:inline"
+        >
+          {PHONE_ALT}
+        </a>
+        <a href={`mailto:${EMAIL}`} className="motion-link hidden hover:underline md:inline">
+          {EMAIL}
+        </a>
+
         <a
           href={WHATSAPP}
           target="_blank"
@@ -166,8 +179,12 @@ export function Footer() {
           <h4 className="eyebrow text-gold">Services</h4>
           <ul className="mt-4 grid gap-2 text-sm">
             {serviceLinks.slice(0, 4).map((link) => (
-              <li key={link.to}>
-                <Link to={link.to} className="motion-link hover:text-gold">
+              <li key={link.slug}>
+                <Link
+                  to="/services/$slug"
+                  params={{ slug: link.slug }}
+                  className="motion-link hover:text-gold"
+                >
                   {link.label}
                 </Link>
               </li>
@@ -177,10 +194,20 @@ export function Footer() {
         <div>
           <h4 className="eyebrow text-gold">Get In Touch</h4>
           <ul className="mt-4 space-y-2 text-sm">
-            <li>Nairobi, Kenya</li>
+            <li>1st Floor B2, Elema Plaza, off North Airport Road, Pipeline, Embakasi, Nairobi</li>
             <li>
               <a href="tel:+254717614427" className="motion-link hover:text-gold">
                 {PHONE}
+              </a>
+            </li>
+            <li>
+              <a href="tel:+254759719147" className="motion-link hover:text-gold">
+                {PHONE_ALT}
+              </a>
+            </li>
+            <li>
+              <a href={`mailto:${EMAIL}`} className="motion-link hover:text-gold">
+                {EMAIL}
               </a>
             </li>
             <li>
@@ -195,6 +222,7 @@ export function Footer() {
             </li>
           </ul>
         </div>
+
       </div>
       <div className="border-t border-white/10 py-5 text-center text-xs">
         © {new Date().getFullYear()} Eyetech Engineering &amp; Supplies. All rights reserved.

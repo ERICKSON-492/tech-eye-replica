@@ -12,10 +12,8 @@ type CaseStudy = {
   scope: string;
   image: string;
   alt: string;
-  href:
-    | "/services/glass-railings-balustrades"
-    | "/services/aluminium-works"
-    | "/services/stainless-steel-fabrication";
+  slug: "glass-railings-balustrades" | "aluminium-works" | "stainless-steel-fabrication";
+
   linkLabel: string;
 };
 
@@ -30,7 +28,7 @@ const caseStudies: CaseStudy[] = [
     image:
       "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1000&q=85",
     alt: "Contemporary interior with glass railing details",
-    href: "/services/glass-railings-balustrades",
+    slug: "glass-railings-balustrades",
     linkLabel: "Explore glass railings",
   },
   {
@@ -43,7 +41,7 @@ const caseStudies: CaseStudy[] = [
     image:
       "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1000&q=85",
     alt: "Modern commercial glass partition and office frontage",
-    href: "/services/aluminium-works",
+    slug: "aluminium-works",
     linkLabel: "Explore aluminium works",
   },
   {
@@ -56,7 +54,7 @@ const caseStudies: CaseStudy[] = [
     image:
       "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1000&q=85",
     alt: "Metalworker fabricating stainless steel in a workshop",
-    href: "/services/stainless-steel-fabrication",
+    slug: "stainless-steel-fabrication",
     linkLabel: "Explore stainless steel",
   },
 ];
@@ -160,7 +158,8 @@ export function CaseStudyStrip() {
                   {study.scope}
                 </p>
                 <Link
-                  to={study.href}
+                  to="/services/$slug"
+                  params={{ slug: study.slug }}
                   className="motion-link mt-5 inline-flex min-h-11 items-center text-sm font-bold text-navy transition-colors hover:text-gold focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
                 >
                   {study.linkLabel} →

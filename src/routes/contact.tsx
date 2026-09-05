@@ -75,9 +75,32 @@ function ContactPage() {
                   </a>
                 </li>
                 <li>
-                  <p className="text-xs font-bold uppercase tracking-widest text-gold">Location</p>
-                  <p className="text-base font-semibold text-navy">Nairobi, Kenya</p>
+                  <p className="text-xs font-bold uppercase tracking-widest text-gold">
+                    Second Line
+                  </p>
+                  <a
+                    href="tel:+254759719147"
+                    className="motion-link text-base font-semibold text-navy hover:text-gold"
+                  >
+                    +254 759 719 147
+                  </a>
                 </li>
+                <li>
+                  <p className="text-xs font-bold uppercase tracking-widest text-gold">Email</p>
+                  <a
+                    href="mailto:eyetechengineering3@gmail.com"
+                    className="motion-link text-base font-semibold text-navy hover:text-gold"
+                  >
+                    eyetechengineering3@gmail.com
+                  </a>
+                </li>
+                <li>
+                  <p className="text-xs font-bold uppercase tracking-widest text-gold">Location</p>
+                  <p className="text-base font-semibold text-navy">
+                    1st Floor B2, Elema Plaza, off North Airport Road, Pipeline, Embakasi, Nairobi
+                  </p>
+                </li>
+
               </ul>
               <div className="motion-card mt-10 border-l-2 border-gold bg-surface p-5 text-sm leading-relaxed text-muted-foreground">
                 Helpful information includes your project location, drawings, approximate
