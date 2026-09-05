@@ -4,7 +4,10 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { serviceLinks } from "@/lib/services";
 
 const PHONE = "+254 717 614 427";
+const PHONE_ALT = "+254 759 719 147";
+const EMAIL = "eyetechengineering3@gmail.com";
 const WHATSAPP = "https://wa.me/254717614427";
+
 
 export function TopBar() {
   return (
