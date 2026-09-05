@@ -12,10 +12,8 @@ type CaseStudy = {
   scope: string;
   image: string;
   alt: string;
-  slug:
-    | "/services/glass-railings-balustrades"
-    | "/services/aluminium-works"
-    | "/services/stainless-steel-fabrication";
+  slug: "glass-railings-balustrades" | "aluminium-works" | "stainless-steel-fabrication";
+
   linkLabel: string;
 };
 
