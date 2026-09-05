@@ -49,14 +49,17 @@ function AboutPage() {
             <div>
               <SectionHeading eyebrow="Our Story" title="Turning Designs Into Solid Reality" />
               <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-                Eyetech Engineering &amp; Supplies was established in 2022 in Nairobi as a growing
-                engineering and fabrication company specializing in steel, aluminium and glass
-                works.
+                Eyetech Engineering &amp; Supplies was established in 2022 in Nairobi as a sole
+                proprietorship under the ownership of Mr. Amos Mwangi. From a modest start, the
+                company has grown steadily through a dedicated technical team working towards
+                becoming one of the best in stainless steel, aluminium and glass decor works in
+                Kenya.
               </p>
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                We work with homeowners, businesses, architects, contractors and institutions to
-                transform ideas and designs into practical, durable and attractive installations —
-                from design and fabrication through to supply, installation and project completion.
+                We are based in the Pipeline area of Nairobi and work across the county and beyond,
+                handling everything in steel, aluminium and glass — from artistically designed
+                stainless steel and glass patterns for homes to aluminium windows and doors for
+                commercial developments, shopping malls, housing complexes and institutions.
               </p>
               <Link
                 to="/contact"
@@ -73,6 +76,62 @@ function AboutPage() {
             />
           </div>
         </section>
+
+        <section className="motion-section bg-navy py-20">
+          <div className="mx-auto max-w-6xl px-4">
+            <SectionHeading
+              eyebrow="Vision, Mission & Objective"
+              title="What We Are Working Towards"
+              light
+            />
+            <div className="mt-10 grid gap-px bg-white/10 md:grid-cols-3">
+              {[
+                {
+                  title: "Our Vision",
+                  text: "Eyetech Engineering & Supplies is redefining construction with steel, aluminium and glass decor.",
+                },
+                {
+                  title: "Our Mission",
+                  text: "To undertake all kinds of steel and aluminium decor projects with an assurance of the best quality, security and beauty, using modern equipment and machinery in residential homes and buildings, commercial and public offices and buildings.",
+                },
+                {
+                  title: "Our Objective",
+                  text: "To explore the advanced technology of stainless steel, aluminium and glass decoration works towards the modernization of Kenya and East African countries.",
+                },
+              ].map((item) => (
+                <div key={item.title} className="bg-navy p-7">
+                  <h3 className="text-base font-bold text-gold">{item.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-white/70">{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="motion-section bg-white py-20">
+          <div className="mx-auto grid max-w-6xl gap-10 px-4 md:grid-cols-3">
+            {[
+              {
+                title: "Our Strength",
+                text: "We have the capacity to handle large stainless steel, aluminium and glass works, with a complete set of modern fabrication machines operated under the supervision of professional engineers, draughtsmen, designers and technicians.",
+              },
+              {
+                title: "Company Philosophy",
+                text: "We operate on trust and build long-lasting relationships with our clients, offering cost-effective service, high-quality products and completion on schedule.",
+              },
+              {
+                title: "Our Team",
+                text: "Our tradesmen and estimators handle projects of all sizes and styles, and specialise in curtain walling, structural glazing, frameless glass, shower doors, double-glazed glass, mirrors, designer glass and aluminium composite cladding.",
+              },
+            ].map((item) => (
+              <div key={item.title} className="motion-card border-l-2 border-gold bg-surface p-6">
+                <h3 className="text-base font-bold text-navy">{item.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
 
         <section className="motion-section bg-surface py-20">
           <div className="mx-auto max-w-6xl px-4">
