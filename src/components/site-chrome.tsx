@@ -179,8 +179,12 @@ export function Footer() {
           <h4 className="eyebrow text-gold">Services</h4>
           <ul className="mt-4 grid gap-2 text-sm">
             {serviceLinks.slice(0, 4).map((link) => (
-              <li key={link.to}>
-                <Link to={link.to} className="motion-link hover:text-gold">
+              <li key={link.slug}>
+                <Link
+                  to="/services/$slug"
+                  params={{ slug: link.slug }}
+                  className="motion-link hover:text-gold"
+                >
                   {link.label}
                 </Link>
               </li>

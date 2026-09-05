@@ -35,8 +35,8 @@ export function SiteMotionObserver() {
 
     const observeMotionElements = () => {
       document.querySelectorAll<HTMLElement>(MOTION_SELECTOR).forEach((element) => {
-        if (element.dataset.motionObserved === "true") return;
-        element.dataset.motionObserved = "true";
+        if (element.dataset['motionObserved'] === "true") return;
+        element.dataset['motionObserved'] = "true";
         observer.observe(element);
       });
     };

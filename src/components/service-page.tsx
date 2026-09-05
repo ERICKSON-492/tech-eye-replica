@@ -134,8 +134,8 @@ export function ServicePage({ service }: { service: Service }) {
               </a>
             </div>
             <img
-              src={service.projects[0].image}
-              alt={service.projects[0].title}
+              src={service.projects[0]?.image}
+              alt={service.projects[0]?.title ?? service.title}
               loading="lazy"
               className="aspect-[4/3] w-full object-cover"
             />

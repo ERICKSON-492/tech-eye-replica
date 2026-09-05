@@ -485,6 +485,6 @@ export function getService(slug: string) {
 }
 
 export const serviceLinks = services.map(({ slug, shortTitle }) => ({
-  to: `/services/${slug}` as const,
+  slug,
   label: shortTitle,
 }));
