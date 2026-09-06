@@ -1,22 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { siteImages } from "@/lib/site-images";
-import { Header, TopBar, Footer, SectionHeading } from "@/components/site-chrome";
+import { Footer, Header, SectionHeading, TopBar } from "@/components/site-chrome";
 
 export const Route = createFileRoute("/about-us")({
   component: AboutPage,
   head: () => ({
     meta: [
-      { title: "About Us | Eyetech Engineering & Supplies" },
+      { title: "About Eyetech Engineering & Supplies | Nairobi" },
       {
         name: "description",
         content:
-          "Eyetech Engineering & Supplies is a Nairobi-based steel, aluminium and glass fabrication company established in 2022, serving clients across Kenya.",
+          "Learn about Eyetech Engineering & Supplies, a Nairobi-based steel, aluminium and glass fabrication company established in 2022.",
       },
       { property: "og:title", content: "About Eyetech Engineering & Supplies" },
       {
         property: "og:description",
         content:
-          "A Nairobi engineering and fabrication company specializing in steel, aluminium and glass works since 2022.",
+          "We build trust through quality, security and beauty in steel, aluminium and glass fabrication projects.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/about-us" },
@@ -25,6 +24,44 @@ export const Route = createFileRoute("/about-us")({
     links: [{ rel: "canonical", href: "/about-us" }],
   }),
 });
+
+const capabilities = [
+  "Steel, stainless-steel and architectural metalwork",
+  "Aluminium doors, windows, shopfronts and curtain walls",
+  "Glass partitions, frameless doors and shower doors",
+  "Structural glazing, double-glazed glass and mirrors",
+  "Staircase systems, handrails and balcony railings",
+  "Cladding, decorative articles and custom-made products",
+  "Commercial, residential and public-building work",
+  "New construction, renovation and annual maintenance support",
+];
+
+const values = [
+  {
+    title: "Trust",
+    text: "We operate on trust and focus on long-lasting relationships with our clients.",
+  },
+  {
+    title: "Quality",
+    text: "We aim to deliver high-quality products and cost-effective services to the agreed scope.",
+  },
+  {
+    title: "Security",
+    text: "We design and fabricate practical solutions with strength, safety and dependable use in mind.",
+  },
+  {
+    title: "Beauty",
+    text: "We combine technical fabrication with details that enhance homes, buildings and public spaces.",
+  },
+  {
+    title: "Technical capability",
+    text: "Our technical team works with different aluminium sections, glass types and available fittings to suit each application.",
+  },
+  {
+    title: "Client partnership",
+    text: "We welcome feedback and use clear communication to keep projects moving toward a successful completion.",
+  },
+];
 
 function AboutPage() {
   return (
@@ -37,135 +74,195 @@ function AboutPage() {
           <div className="mx-auto max-w-6xl px-4">
             <span className="eyebrow text-gold">
               <span className="h-px w-8 bg-gold" />
-              About Us
+              About Eyetech
             </span>
-            <h1 className="mt-4 max-w-2xl text-4xl font-black leading-tight text-white sm:text-5xl">
-              Engineering, Fabrication and Supplies in Nairobi
+            <h1 className="mt-4 max-w-4xl text-4xl font-black leading-tight text-white sm:text-6xl">
+              We Build Trust, <span className="text-gold">Quality, Security &amp; Beauty</span>
             </h1>
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/70">
+              Eyetech Engineering &amp; Supplies is a Nairobi-based fabrication and supplies company
+              working with steel, aluminium and glass for residential, commercial and public
+              projects.
+            </p>
+          </div>
+        </section>
+
+        <section className="motion-section bg-white py-20">
+          <div className="mx-auto grid max-w-6xl items-start gap-12 px-4 lg:grid-cols-[1.1fr_0.9fr]">
+            <div>
+              <SectionHeading
+                eyebrow="Our story"
+                title="Turning ideas and designs into solid reality"
+              />
+              <p className="mt-5 text-base leading-relaxed text-muted-foreground">
+                Eyetech Engineering &amp; Supplies was established as a sole proprietorship under
+                the ownership of Amos Mwangi in 2022 in Nairobi. From a modest beginning, the
+                company has progressed through the work of a dedicated technical team and a growing
+                understanding of modern steel, aluminium and glass fabrication.
+              </p>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                Based in the Pipeline area of Nairobi, Eyetech serves projects in Nairobi and other
+                counties. The company works with homeowners, businesses, architects, contractors and
+                institutions to turn practical requirements and creative ideas into finished work.
+              </p>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                Our work ranges from residential homes and villas to commercial buildings, shopping
+                spaces, housing complexes and educational institutions across public and private
+                sectors.
+              </p>
+              <Link
+                to="/contact"
+                className="motion-link mt-8 inline-block bg-gold px-7 py-3.5 text-sm font-bold text-navy-deep transition-colors hover:bg-gold-bright"
+              >
+                Talk to Our Team →
+              </Link>
+            </div>
+            <div className="motion-card border-l-2 border-gold bg-surface p-7">
+              <p className="eyebrow text-gold">Company profile</p>
+              <dl className="mt-6 space-y-5 text-sm">
+                <div>
+                  <dt className="font-bold uppercase tracking-widest text-navy">Established</dt>
+                  <dd className="mt-1 text-muted-foreground">2022, Nairobi</dd>
+                </div>
+                <div>
+                  <dt className="font-bold uppercase tracking-widest text-navy">Base</dt>
+                  <dd className="mt-1 text-muted-foreground">Pipeline area, Nairobi</dd>
+                </div>
+                <div>
+                  <dt className="font-bold uppercase tracking-widest text-navy">Core focus</dt>
+                  <dd className="mt-1 text-muted-foreground">
+                    Steel, aluminium, glass and architectural décor
+                  </dd>
+                </div>
+                <div>
+                  <dt className="font-bold uppercase tracking-widest text-navy">Contact</dt>
+                  <dd className="mt-1 text-muted-foreground">
+                    +254 717 614 427 · +254 759 719 147
+                    <br />
+                    eyetechengineering3@gmail.com
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </section>
+
+        <section className="motion-section bg-surface py-20">
+          <div className="mx-auto max-w-6xl px-4">
+            <SectionHeading
+              eyebrow="Our direction"
+              title="A practical vision for modern spaces"
+              intro="The company profile sets out a clear direction for how Eyetech approaches fabrication, design and service."
+            />
+            <div className="mt-10 grid gap-5 lg:grid-cols-3">
+              <article className="motion-card border border-border bg-white p-7">
+                <span className="text-3xl font-black text-gold">01</span>
+                <h2 className="mt-5 text-lg font-bold text-navy">Our vision</h2>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  To help redefine construction through steel, aluminium and glass décor.
+                </p>
+              </article>
+              <article className="motion-card border border-border bg-white p-7">
+                <span className="text-3xl font-black text-gold">02</span>
+                <h2 className="mt-5 text-lg font-bold text-navy">Our mission</h2>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  To undertake steel and aluminium décor projects with an assurance of quality,
+                  security and beauty, using current technology, equipment and machinery.
+                </p>
+              </article>
+              <article className="motion-card border border-border bg-white p-7">
+                <span className="text-3xl font-black text-gold">03</span>
+                <h2 className="mt-5 text-lg font-bold text-navy">Our objective</h2>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  To explore advances in stainless steel, aluminium and glass decoration for the
+                  modernization of Kenya and East African countries.
+                </p>
+              </article>
+            </div>
           </div>
         </section>
 
         <section className="motion-section bg-white py-20">
           <div className="mx-auto grid max-w-6xl items-start gap-12 px-4 lg:grid-cols-2">
             <div>
-              <SectionHeading eyebrow="Our Story" title="Turning Designs Into Solid Reality" />
+              <SectionHeading
+                eyebrow="Our strength"
+                title="Technical capability for projects of different sizes"
+              />
               <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-                Eyetech Engineering &amp; Supplies was established in 2022 in Nairobi as a sole
-                proprietorship under the ownership of Mr. Amos Mwangi. From a modest start, the
-                company has grown steadily through a dedicated technical team working towards
-                becoming one of the best in stainless steel, aluminium and glass decor works in
-                Kenya.
+                The company profile describes a fabrication environment equipped for stainless
+                steel, aluminium and glass work, supported by engineers, draughtsmen, designers,
+                technicians, tradesmen and estimators.
               </p>
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                We are based in the Pipeline area of Nairobi and work across the county and beyond,
-                handling everything in steel, aluminium and glass — from artistically designed
-                stainless steel and glass patterns for homes to aluminium windows and doors for
-                commercial developments, shopping malls, housing complexes and institutions.
+                This mix of technical and practical experience supports projects that require
+                careful design, measurement, fabrication, fitting and installation. The team works
+                with a range of aluminium sections, glass types and fittings to select suitable
+                solutions for each use.
               </p>
-              <Link
-                to="/contact"
-                className="motion-link mt-8 inline-block bg-gold px-7 py-3.5 text-sm font-bold text-navy-deep transition-colors hover:bg-gold-bright"
-              >
-                Talk to Us →
-              </Link>
             </div>
-            <img
-              src={siteImages.steel}
-              alt="Stainless steel fabrication work"
-              loading="lazy"
-              className="motion-image w-full object-cover"
-            />
-          </div>
-        </section>
-
-        <section className="motion-section bg-navy py-20">
-          <div className="mx-auto max-w-6xl px-4">
-            <SectionHeading
-              eyebrow="Vision, Mission & Objective"
-              title="What We Are Working Towards"
-              light
-            />
-            <div className="mt-10 grid gap-px bg-white/10 md:grid-cols-3">
-              {[
-                {
-                  title: "Our Vision",
-                  text: "Eyetech Engineering & Supplies is redefining construction with steel, aluminium and glass decor.",
-                },
-                {
-                  title: "Our Mission",
-                  text: "To undertake all kinds of steel and aluminium decor projects with an assurance of the best quality, security and beauty, using modern equipment and machinery in residential homes and buildings, commercial and public offices and buildings.",
-                },
-                {
-                  title: "Our Objective",
-                  text: "To explore the advanced technology of stainless steel, aluminium and glass decoration works towards the modernization of Kenya and East African countries.",
-                },
-              ].map((item) => (
-                <div key={item.title} className="bg-navy p-7">
-                  <h3 className="text-base font-bold text-gold">{item.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-white/70">{item.text}</p>
-                </div>
-              ))}
+            <div className="motion-card bg-navy p-7 text-white">
+              <p className="eyebrow text-gold">Specialist capabilities</p>
+              <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+                {capabilities.map((capability) => (
+                  <li key={capability} className="flex gap-2 text-sm leading-relaxed text-white/75">
+                    <span className="text-gold" aria-hidden="true">
+                      ◆
+                    </span>
+                    <span>{capability}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>
-
-        <section className="motion-section bg-white py-20">
-          <div className="mx-auto grid max-w-6xl gap-10 px-4 md:grid-cols-3">
-            {[
-              {
-                title: "Our Strength",
-                text: "We have the capacity to handle large stainless steel, aluminium and glass works, with a complete set of modern fabrication machines operated under the supervision of professional engineers, draughtsmen, designers and technicians.",
-              },
-              {
-                title: "Company Philosophy",
-                text: "We operate on trust and build long-lasting relationships with our clients, offering cost-effective service, high-quality products and completion on schedule.",
-              },
-              {
-                title: "Our Team",
-                text: "Our tradesmen and estimators handle projects of all sizes and styles, and specialise in curtain walling, structural glazing, frameless glass, shower doors, double-glazed glass, mirrors, designer glass and aluminium composite cladding.",
-              },
-            ].map((item) => (
-              <div key={item.title} className="motion-card border-l-2 border-gold bg-surface p-6">
-                <h3 className="text-base font-bold text-navy">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
 
         <section className="motion-section bg-surface py-20">
           <div className="mx-auto max-w-6xl px-4">
-            <SectionHeading eyebrow="What Guides Us" title="Built Around Quality" />
-            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {[
-                { title: "Quality", text: "High-quality materials and professional workmanship." },
-                {
-                  title: "Security",
-                  text: "Strong, reliable and practical fabrication solutions.",
-                },
-                {
-                  title: "Beauty",
-                  text: "Designs created to enhance homes and commercial spaces.",
-                },
-                {
-                  title: "Experienced Team",
-                  text: "Skilled engineers, designers, tradesmen and technicians.",
-                },
-                {
-                  title: "Reliable Delivery",
-                  text: "Professional project coordination from fabrication to installation.",
-                },
-                {
-                  title: "Lasting Relationships",
-                  text: "We focus on trust, quality products and reliable service.",
-                },
-              ].map((v) => (
-                <div key={v.title} className="motion-card border border-border bg-white p-6">
-                  <h3 className="text-base font-bold text-navy">{v.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{v.text}</p>
-                </div>
+            <SectionHeading
+              eyebrow="What guides us"
+              title="Trust, quality, security and beauty"
+              intro="These principles shape the way Eyetech approaches client relationships, fabrication and project delivery."
+            />
+            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {values.map((value) => (
+                <article
+                  key={value.title}
+                  className="motion-card border border-border bg-white p-6"
+                >
+                  <h2 className="text-base font-bold text-navy">{value.title}</h2>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{value.text}</p>
+                </article>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="motion-section bg-navy-deep py-20">
+          <div className="mx-auto max-w-3xl px-4 text-center">
+            <span className="eyebrow justify-center text-gold">Start a conversation</span>
+            <h2 className="mt-4 text-3xl font-black leading-tight text-white sm:text-4xl">
+              Have a steel, aluminium or glass project in mind?
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/70">
+              Share your drawings, dimensions, reference images or project requirements and let us
+              discuss the most practical next step.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <Link
+                to="/contact"
+                className="motion-link bg-gold px-7 py-3.5 text-sm font-bold text-navy-deep transition-colors hover:bg-gold-bright"
+              >
+                Request a Quote →
+              </Link>
+              <a
+                href="https://wa.me/254717614427"
+                target="_blank"
+                rel="noreferrer"
+                className="motion-link border border-white/40 px-7 py-3.5 text-sm font-bold text-white transition-colors hover:bg-white hover:text-navy"
+              >
+                WhatsApp Us
+              </a>
             </div>
           </div>
         </section>

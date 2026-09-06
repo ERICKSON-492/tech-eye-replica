@@ -31,6 +31,19 @@ export function ThemeToggle() {
 
   const isDark = theme === "dark";
 
+  if (!ready) {
+    return (
+      <button
+        type="button"
+        disabled
+        aria-label="Theme mode"
+        className="flex min-h-11 min-w-11 items-center justify-center border border-border bg-background text-base text-navy opacity-80"
+      >
+        <span aria-hidden="true">◐</span>
+      </button>
+    );
+  }
+
   return (
     <button
       type="button"
