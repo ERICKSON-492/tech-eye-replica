@@ -2,6 +2,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { CaseStudyStrip } from "@/components/case-study-strip";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { Footer, Header, SectionHeading, TopBar } from "@/components/site-chrome";
+import { blogPosts, formatPostDate } from "@/lib/blog";
 import { services as serviceCatalog } from "@/lib/services";
 import { siteImages } from "@/lib/site-images";
 
@@ -267,6 +268,58 @@ function Index() {
             </Link>
           </div>
         </section>
+
+        <section className="motion-section bg-white py-20">
+          <div className="mx-auto max-w-6xl px-4">
+            <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+              <SectionHeading
+                eyebrow="From the blog"
+                title="Advice before you build"
+                intro="Short, practical reads on choosing materials, planning a project and looking after the finished work."
+              />
+              <Link
+                to="/blog"
+                className="motion-link inline-flex min-h-11 shrink-0 items-center text-sm font-bold text-navy hover:text-gold"
+              >
+                View all articles →
+              </Link>
+            </div>
+            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {blogPosts.slice(0, 3).map((post) => (
+                <article
+                  key={post.slug}
+                  className="motion-card group overflow-hidden border border-border bg-white"
+                >
+                  <div className="aspect-[4/3] overflow-hidden">
+                    <img
+                      src={post.image}
+                      alt={post.imageAlt}
+                      loading="lazy"
+                      className="motion-image h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <span className="text-xs font-bold uppercase tracking-[0.18em] text-gold">
+                      {post.category} · {formatPostDate(post.date)}
+                    </span>
+                    <h3 className="mt-3 text-lg font-bold leading-tight text-navy">{post.title}</h3>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                      {post.excerpt}
+                    </p>
+                    <Link
+                      to="/blog/$slug"
+                      params={{ slug: post.slug }}
+                      className="motion-link mt-5 inline-flex min-h-11 items-center text-sm font-bold text-navy hover:text-gold"
+                    >
+                      Read more →
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
 
         <section className="motion-section bg-navy-deep py-20">
           <div className="mx-auto max-w-3xl px-4 text-center">
