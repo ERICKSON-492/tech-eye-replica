@@ -44,6 +44,7 @@ export function Header() {
   const links = [
     { to: "/", label: "Home" },
     { to: "/services", label: "Services" },
+    { to: "/blog", label: "Blog" },
     { to: "/about-us", label: "About" },
     { to: "/contact", label: "Contact" },
   ] as const;
@@ -161,6 +162,11 @@ export function Footer() {
             <li>
               <Link to="/services" className="motion-link hover:text-gold">
                 All Services
+              </Link>
+            </li>
+            <li>
+              <Link to="/blog" className="motion-link hover:text-gold">
+                Blog
               </Link>
             </li>
             <li>

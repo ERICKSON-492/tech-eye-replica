@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { siteImages } from "@/lib/site-images";
 
 const categories = ["All", "Glass & Railings", "Aluminium", "Stainless Steel"] as const;
 type Category = (typeof categories)[number];
@@ -25,8 +26,7 @@ const caseStudies: CaseStudy[] = [
     description:
       "A clean, light-filled railing solution for staircases, balconies and contemporary homes.",
     scope: "Glass railings · Measurements · Installation",
-    image:
-      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1000&q=85",
+    image: siteImages.railing,
     alt: "Contemporary interior with glass railing details",
     slug: "glass-railings-balustrades",
     linkLabel: "Explore glass railings",
@@ -38,8 +38,7 @@ const caseStudies: CaseStudy[] = [
     description:
       "A practical approach to brighter offices, shopfronts and customer-facing commercial spaces.",
     scope: "Aluminium systems · Glazing · Project coordination",
-    image:
-      "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1000&q=85",
+    image: siteImages.glazing,
     alt: "Modern commercial glass partition and office frontage",
     slug: "aluminium-works",
     linkLabel: "Explore aluminium works",
@@ -51,8 +50,7 @@ const caseStudies: CaseStudy[] = [
     description:
       "Made-to-measure railings, gates and architectural metalwork shaped around the site and intended use.",
     scope: "Fabrication · Finishing · Supply and installation",
-    image:
-      "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1000&q=85",
+    image: siteImages.steel,
     alt: "Metalworker fabricating stainless steel in a workshop",
     slug: "stainless-steel-fabrication",
     linkLabel: "Explore stainless steel",

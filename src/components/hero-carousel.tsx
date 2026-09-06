@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { siteImages } from "@/lib/site-images";
 import { useRef } from "react";
 import { Link } from "@tanstack/react-router";
 
@@ -22,8 +23,7 @@ const slides: HeroSlide[] = [
     accent: "Fabricated with Strength",
     description:
       "Steel, aluminium and glass fabrication and supplies for residential, commercial and public projects across Kenya.",
-    image:
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=85",
+    image: siteImages.building,
     alt: "Glass and steel high-rise buildings",
     primaryLabel: "Explore Services →",
     primaryHref: "#ey-services",
@@ -36,8 +36,7 @@ const slides: HeroSlide[] = [
     accent: "Your Space Works",
     description:
       "From stainless-steel railings to architectural details, we turn measurements and ideas into durable finished work.",
-    image:
-      "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1920&q=85",
+    image: siteImages.steel,
     alt: "Metalworker fabricating steel in a workshop",
     primaryLabel: "Explore Fabrication →",
     primaryHref: "/services/stainless-steel-fabrication",
@@ -50,8 +49,7 @@ const slides: HeroSlide[] = [
     accent: "Practical Solutions",
     description:
       "Create brighter, cleaner spaces with aluminium systems, glass partitions, balustrades and custom installations.",
-    image:
-      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1920&q=85",
+    image: siteImages.railing,
     alt: "Bright contemporary interior with glass and aluminium details",
     primaryLabel: "Discover Glass & Aluminium →",
     primaryHref: "/services/aluminium-works",

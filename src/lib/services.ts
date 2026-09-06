@@ -1,3 +1,5 @@
+import { siteImages as images } from "@/lib/site-images";
+
 export type Service = {
   slug: string;
   number: string;
@@ -14,22 +16,6 @@ export type Service = {
   faqs: { question: string; answer: string }[];
 };
 
-const images = {
-  steel:
-    "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1400&q=85",
-  aluminium:
-    "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1400&q=85",
-  glazing:
-    "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1400&q=85",
-  shower:
-    "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1400&q=85",
-  railing:
-    "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1400&q=85",
-  kitchen:
-    "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1400&q=85",
-  metalwork:
-    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85",
-};
 
 export const services: Service[] = [
   {
