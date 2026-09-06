@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Footer, Header, SectionHeading, TopBar } from "@/components/site-chrome";
 import { QuoteForm } from "@/components/quote-form";
+import { PageBanner } from "@/components/page-banner";
+import { siteImages } from "@/lib/site-images";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
@@ -31,20 +33,13 @@ function ContactPage() {
       <TopBar />
       <Header />
       <main id="main">
-        <section className="motion-section bg-navy-deep py-20">
-          <div className="mx-auto max-w-6xl px-4">
-            <span className="eyebrow text-gold">
-              <span className="h-px w-8 bg-gold" />
-              Contact
-            </span>
-            <h1 className="mt-4 max-w-2xl text-4xl font-black leading-tight text-white sm:text-5xl">
-              Have a Design or Project in Mind?
-            </h1>
-            <p className="mt-4 max-w-xl text-base text-white/70">
-              Let Eyetech Engineering &amp; Supplies help turn your ideas into reality.
-            </p>
-          </div>
-        </section>
+        <PageBanner
+          eyebrow="Contact"
+          title="Have a Design or Project in Mind?"
+          description="Let Eyetech Engineering & Supplies help turn your ideas into reality."
+          image={siteImages.glazing}
+          imageAlt="Glass and aluminium facade representing Eyetech project work"
+        />
         <section className="motion-section bg-white py-20">
           <div className="mx-auto grid max-w-6xl gap-12 px-4 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
             <div>
@@ -100,7 +95,6 @@ function ContactPage() {
                     1st Floor B2, Elema Plaza, off North Airport Road, Pipeline, Embakasi, Nairobi
                   </p>
                 </li>
-
               </ul>
               <div className="motion-card mt-10 border-l-2 border-gold bg-surface p-5 text-sm leading-relaxed text-muted-foreground">
                 Helpful information includes your project location, drawings, approximate

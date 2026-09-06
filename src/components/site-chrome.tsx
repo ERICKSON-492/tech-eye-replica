@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useCart } from "@/components/cart-provider";
 import { serviceLinks } from "@/lib/services";
 
 const PHONE = "+254 717 614 427";
@@ -40,9 +41,11 @@ export function TopBar() {
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const { itemCount } = useCart();
   const links = [
     { to: "/", label: "Home" },
     { to: "/services", label: "Services" },
+    { to: "/shop", label: "Shop" },
     { to: "/blog", label: "Blog" },
     { to: "/about-us", label: "About" },
     { to: "/contact", label: "Contact" },
@@ -83,6 +86,12 @@ export function Header() {
             </Link>
           ))}
           <Link
+            to="/shop/checkout"
+            className="motion-link border border-navy px-4 py-2.5 text-xs font-bold uppercase tracking-widest text-navy transition-colors hover:bg-navy hover:text-white"
+          >
+            Cart ({itemCount})
+          </Link>
+          <Link
             to="/contact"
             className="motion-link bg-navy px-4 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-navy-deep"
           >
@@ -121,7 +130,14 @@ export function Header() {
               {link.label}
             </Link>
           ))}
-          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          <div className="mt-3 grid gap-2 sm:grid-cols-3">
+            <Link
+              to="/shop/checkout"
+              onClick={() => setOpen(false)}
+              className="motion-link border border-navy px-4 py-3 text-center text-xs font-bold uppercase tracking-widest text-navy"
+            >
+              Cart ({itemCount})
+            </Link>
             <Link
               to="/contact"
               onClick={() => setOpen(false)}
@@ -179,6 +195,11 @@ export function Footer() {
               </Link>
             </li>
             <li>
+              <Link to="/shop" className="motion-link hover:text-gold">
+                Shop
+              </Link>
+            </li>
+            <li>
               <Link to="/blog" className="motion-link hover:text-gold">
                 Blog
               </Link>
@@ -191,6 +212,14 @@ export function Footer() {
             <li>
               <Link to="/contact" className="motion-link hover:text-gold">
                 Contact
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/admin"
+                className="motion-link text-xs uppercase tracking-widest text-white/40 hover:text-gold"
+              >
+                Admin
               </Link>
             </li>
           </ul>

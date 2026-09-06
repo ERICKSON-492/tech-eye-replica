@@ -1,6 +1,8 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { Footer, Header, SectionHeading, TopBar } from "@/components/site-chrome";
+import { PageBanner } from "@/components/page-banner";
 import { blogPosts, formatPostDate } from "@/lib/blog";
+import { siteImages } from "@/lib/site-images";
 
 export const Route = createFileRoute("/blog/")({
   component: BlogIndex,
@@ -27,27 +29,24 @@ export const Route = createFileRoute("/blog/")({
 
 function BlogIndex() {
   const [featured, ...rest] = blogPosts;
+  if (!featured) return null;
 
   return (
     <div className="min-h-screen bg-background">
       <TopBar />
       <Header />
       <main id="main">
-        <section className="motion-section bg-navy-deep py-20">
-          <div className="mx-auto max-w-6xl px-4">
-            <span className="eyebrow text-gold">
-              <span className="h-px w-8 bg-gold" />
-              Insights
-            </span>
-            <h1 className="mt-5 max-w-3xl text-4xl font-black leading-tight text-white sm:text-6xl">
+        <PageBanner
+          eyebrow="Insights"
+          title={
+            <>
               Notes from the <span className="text-gold">workshop</span>
-            </h1>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/70">
-              Practical advice on steel, aluminium and glass works — written for homeowners,
-              builders and project managers planning their next installation.
-            </p>
-          </div>
-        </section>
+            </>
+          }
+          description="Practical advice on steel, aluminium and glass works — written for homeowners, builders and project managers planning their next installation."
+          image={siteImages.steel}
+          imageAlt="Eyetech workshop and steel fabrication environment"
+        />
 
         <section className="motion-section bg-white py-20">
           <div className="mx-auto max-w-6xl px-4">

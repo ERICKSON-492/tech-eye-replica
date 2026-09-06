@@ -1,6 +1,8 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { Footer, Header, SectionHeading, TopBar } from "@/components/site-chrome";
+import { PageBanner } from "@/components/page-banner";
 import { services } from "@/lib/services";
+import { siteImages } from "@/lib/site-images";
 
 export const Route = createFileRoute("/services/")({
   component: ServicesIndex,
@@ -29,37 +31,31 @@ function ServicesIndex() {
       <TopBar />
       <Header />
       <main id="main">
-        <section className="motion-section bg-navy-deep py-20">
-          <div className="mx-auto max-w-6xl px-4">
-            <span className="eyebrow text-gold">
-              <span className="h-px w-8 bg-gold" />
-              What we do
-            </span>
-            <h1 className="mt-5 max-w-3xl text-4xl font-black leading-tight text-white sm:text-6xl">
+        <PageBanner
+          eyebrow="What we do"
+          title={
+            <>
               Engineering and fabrication services for{" "}
               <span className="text-gold">real spaces</span>
-            </h1>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/70">
-              From steel fabrication and aluminium works to architectural glazing, kitchens and
-              custom metalwork, we help turn designs and project requirements into finished
-              installations.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href="#service-list"
-                className="motion-link bg-gold px-6 py-3.5 text-sm font-bold text-navy-deep hover:bg-gold-bright"
-              >
-                Explore services →
-              </a>
-              <Link
-                to="/contact"
-                className="motion-link border border-white/40 px-6 py-3.5 text-sm font-bold text-white hover:bg-white hover:text-navy"
-              >
-                Request a quote
-              </Link>
-            </div>
-          </div>
-        </section>
+            </>
+          }
+          description="From steel fabrication and aluminium works to architectural glazing, kitchens and custom metalwork, we help turn designs and project requirements into finished installations."
+          image={siteImages.steel}
+          imageAlt="Eyetech workshop fabrication environment"
+        >
+          <a
+            href="#service-list"
+            className="motion-link bg-gold px-6 py-3.5 text-sm font-bold text-navy-deep hover:bg-gold-bright"
+          >
+            Explore services →
+          </a>
+          <Link
+            to="/contact"
+            className="motion-link border border-white/40 px-6 py-3.5 text-sm font-bold text-white hover:bg-white hover:text-navy"
+          >
+            Request a quote
+          </Link>
+        </PageBanner>
 
         <section id="service-list" className="motion-section scroll-mt-24 bg-white py-20">
           <div className="mx-auto max-w-6xl px-4">

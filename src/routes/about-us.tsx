@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Footer, Header, SectionHeading, TopBar } from "@/components/site-chrome";
+import { PageBanner } from "@/components/page-banner";
+import { siteImages } from "@/lib/site-images";
 
 export const Route = createFileRoute("/about-us")({
   component: AboutPage,
@@ -70,22 +72,17 @@ function AboutPage() {
       <Header />
 
       <main id="main">
-        <section className="motion-section relative isolate overflow-hidden bg-navy-deep py-20">
-          <div className="mx-auto max-w-6xl px-4">
-            <span className="eyebrow text-gold">
-              <span className="h-px w-8 bg-gold" />
-              About Eyetech
-            </span>
-            <h1 className="mt-4 max-w-4xl text-4xl font-black leading-tight text-white sm:text-6xl">
+        <PageBanner
+          eyebrow="About Eyetech"
+          title={
+            <>
               We Build Trust, <span className="text-gold">Quality, Security &amp; Beauty</span>
-            </h1>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/70">
-              Eyetech Engineering &amp; Supplies is a Nairobi-based fabrication and supplies company
-              working with steel, aluminium and glass for residential, commercial and public
-              projects.
-            </p>
-          </div>
-        </section>
+            </>
+          }
+          description="Eyetech Engineering & Supplies is a Nairobi-based fabrication and supplies company working with steel, aluminium and glass for residential, commercial and public projects."
+          image={siteImages.building}
+          imageAlt="Modern building facade representing Eyetech engineering and fabrication work"
+        />
 
         <section className="motion-section bg-white py-20">
           <div className="mx-auto grid max-w-6xl items-start gap-12 px-4 lg:grid-cols-[1.1fr_0.9fr]">
