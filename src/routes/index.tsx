@@ -121,7 +121,7 @@ function Index() {
           <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 lg:grid-cols-2">
             <div className="relative">
               <img
-                src={siteImages.workshopWide ?? siteImages.building}
+                src={siteImages.building}
                 alt="Eyetech Engineering and Supplies workspace"
                 className="w-full object-cover"
                 loading="lazy"
