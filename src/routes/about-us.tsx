@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { siteImages } from "@/lib/site-images";
 import { Header, TopBar, Footer, SectionHeading } from "@/components/site-chrome";
 
 export const Route = createFileRoute("/about-us")({
@@ -69,7 +70,7 @@ function AboutPage() {
               </Link>
             </div>
             <img
-              src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1200&q=85"
+              src={siteImages.steel}
               alt="Stainless steel fabrication work"
               loading="lazy"
               className="motion-image w-full object-cover"

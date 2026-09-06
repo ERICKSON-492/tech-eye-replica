@@ -3,6 +3,7 @@ import { CaseStudyStrip } from "@/components/case-study-strip";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { Footer, Header, SectionHeading, TopBar } from "@/components/site-chrome";
 import { services as serviceCatalog } from "@/lib/services";
+import { siteImages } from "@/lib/site-images";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -66,28 +67,28 @@ const projects = [
   {
     n: "01",
     title: "Architectural Metalwork",
-    img: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85",
+    img: siteImages.metalwork,
     wide: true,
   },
   {
     n: "02",
     title: "Glass & Aluminium",
-    img: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=85",
+    img: siteImages.railing,
   },
   {
     n: "03",
     title: "Balustrades",
-    img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=85",
+    img: siteImages.glazing,
   },
   {
     n: "04",
     title: "Commercial Projects",
-    img: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=85",
+    img: siteImages.building,
   },
   {
     n: "05",
     title: "Custom Fabrication",
-    img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=900&q=85",
+    img: siteImages.kitchen,
   },
 ];
 
@@ -120,7 +121,7 @@ function Index() {
           <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 lg:grid-cols-2">
             <div className="relative">
               <img
-                src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=85"
+                src={siteImages.workshopWide ?? siteImages.building}
                 alt="Eyetech Engineering and Supplies workspace"
                 className="w-full object-cover"
                 loading="lazy"
