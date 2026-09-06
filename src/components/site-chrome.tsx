@@ -8,7 +8,6 @@ const PHONE_ALT = "+254 759 719 147";
 const EMAIL = "eyetechengineering3@gmail.com";
 const WHATSAPP = "https://wa.me/254717614427";
 
-
 export function TopBar() {
   return (
     <div className="bg-gold text-navy-deep">
@@ -57,8 +56,13 @@ export function Header() {
           className="motion-link flex items-center gap-3"
           aria-label="Eyetech Engineering & Supplies home"
         >
-          <span className="flex h-9 w-9 items-center justify-center bg-navy text-sm font-black text-gold">
-            E
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center bg-white p-1 shadow-sm ring-1 ring-border">
+            <img
+              src="/eyetech-logo.png"
+              alt=""
+              aria-hidden="true"
+              className="h-full w-full object-contain"
+            />
           </span>
           <span className="text-sm font-medium text-navy sm:text-base">
             Eyetech Engineering &amp; Supplies
@@ -145,7 +149,17 @@ export function Footer() {
     <footer className="bg-navy-deep text-white/70">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 lg:grid-cols-[1.1fr_1fr_1.2fr_0.9fr]">
         <div>
-          <h3 className="text-base font-bold text-white">Eyetech Engineering &amp; Supplies</h3>
+          <div className="flex items-center gap-3">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center bg-white p-1.5">
+              <img
+                src="/eyetech-logo.png"
+                alt="Eyetech Engineering & Supplies logo"
+                className="h-full w-full object-contain"
+                loading="lazy"
+              />
+            </span>
+            <h3 className="text-base font-bold text-white">Eyetech Engineering &amp; Supplies</h3>
+          </div>
           <p className="mt-3 text-sm leading-relaxed">
             Steel, aluminium and glass fabrication and supplies for residential, commercial and
             public projects across Kenya.
@@ -228,7 +242,6 @@ export function Footer() {
             </li>
           </ul>
         </div>
-
       </div>
       <div className="border-t border-white/10 py-5 text-center text-xs">
         © {new Date().getFullYear()} Eyetech Engineering &amp; Supplies. All rights reserved.
