@@ -276,6 +276,20 @@ function Index() {
                 </figure>
               ))}
             </div>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              {projectClips.map((clip) => (
+                <figure key={clip.src} className="relative overflow-hidden bg-navy-deep">
+                  <video
+                    src={clip.src}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    className="h-72 w-full object-cover"
+                  />
+                  <figcaption className="px-5 py-3 text-sm font-bold text-white">{clip.title}</figcaption>
+                </figure>
+              ))}
+            </div>
             <Link
               to="/contact"
               className="mt-10 inline-block bg-navy px-7 py-3.5 text-sm font-bold text-white hover:bg-navy-deep"
