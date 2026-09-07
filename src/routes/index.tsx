@@ -5,6 +5,11 @@ import { Footer, Header, SectionHeading, TopBar } from "@/components/site-chrome
 import { blogPosts, formatPostDate } from "@/lib/blog";
 import { services as serviceCatalog } from "@/lib/services";
 import { siteImages } from "@/lib/site-images";
+import framelessStairGlass from "@/assets/frameless-stair-glass.jpeg.asset.json";
+import glassStairRailing from "@/assets/glass-stair-railing.jpeg.asset.json";
+import projectClip1 from "@/assets/project-clip-1.mp4.asset.json";
+import projectClip2 from "@/assets/project-clip-2.mp4.asset.json";
+import showerEnclosureMarble from "@/assets/shower-enclosure-marble.jpeg.asset.json";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -67,31 +72,42 @@ const values = [
 const projects = [
   {
     n: "01",
-    title: "Architectural Metalwork",
-    img: siteImages.metalwork,
+    title: "Glass & Stainless Staircase Balustrade",
+    img: glassStairRailing.url,
     wide: true,
   },
   {
     n: "02",
-    title: "Glass & Aluminium",
-    img: siteImages.railing,
+    title: "Frameless Glass Stair Railing",
+    img: framelessStairGlass.url,
   },
   {
     n: "03",
-    title: "Balustrades",
-    img: siteImages.glazing,
+    title: "Sliding Glass Shower Enclosure",
+    img: showerEnclosureMarble.url,
   },
   {
     n: "04",
+    title: "Architectural Metalwork",
+    img: siteImages.metalwork,
+  },
+  {
+    n: "05",
     title: "Commercial Projects",
     img: siteImages.building,
   },
   {
-    n: "05",
+    n: "06",
     title: "Custom Fabrication",
     img: siteImages.kitchen,
   },
 ];
+
+const projectClips = [
+  { src: projectClip1.url, title: "Installation walkthrough" },
+  { src: projectClip2.url, title: "Finished glass and steel work" },
+];
+
 
 function Index() {
   return (
