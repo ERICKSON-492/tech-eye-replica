@@ -214,14 +214,23 @@ export function Footer() {
                 Contact
               </Link>
             </li>
-            <li>
-              <Link
-                to="/admin"
-                className="motion-link text-xs uppercase tracking-widest text-white/40 hover:text-gold"
-              >
-                Admin
-              </Link>
-            </li>
+          </ul>
+          <h4 className="eyebrow mt-6 text-gold">Follow Us</h4>
+          <ul className="mt-3 flex items-center gap-3">
+            {socialLinks.map((social) => (
+              <li key={social.label}>
+                <a
+                  href={social.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={social.label}
+                  title={social.label}
+                  className="motion-link flex h-10 w-10 items-center justify-center border border-white/20 text-white/80 transition-colors hover:border-gold hover:text-gold"
+                >
+                  {social.icon}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
         <div>
