@@ -59,3 +59,19 @@ For Kenya-focused checkout, evaluate Paystack, Flutterwave, or M-Pesa/Daraja. St
 ## 7. Available routes
 
 The public shop is available at `/shop`, the checkout-ready cart is at `/shop/checkout`, and the protected dashboard foundation is at `/admin`. The public site also includes image-led banners on the Services, About, Contact, and Blog pages.
+
+## 8. Blog content management
+
+The SQL schema also creates `public.blog_posts`. Run the updated `supabase/schema.sql` in the Supabase SQL editor before using blog management. The table stores the slug, title, excerpt, category, image URL, image alt text, read time, JSON article body, publication state, publication timestamp, author reference, and timestamps.
+
+The `/admin` dashboard now includes a Blog posts section for authenticated administrators. Admins can create drafts, edit existing posts, publish or unpublish posts, and delete posts. The public `/blog` and `/blog/:slug` routes query published Supabase posts when the Supabase environment is configured. If Supabase is not configured or has no published rows, the existing local article catalog remains visible as a safe fallback.
+
+Only published posts are readable publicly through Row Level Security. All inserts, updates, and deletes require the `admin` role verified by `public.is_admin()`. Promote the intended Supabase Auth account by updating its row in `public.profiles`:
+
+```sql
+update public.profiles
+set role = 'admin'
+where email = 'your-admin-email@example.com';
+```
+
+The editor currently stores the article body as paragraphs under a single `Article` section. This keeps the public renderer compatible with the existing site while allowing a richer block editor to be added later.

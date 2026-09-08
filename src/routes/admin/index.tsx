@@ -39,12 +39,50 @@ const productFields = [
   ["price_kes", "Price (KES)"],
   ["stock_quantity", "Stock quantity"],
 ] as const;
+type BlogRow = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  image_url: string | null;
+  image_alt: string;
+  read_time: string;
+  body: { heading: string; paragraphs: string[] }[];
+  published: boolean;
+  published_at: string | null;
+};
+type BlogDraft = {
+  id?: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  image_url: string;
+  image_alt: string;
+  read_time: string;
+  body: string;
+  published: boolean;
+};
+const emptyBlogDraft: BlogDraft = {
+  slug: "",
+  title: "",
+  excerpt: "",
+  category: "Guides",
+  image_url: "/images/workshop.jpg",
+  image_alt: "",
+  read_time: "5 min read",
+  body: "",
+  published: false,
+};
 
 function AdminPage() {
   const [sessionEmail, setSessionEmail] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [products, setProducts] = useState<ProductRow[]>([]);
   const [orders, setOrders] = useState<OrderRow[]>([]);
+  const [blogPosts, setBlogPosts] = useState<BlogRow[]>([]);
+  const [blogDraft, setBlogDraft] = useState<BlogDraft>(emptyBlogDraft);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -67,7 +105,7 @@ function AdminPage() {
       setLoading(false);
       return;
     }
-    const [{ data: productRows }, { data: orderRows }] = await Promise.all([
+    const [{ data: productRows }, { data: orderRows }, { data: blogRows }] = await Promise.all([
       supabase
         .from("products")
         .select("id, sku, name, category, price_kes, stock_quantity, active")
@@ -77,9 +115,16 @@ function AdminPage() {
         .select("id, customer_name, status, payment_status, total_kes, created_at")
         .order("created_at", { ascending: false })
         .limit(20),
+      supabase
+        .from("blog_posts")
+        .select(
+          "id, slug, title, excerpt, category, image_url, image_alt, read_time, body, published, published_at",
+        )
+        .order("updated_at", { ascending: false }),
     ]);
     setProducts((productRows ?? []) as ProductRow[]);
     setOrders((orderRows ?? []) as OrderRow[]);
+    setBlogPosts((blogRows ?? []) as BlogRow[]);
     setLoading(false);
   };
 
@@ -104,6 +149,8 @@ function AdminPage() {
     setRole(null);
     setProducts([]);
     setOrders([]);
+    setBlogPosts([]);
+    setBlogDraft(emptyBlogDraft);
   };
 
   const createProduct = async (event: FormEvent<HTMLFormElement>) => {
@@ -124,6 +171,78 @@ function AdminPage() {
       event.currentTarget.reset();
       void loadDashboard();
     }
+  };
+
+  const saveBlogPost = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const paragraphs = blogDraft.body
+      .split(/\n+/)
+      .map((item) => item.trim())
+      .filter(Boolean);
+    const payload = {
+      slug: blogDraft.slug.trim().toLowerCase().replace(/\s+/g, "-"),
+      title: blogDraft.title.trim(),
+      excerpt: blogDraft.excerpt.trim(),
+      category: blogDraft.category.trim() || "Guides",
+      image_url: blogDraft.image_url.trim() || "/images/workshop.jpg",
+      image_alt: blogDraft.image_alt.trim() || blogDraft.title.trim(),
+      read_time: blogDraft.read_time.trim() || "5 min read",
+      body: [{ heading: "Article", paragraphs }],
+      published: blogDraft.published,
+      published_at: blogDraft.published ? new Date().toISOString() : null,
+    };
+    const result = blogDraft.id
+      ? await supabase.from("blog_posts").update(payload).eq("id", blogDraft.id)
+      : await supabase.from("blog_posts").insert(payload);
+    setMessage(
+      result.error
+        ? result.error.message
+        : blogDraft.id
+          ? "Blog post updated."
+          : "Blog post created.",
+    );
+    if (!result.error) {
+      setBlogDraft(emptyBlogDraft);
+      void loadDashboard();
+    }
+  };
+
+  const editBlogPost = (post: BlogRow) => {
+    setBlogDraft({
+      id: post.id,
+      slug: post.slug,
+      title: post.title,
+      excerpt: post.excerpt,
+      category: post.category,
+      image_url: post.image_url ?? "/images/workshop.jpg",
+      image_alt: post.image_alt,
+      read_time: post.read_time,
+      body: post.body.flatMap((section) => section.paragraphs).join("\n\n"),
+      published: post.published,
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const toggleBlogPublish = async (post: BlogRow) => {
+    const nextPublished = !post.published;
+    const { error } = await supabase
+      .from("blog_posts")
+      .update({
+        published: nextPublished,
+        published_at: nextPublished ? new Date().toISOString() : null,
+      })
+      .eq("id", post.id);
+    setMessage(
+      error ? error.message : nextPublished ? "Blog post published." : "Blog post unpublished.",
+    );
+    if (!error) void loadDashboard();
+  };
+
+  const deleteBlogPost = async (post: BlogRow) => {
+    if (!window.confirm(`Delete “${post.title}”?`)) return;
+    const { error } = await supabase.from("blog_posts").delete().eq("id", post.id);
+    setMessage(error ? error.message : "Blog post deleted.");
+    if (!error) void loadDashboard();
   };
 
   return (
@@ -319,6 +438,185 @@ function AdminPage() {
                 </section>
               </div>
             </div>
+            <section className="border border-border bg-white p-6">
+              <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-gold">
+                    Content management
+                  </p>
+                  <h2 className="mt-2 text-2xl font-black text-navy">Blog posts</h2>
+                  <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+                    Draft, edit and publish articles that appear on the public Blog page.
+                  </p>
+                </div>
+                {blogDraft.id && (
+                  <button
+                    type="button"
+                    onClick={() => setBlogDraft(emptyBlogDraft)}
+                    className="min-h-11 border border-border px-4 py-2 text-xs font-bold uppercase tracking-widest text-navy"
+                  >
+                    New post
+                  </button>
+                )}
+              </div>
+              <form onSubmit={saveBlogPost} className="mt-6 grid gap-4 lg:grid-cols-2">
+                <label className="grid gap-2 text-sm font-bold text-navy">
+                  Title
+                  <input
+                    required
+                    value={blogDraft.title}
+                    onChange={(event) =>
+                      setBlogDraft((draft) => ({ ...draft, title: event.target.value }))
+                    }
+                    className="border border-border bg-background px-4 py-3 font-normal"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-bold text-navy">
+                  Slug
+                  <input
+                    required
+                    value={blogDraft.slug}
+                    onChange={(event) =>
+                      setBlogDraft((draft) => ({ ...draft, slug: event.target.value }))
+                    }
+                    className="border border-border bg-background px-4 py-3 font-normal"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-bold text-navy">
+                  Category
+                  <input
+                    required
+                    value={blogDraft.category}
+                    onChange={(event) =>
+                      setBlogDraft((draft) => ({ ...draft, category: event.target.value }))
+                    }
+                    className="border border-border bg-background px-4 py-3 font-normal"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-bold text-navy">
+                  Read time
+                  <input
+                    required
+                    value={blogDraft.read_time}
+                    onChange={(event) =>
+                      setBlogDraft((draft) => ({ ...draft, read_time: event.target.value }))
+                    }
+                    className="border border-border bg-background px-4 py-3 font-normal"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-bold text-navy lg:col-span-2">
+                  Excerpt
+                  <textarea
+                    required
+                    rows={3}
+                    value={blogDraft.excerpt}
+                    onChange={(event) =>
+                      setBlogDraft((draft) => ({ ...draft, excerpt: event.target.value }))
+                    }
+                    className="border border-border bg-background px-4 py-3 font-normal"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-bold text-navy">
+                  Image URL
+                  <input
+                    value={blogDraft.image_url}
+                    onChange={(event) =>
+                      setBlogDraft((draft) => ({ ...draft, image_url: event.target.value }))
+                    }
+                    className="border border-border bg-background px-4 py-3 font-normal"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-bold text-navy">
+                  Image alt text
+                  <input
+                    required
+                    value={blogDraft.image_alt}
+                    onChange={(event) =>
+                      setBlogDraft((draft) => ({ ...draft, image_alt: event.target.value }))
+                    }
+                    className="border border-border bg-background px-4 py-3 font-normal"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-bold text-navy lg:col-span-2">
+                  Article body
+                  <textarea
+                    required
+                    rows={8}
+                    value={blogDraft.body}
+                    onChange={(event) =>
+                      setBlogDraft((draft) => ({ ...draft, body: event.target.value }))
+                    }
+                    placeholder="Use a blank line between paragraphs."
+                    className="border border-border bg-background px-4 py-3 font-normal"
+                  />
+                </label>
+                <label className="flex min-h-11 items-center gap-3 text-sm font-bold text-navy">
+                  <input
+                    type="checkbox"
+                    checked={blogDraft.published}
+                    onChange={(event) =>
+                      setBlogDraft((draft) => ({ ...draft, published: event.target.checked }))
+                    }
+                    className="h-5 w-5 accent-gold"
+                  />
+                  Publish immediately
+                </label>
+                <div className="flex items-center justify-end gap-3">
+                  <button
+                    type="submit"
+                    className="min-h-11 bg-gold px-5 py-3 text-sm font-bold text-navy-deep"
+                  >
+                    {blogDraft.id ? "Save changes" : "Create post"}
+                  </button>
+                </div>
+              </form>
+              <div className="mt-10 overflow-x-auto">
+                <table className="w-full min-w-[760px] text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-border text-xs uppercase tracking-widest text-muted-foreground">
+                      <th className="py-3">Title</th>
+                      <th>Category</th>
+                      <th>Status</th>
+                      <th className="text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {blogPosts.map((post) => (
+                      <tr key={post.id} className="border-b border-border">
+                        <td className="py-3 font-bold text-navy">{post.title}</td>
+                        <td>{post.category}</td>
+                        <td>{post.published ? "Published" : "Draft"}</td>
+                        <td>
+                          <div className="flex justify-end gap-2">
+                            <button
+                              type="button"
+                              onClick={() => editBlogPost(post)}
+                              className="min-h-10 border border-border px-3 py-2 text-xs font-bold uppercase tracking-widest text-navy"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => void toggleBlogPublish(post)}
+                              className="min-h-10 border border-border px-3 py-2 text-xs font-bold uppercase tracking-widest text-navy"
+                            >
+                              {post.published ? "Unpublish" : "Publish"}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => void deleteBlogPost(post)}
+                              className="min-h-10 border border-red-200 px-3 py-2 text-xs font-bold uppercase tracking-widest text-red-700"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
           </div>
         )}
         {message && (

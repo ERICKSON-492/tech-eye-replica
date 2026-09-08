@@ -1,10 +1,11 @@
+import { useEffect, useState } from "react";
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
 import { Footer, Header, TopBar } from "@/components/site-chrome";
-import { blogPosts, formatPostDate, getPost } from "@/lib/blog";
+import { blogPosts, formatPostDate, loadPublishedPost } from "@/lib/blog";
 
 export const Route = createFileRoute("/blog/$slug")({
-  loader: ({ params }) => {
-    const post = getPost(params.slug);
+  loader: async ({ params }) => {
+    const post = await loadPublishedPost(params.slug);
     if (!post) throw notFound();
     return { post };
   },
@@ -38,9 +39,7 @@ function PostNotFound() {
       <Header />
       <main id="main" className="mx-auto max-w-3xl px-4 py-24 text-center">
         <h1 className="text-3xl font-black text-navy">Article not found</h1>
-        <p className="mt-4 text-muted-foreground">
-          That article may have been moved or renamed.
-        </p>
+        <p className="mt-4 text-muted-foreground">That article may have been moved or renamed.</p>
         <Link
           to="/blog"
           className="motion-link mt-8 inline-flex bg-navy px-6 py-3 text-sm font-bold text-white hover:bg-navy-deep"
@@ -54,7 +53,17 @@ function PostNotFound() {
 }
 
 function BlogPost() {
-  const { post } = Route.useLoaderData();
+  const { post: initialPost } = Route.useLoaderData();
+  const [post, setPost] = useState(initialPost);
+  useEffect(() => {
+    let active = true;
+    void loadPublishedPost(initialPost.slug).then((item) => {
+      if (active && item) setPost(item);
+    });
+    return () => {
+      active = false;
+    };
+  }, [initialPost.slug]);
   const related = blogPosts.filter((item) => item.slug !== post.slug).slice(0, 3);
 
   return (
@@ -64,7 +73,10 @@ function BlogPost() {
       <main id="main">
         <section className="motion-section bg-navy-deep py-16">
           <div className="mx-auto max-w-3xl px-4">
-            <Link to="/blog" className="motion-link text-xs font-bold uppercase tracking-widest text-gold">
+            <Link
+              to="/blog"
+              className="motion-link text-xs font-bold uppercase tracking-widest text-gold"
+            >
               ← Back to blog
             </Link>
             <h1 className="mt-6 text-3xl font-black leading-tight text-white sm:text-5xl">
@@ -89,7 +101,10 @@ function BlogPost() {
               <div key={section.heading} className="mt-10">
                 <h2 className="text-xl font-bold text-navy">{section.heading}</h2>
                 {section.paragraphs.map((paragraph) => (
-                  <p key={paragraph} className="mt-4 text-base leading-relaxed text-muted-foreground">
+                  <p
+                    key={paragraph}
+                    className="mt-4 text-base leading-relaxed text-muted-foreground"
+                  >
                     {paragraph}
                   </p>
                 ))}

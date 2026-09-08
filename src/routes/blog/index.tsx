@@ -1,7 +1,8 @@
+import { useEffect, useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { Footer, Header, SectionHeading, TopBar } from "@/components/site-chrome";
 import { PageBanner } from "@/components/page-banner";
-import { blogPosts, formatPostDate } from "@/lib/blog";
+import { blogPosts, formatPostDate, loadPublishedPosts } from "@/lib/blog";
 import { siteImages } from "@/lib/site-images";
 
 export const Route = createFileRoute("/blog/")({
@@ -28,8 +29,47 @@ export const Route = createFileRoute("/blog/")({
 });
 
 function BlogIndex() {
-  const [featured, ...rest] = blogPosts;
-  if (!featured) return null;
+  const [posts, setPosts] = useState(blogPosts);
+  useEffect(() => {
+    let active = true;
+    void loadPublishedPosts().then((items) => {
+      if (active) setPosts(items);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+  const [featured, ...rest] = posts;
+  if (!featured) {
+    return (
+      <div className="min-h-screen bg-background">
+        <TopBar />
+        <Header />
+        <main id="main">
+          <PageBanner
+            eyebrow="Insights"
+            title={
+              <>
+                Notes from the <span className="text-gold">workshop</span>
+              </>
+            }
+            description="New guides and project insights will appear here soon."
+            image={siteImages.steel}
+            imageAlt="Eyetech workshop and steel fabrication environment"
+          />
+          <section className="motion-section bg-white py-20">
+            <div className="mx-auto max-w-3xl px-4 text-center">
+              <h2 className="text-3xl font-black text-navy">No published articles yet</h2>
+              <p className="mt-4 text-muted-foreground">
+                Check back soon for practical advice from the Eyetech team.
+              </p>
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">

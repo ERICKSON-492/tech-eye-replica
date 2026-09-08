@@ -1,4 +1,5 @@
 import { siteImages } from "@/lib/site-images";
+import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 
 export type BlogPost = {
   slug: string;
@@ -164,4 +165,52 @@ export function formatPostDate(date: string) {
     month: "long",
     year: "numeric",
   });
+}
+
+function fromSupabaseRow(row: {
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  image_url: string | null;
+  image_alt: string;
+  read_time: string;
+  body: unknown;
+  published_at: string | null;
+}): BlogPost {
+  const body = Array.isArray(row.body) ? row.body : [];
+  return {
+    slug: row.slug,
+    title: row.title,
+    excerpt: row.excerpt,
+    date: row.published_at ?? new Date().toISOString(),
+    readTime: row.read_time,
+    category: row.category,
+    image: row.image_url || siteImages.steel,
+    imageAlt: row.image_alt || row.title,
+    body: body as BlogPost["body"],
+  };
+}
+
+export async function loadPublishedPosts(): Promise<BlogPost[]> {
+  if (!isSupabaseConfigured) return blogPosts;
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select("slug, title, excerpt, category, image_url, image_alt, read_time, body, published_at")
+    .eq("published", true)
+    .order("published_at", { ascending: false });
+  if (error) return blogPosts;
+  return (data ?? []).map((row) => fromSupabaseRow(row));
+}
+
+export async function loadPublishedPost(slug: string): Promise<BlogPost | undefined> {
+  if (!isSupabaseConfigured) return getPost(slug);
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select("slug, title, excerpt, category, image_url, image_alt, read_time, body, published_at")
+    .eq("slug", slug)
+    .eq("published", true)
+    .maybeSingle();
+  if (error) return getPost(slug);
+  return data ? fromSupabaseRow(data) : undefined;
 }

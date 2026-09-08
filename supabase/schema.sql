@@ -119,3 +119,31 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
 after insert on auth.users
 for each row execute procedure public.handle_new_user();
+
+create table if not exists public.blog_posts (
+  id uuid primary key default uuid_generate_v4(),
+  slug text not null unique,
+  title text not null,
+  excerpt text not null default '',
+  category text not null default 'Guides',
+  image_url text,
+  image_alt text not null default '',
+  read_time text not null default '5 min read',
+  body jsonb not null default '[]'::jsonb,
+  published boolean not null default false,
+  published_at timestamptz,
+  author_id uuid references auth.users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists blog_posts_published_idx
+  on public.blog_posts (published, published_at desc);
+
+alter table public.blog_posts enable row level security;
+
+create policy "Public can view published blog posts" on public.blog_posts
+  for select using (published = true or public.is_admin());
+
+create policy "Admins manage blog posts" on public.blog_posts
+  for all using (public.is_admin()) with check (public.is_admin());
