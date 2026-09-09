@@ -98,7 +98,12 @@ const projects = [
   },
 ];
 
-const projectClips: { src: string; title: string }[] = [];
+const projectClips = [
+  {
+    src: "/videos/glass-stainless-staircase-installation.mp4",
+    title: "Glass and stainless staircase installation",
+  },
+];
 
 
 function Index() {
