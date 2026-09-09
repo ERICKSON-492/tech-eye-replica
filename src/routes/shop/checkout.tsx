@@ -2,7 +2,8 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { Footer, Header, TopBar } from "@/components/site-chrome";
 import { useCart } from "@/components/cart-provider";
 import { formatKes } from "@/lib/shop";
-import { useState } from "react";
+import { isSupabaseConfigured, supabase } from "@/lib/supabase";
+import { useState, type FormEvent } from "react";
 
 export const Route = createFileRoute("/shop/checkout")({
   component: CheckoutPage,
@@ -22,6 +23,9 @@ export const Route = createFileRoute("/shop/checkout")({
 function CheckoutPage() {
   const { lines, subtotal, setQuantity, remove, clear } = useCart();
   const [submitted, setSubmitted] = useState(false);
+  const [orderId, setOrderId] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   if (!lines.length && !submitted) {
     return (
@@ -54,11 +58,10 @@ function CheckoutPage() {
         <main id="main" className="mx-auto max-w-3xl px-4 py-24 text-center">
           <span className="eyebrow justify-center text-gold">Request received</span>
           <h1 className="mt-4 text-4xl font-black text-navy">
-            Your order request is ready for Supabase processing
+            Your order request has been received
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Connect your Supabase project and payment provider to persist this request, send
-            confirmation, and begin checkout.
+            Your order reference is {orderId ? `${orderId.slice(0, 8).toUpperCase()}` : "being prepared"}. The Eyetech team can now review the request and confirm final pricing, delivery, installation and payment details.
           </p>
           <Link
             to="/shop"
@@ -143,8 +146,35 @@ function CheckoutPage() {
           </section>
           <form
             className="border border-border bg-white p-6 sm:p-8"
-            onSubmit={(event) => {
+            onSubmit={async (event: FormEvent<HTMLFormElement>) => {
               event.preventDefault();
+              setError("");
+              if (!isSupabaseConfigured) {
+                setError("Supabase is not configured for this deployment yet. Add the required VITE_SUPABASE variables before submitting an order.");
+                return;
+              }
+
+              setSubmitting(true);
+              const form = new FormData(event.currentTarget);
+              const { data, error: orderError } = await supabase.rpc("create_order_with_items", {
+                p_customer_name: String(form.get("name") ?? ""),
+                p_customer_email: String(form.get("email") ?? ""),
+                p_customer_phone: String(form.get("phone") ?? ""),
+                p_delivery_location: String(form.get("location") ?? ""),
+                p_items: lines.map((line) => ({
+                  product_id: line.product.id,
+                  quantity: line.quantity,
+                })),
+              });
+              setSubmitting(false);
+
+              if (orderError) {
+                setError(orderError.message);
+                return;
+              }
+
+              setOrderId(data as string);
+              clear();
               setSubmitted(true);
             }}
           >
@@ -195,11 +225,17 @@ function CheckoutPage() {
                 Final fabrication, delivery, installation, tax and payment fees are confirmed before
                 payment.
               </p>
+              {error && (
+                <p role="alert" className="mt-5 border-l-2 border-red-600 bg-red-50 p-3 text-sm leading-relaxed text-red-900">
+                  {error}
+                </p>
+              )}
               <button
                 type="submit"
-                className="mt-6 w-full bg-gold px-6 py-3.5 text-sm font-bold text-navy-deep hover:bg-gold-bright"
+                disabled={submitting}
+                className="mt-6 w-full bg-gold px-6 py-3.5 text-sm font-bold text-navy-deep hover:bg-gold-bright disabled:cursor-wait disabled:opacity-60"
               >
-                Continue to payment setup →
+                {submitting ? "Submitting order…" : "Submit order request →"}
               </button>
             </div>
           </form>

@@ -1,3 +1,5 @@
+import { isSupabaseConfigured, supabase } from "@/lib/supabase";
+
 export type ShopProduct = {
   id: string;
   sku: string;
@@ -63,6 +65,43 @@ export const starterProducts: ShopProduct[] = [
     active: true,
   },
 ];
+
+type SupabaseProductRow = {
+  id: string;
+  sku: string;
+  name: string;
+  category: string;
+  description: string;
+  price_kes: number;
+  image_url: string | null;
+  active: boolean;
+};
+
+const fromSupabaseProduct = (row: SupabaseProductRow): ShopProduct => ({
+  id: row.id,
+  sku: row.sku,
+  name: row.name,
+  category: row.category,
+  description: row.description,
+  priceKes: row.price_kes,
+  image: row.image_url || "/images/workshop.jpg",
+  imageAlt: row.name,
+  unit: "from",
+  active: row.active,
+});
+
+export async function loadShopProducts(): Promise<ShopProduct[]> {
+  if (!isSupabaseConfigured) return starterProducts;
+
+  const { data, error } = await supabase
+    .from("products")
+    .select("id, sku, name, category, description, price_kes, image_url, active")
+    .eq("active", true)
+    .order("created_at", { ascending: false });
+
+  if (error) return starterProducts;
+  return (data ?? []).map((row) => fromSupabaseProduct(row as SupabaseProductRow));
+}
 
 export const formatKes = (value: number) =>
   new Intl.NumberFormat("en-KE", {

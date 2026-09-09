@@ -147,3 +147,115 @@ create policy "Public can view published blog posts" on public.blog_posts
 
 create policy "Admins manage blog posts" on public.blog_posts
   for all using (public.is_admin()) with check (public.is_admin());
+
+
+-- Server-side checkout: re-reads product prices and stock instead of trusting the browser cart.
+create or replace function public.create_order_with_items(
+  p_customer_name text,
+  p_customer_email text,
+  p_customer_phone text,
+  p_delivery_location text,
+  p_items jsonb,
+  p_notes text default null
+)
+returns uuid
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_order_id uuid;
+  v_customer_id uuid := auth.uid();
+  v_item jsonb;
+  v_product public.products%rowtype;
+  v_quantity integer;
+  v_subtotal integer := 0;
+  v_line_total integer;
+begin
+  if coalesce(trim(p_customer_name), '') = ''
+    or coalesce(trim(p_customer_email), '') = ''
+    or coalesce(trim(p_customer_phone), '') = ''
+    or coalesce(trim(p_delivery_location), '') = '' then
+    raise exception 'Customer details are required';
+  end if;
+
+  if jsonb_typeof(p_items) <> 'array' or jsonb_array_length(p_items) = 0 then
+    raise exception 'At least one order item is required';
+  end if;
+
+  for v_item in select value from jsonb_array_elements(p_items)
+  loop
+    v_quantity := (v_item->>'quantity')::integer;
+    if v_quantity is null or v_quantity < 1 then
+      raise exception 'Order quantities must be positive';
+    end if;
+
+    select * into v_product
+    from public.products
+    where id = (v_item->>'product_id')::uuid
+      and active = true
+    for update;
+
+    if not found then
+      raise exception 'One or more products are no longer available';
+    end if;
+
+    if v_product.stock_quantity < v_quantity then
+      raise exception 'Insufficient stock for product: %', v_product.name;
+    end if;
+
+    v_line_total := v_product.price_kes * v_quantity;
+    v_subtotal := v_subtotal + v_line_total;
+  end loop;
+
+  insert into public.orders (
+    customer_id,
+    customer_name,
+    customer_email,
+    customer_phone,
+    delivery_location,
+    subtotal_kes,
+    total_kes,
+    notes
+  ) values (
+    v_customer_id,
+    trim(p_customer_name),
+    trim(p_customer_email),
+    trim(p_customer_phone),
+    trim(p_delivery_location),
+    v_subtotal,
+    v_subtotal,
+    nullif(trim(p_notes), '')
+  ) returning id into v_order_id;
+
+  for v_item in select value from jsonb_array_elements(p_items)
+  loop
+    v_quantity := (v_item->>'quantity')::integer;
+    select * into v_product from public.products where id = (v_item->>'product_id')::uuid;
+
+    insert into public.order_items (
+      order_id,
+      product_id,
+      product_name,
+      unit_price_kes,
+      quantity
+    ) values (
+      v_order_id,
+      v_product.id,
+      v_product.name,
+      v_product.price_kes,
+      v_quantity
+    );
+
+    update public.products
+    set stock_quantity = stock_quantity - v_quantity,
+        updated_at = now()
+    where id = v_product.id;
+  end loop;
+
+  return v_order_id;
+end;
+$$;
+
+grant execute on function public.create_order_with_items(text, text, text, text, jsonb, text)
+to anon, authenticated;

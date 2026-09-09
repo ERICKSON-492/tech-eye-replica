@@ -2,8 +2,8 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { Footer, Header, TopBar } from "@/components/site-chrome";
 import { PageBanner } from "@/components/page-banner";
 import { useCart } from "@/components/cart-provider";
-import { formatKes, starterProducts } from "@/lib/shop";
-import { useState } from "react";
+import { loadShopProducts, formatKes, starterProducts, type ShopProduct } from "@/lib/shop";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/shop/")({
   component: ShopPage,
@@ -22,11 +22,21 @@ export const Route = createFileRoute("/shop/")({
 function ShopPage() {
   const { add, itemCount } = useCart();
   const [category, setCategory] = useState("All");
-  const categories = ["All", ...new Set(starterProducts.map((product) => product.category))];
+  const [catalog, setCatalog] = useState<ShopProduct[]>(starterProducts);
+
+  useEffect(() => {
+    let active = true;
+    void loadShopProducts().then((products) => {
+      if (active) setCatalog(products);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const categories = ["All", ...new Set(catalog.map((product) => product.category))];
   const products =
-    category === "All"
-      ? starterProducts
-      : starterProducts.filter((product) => product.category === category);
+    category === "All" ? catalog : catalog.filter((product) => product.category === category);
 
   return (
     <div className="min-h-screen bg-background">
@@ -40,8 +50,8 @@ function ShopPage() {
               Fabrication products for <span className="text-gold">real projects</span>
             </>
           }
-          description="Browse starter product categories, then request a project-specific quotation. Live inventory and checkout can be connected to Supabase and your chosen payment provider."
-          image="/src/assets/workshop.jpg"
+          description="Browse active product categories, then request a project-specific quotation. Prices and availability are loaded from the connected catalog when configured."
+          image="/images/workshop.jpg"
           imageAlt="Eyetech workshop fabrication environment"
         >
           <Link

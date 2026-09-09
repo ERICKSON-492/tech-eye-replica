@@ -1,6 +1,6 @@
 # Supabase Ecommerce and Admin Setup
 
-This repository now contains a Supabase-ready Shop, cart, checkout-ready request flow, and authenticated admin dashboard foundation. Live authentication, database persistence, inventory, order management, and payment processing remain disabled until the Supabase project and payment provider are connected.
+This repository now contains a Supabase-backed Shop, persistent cart, server-validated order request flow, and authenticated admin dashboard foundation. Live payment capture still requires a payment provider and server-side webhook configuration.
 
 ## 1. Configure browser-safe environment variables
 
@@ -17,7 +17,7 @@ The anonymous key is designed for browser use when Row Level Security is correct
 
 Open the Supabase SQL Editor and run [`supabase/schema.sql`](./supabase/schema.sql). It creates `profiles`, `products`, `orders`, and `order_items`, enables Row Level Security, adds the admin-role function, and creates the new-user profile trigger.
 
-The public catalog can read active products. Customers can create orders and view only their own order records. Admins are identified by `profiles.role = 'admin'` and can manage products, orders, and order items through RLS-protected operations.
+The public catalog reads active products from Supabase when the environment variables are configured, with the verified starter catalog as a local fallback. Checkout calls the server-side `public.create_order_with_items(...)` RPC, which re-reads active product prices and stock before creating the order and order items. Customers can view only their own order records. Admins are identified by `profiles.role = 'admin'` and can manage products, orders, and order items through RLS-protected operations.
 
 ## 3. Create and promote the first admin
 
@@ -31,15 +31,17 @@ where email = 'your-admin-email@example.com';
 
 The `/admin` route checks the Supabase session and the profile role before querying product or order data. A signed-in customer cannot access admin data through the frontend because the database policies reject non-admin reads and writes.
 
-## 4. Seed products
+## 4. Apply checkout function and seed products
 
-The Shop page currently uses a small starter catalog from `src/lib/shop.ts` so the UI can be tested before Supabase is connected. Once the database is configured, seed the `products` table with real names, SKUs, prices, stock quantities, descriptions, and image URLs. The production version should replace the starter catalog query with a Supabase `products` query and retain the same `ShopProduct` shape.
+If you ran an older version of `supabase/schema.sql`, run the updated file again so the `create_order_with_items` RPC is created. This function is required for checkout submission; the browser does not insert client-supplied prices directly.
+
+The Shop page uses active Supabase `products` rows when configured and falls back to a small verified starter catalog from `src/lib/shop.ts` when Supabase is unavailable. Seed the `products` table with real names, SKUs, prices, stock quantities, descriptions, and image URLs. The checkout RPC validates the active row and stock quantity again before creating an order.
 
 The existing images are used as visual banners and starter product imagery. Replace them with approved product or project images when available, preferably using Supabase Storage or another controlled image host.
 
 ## 5. Payment provider
 
-The checkout-ready page collects customer details and calculates a cart subtotal, but it does not activate payment capture. Choose a payment provider before production launch, then implement a server-side payment session or payment-intent flow. Do not trust browser-submitted prices: read product prices from Supabase on the server or in a protected edge function, create the order, and confirm payment through the provider webhook before marking `payment_status` as `paid`.
+The checkout page now creates a pending order request through the server-side RPC and does not activate payment capture. Choose a payment provider before production launch, then add a server-side payment session or payment-intent flow. Do not trust browser-submitted prices: the RPC re-reads product prices from Supabase, creates the order, and the future provider webhook must confirm payment before `payment_status` is marked as `paid`.
 
 For Kenya-focused checkout, evaluate Paystack, Flutterwave, or M-Pesa/Daraja. Stripe is also supported where the business and settlement setup permit it. Payment secrets must remain server-side and must never be stored in `VITE_*` variables.
 
