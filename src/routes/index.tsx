@@ -83,16 +83,21 @@ const projects = [
   },
   {
     n: "04",
+    title: "Custom Glass Shower Enclosure",
+    img: "/images/glass-shower-enclosure-project.jpg",
+  },
+  {
+    n: "05",
     title: "Architectural Metalwork",
     img: siteImages.metalwork,
   },
   {
-    n: "05",
+    n: "06",
     title: "Commercial Projects",
     img: siteImages.building,
   },
   {
-    n: "06",
+    n: "07",
     title: "Custom Fabrication",
     img: siteImages.kitchen,
   },
