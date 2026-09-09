@@ -88,16 +88,21 @@ const projects = [
   },
   {
     n: "05",
+    title: "Glass Staircase Railing",
+    img: "/images/glass-staircase-railing-project.jpg",
+  },
+  {
+    n: "06",
     title: "Architectural Metalwork",
     img: siteImages.metalwork,
   },
   {
-    n: "06",
+    n: "07",
     title: "Commercial Projects",
     img: siteImages.building,
   },
   {
-    n: "07",
+    n: "08",
     title: "Custom Fabrication",
     img: siteImages.kitchen,
   },
