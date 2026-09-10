@@ -113,6 +113,9 @@ function AdminPage() {
   ]);
   const [blogPosts, setBlogPosts] = useState<BlogRow[]>([]);
   const [blogDraft, setBlogDraft] = useState<BlogDraft>(emptyBlogDraft);
+  const [liveStatus, setLiveStatus] = useState<"connecting" | "live">("connecting");
+  const [liveCount, setLiveCount] = useState(0);
+  const [lastLiveAt, setLastLiveAt] = useState<Date | null>(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -171,6 +174,38 @@ function AdminPage() {
   useEffect(() => {
     void loadDashboard();
   }, []);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured || role !== "admin") return;
+    const channel = supabase
+      .channel("quotation-requests-live")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "quotation_requests" },
+        (payload) => {
+          const row = payload.new as QuotationRow | undefined;
+          if (payload.eventType === "DELETE") {
+            const oldId = (payload.old as { id?: string } | undefined)?.id;
+            if (oldId) setQuotations((current) => current.filter((item) => item.id !== oldId));
+            return;
+          }
+          if (!row?.id) return;
+          setQuotations((current) => {
+            const rest = current.filter((item) => item.id !== row.id);
+            return [row, ...rest];
+          });
+          if (payload.eventType === "INSERT") {
+            setLiveCount((count) => count + 1);
+            setLastLiveAt(new Date());
+          }
+        },
+      )
+      .subscribe((status) => setLiveStatus(status === "SUBSCRIBED" ? "live" : "connecting"));
+
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [role]);
 
   const signIn = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -603,6 +638,22 @@ function AdminPage() {
                   <h2 className="mt-2 text-2xl font-black text-navy">Quotation requests</h2>
                   <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
                     Review public requests, price a scope, update the workflow status and print a quote-ready summary.
+                  </p>
+                  <p
+                    aria-live="polite"
+                    className="mt-3 inline-flex items-center gap-2 border border-border bg-background px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-navy"
+                  >
+                    <span
+                      className={`inline-block h-2 w-2 rounded-full ${liveStatus === "live" ? "animate-pulse bg-green-600" : "bg-muted-foreground"}`}
+                      aria-hidden="true"
+                    />
+                    {liveStatus === "live" ? "Live" : "Connecting…"}
+                    {liveCount > 0 && (
+                      <span className="text-gold">
+                        {liveCount} new
+                        {lastLiveAt ? ` · ${lastLiveAt.toLocaleTimeString()}` : ""}
+                      </span>
+                    )}
                   </p>
                 </div>
                 <button
