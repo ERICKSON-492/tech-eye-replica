@@ -172,6 +172,38 @@ function AdminPage() {
     void loadDashboard();
   }, []);
 
+  useEffect(() => {
+    if (!isSupabaseConfigured || role !== "admin") return;
+    const channel = supabase
+      .channel("quotation-requests-live")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "quotation_requests" },
+        (payload) => {
+          const row = payload.new as QuotationRow | undefined;
+          if (payload.eventType === "DELETE") {
+            const oldId = (payload.old as { id?: string } | undefined)?.id;
+            if (oldId) setQuotations((current) => current.filter((item) => item.id !== oldId));
+            return;
+          }
+          if (!row?.id) return;
+          setQuotations((current) => {
+            const rest = current.filter((item) => item.id !== row.id);
+            return [row, ...rest];
+          });
+          if (payload.eventType === "INSERT") {
+            setLiveCount((count) => count + 1);
+            setLastLiveAt(new Date());
+          }
+        },
+      )
+      .subscribe((status) => setLiveStatus(status === "SUBSCRIBED" ? "live" : "connecting"));
+
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [role]);
+
   const signIn = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
