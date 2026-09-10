@@ -103,12 +103,15 @@ export function QuoteForm({ initialService = "", compact = false }: QuoteFormPro
     setSubmitting(false);
     setSent(true);
     form.reset();
+    setDraft({ ...emptyDraft, service: initialService });
   };
 
   return (
     <form
       className={`motion-section border border-border bg-surface ${compact ? "p-6" : "p-6 sm:p-8"}`}
       onSubmit={submitQuote}
+      onChange={(event) => syncDraft(event.currentTarget)}
+      onInput={(event) => syncDraft(event.currentTarget)}
     >
       <h2 className="text-lg font-bold text-navy">Request a Quote</h2>
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
