@@ -22,6 +22,7 @@ type ProductRow = {
   price_kes: number;
   stock_quantity: number;
   active: boolean;
+  image_url: string | null;
 };
 type OrderRow = {
   id: string;
@@ -156,6 +157,35 @@ function AdminPage() {
   const createProduct = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
+    const image = form.get("image");
+    const imageFile = image instanceof File && image.size > 0 ? image : null;
+    let imageUrl: string | null = null;
+    let uploadedPath: string | null = null;
+
+    if (imageFile) {
+      if (!imageFile.type.startsWith("image/")) {
+        setMessage("Please choose an image file.");
+        return;
+      }
+      if (imageFile.size > 5 * 1024 * 1024) {
+        setMessage("Product images must be 5 MB or smaller.");
+        return;
+      }
+
+      const extension = imageFile.name.split(".").pop()?.toLowerCase() || "jpg";
+      uploadedPath = `${crypto.randomUUID()}.${extension}`;
+      const upload = await supabase.storage.from("product-images").upload(uploadedPath, imageFile, {
+        cacheControl: "3600",
+        contentType: imageFile.type,
+        upsert: false,
+      });
+      if (upload.error) {
+        setMessage(`Image upload failed: ${upload.error.message}`);
+        return;
+      }
+      imageUrl = supabase.storage.from("product-images").getPublicUrl(uploadedPath).data.publicUrl;
+    }
+
     const { error } = await supabase.from("products").insert({
       sku: String(form.get("sku")),
       name: String(form.get("name")),
@@ -164,8 +194,13 @@ function AdminPage() {
       description: String(form.get("description")),
       price_kes: Number(form.get("price_kes")),
       stock_quantity: Number(form.get("stock_quantity")),
+      image_url: imageUrl,
       active: true,
     });
+
+    if (error && uploadedPath) {
+      await supabase.storage.from("product-images").remove([uploadedPath]);
+    }
     setMessage(error ? error.message : "Product created.");
     if (!error) {
       event.currentTarget.reset();
@@ -359,6 +394,18 @@ function AdminPage() {
                     </label>
                   ))}
                   <label className="grid gap-1 text-xs font-bold uppercase tracking-widest text-navy">
+                    Product image (optional)
+                    <input
+                      name="image"
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      className="border border-border bg-background px-3 py-2.5 text-sm font-normal normal-case tracking-normal"
+                    />
+                    <span className="text-[11px] font-normal normal-case tracking-normal text-muted-foreground">
+                      Upload a JPG, PNG or WebP image up to 5 MB. The file is stored in Supabase Storage.
+                    </span>
+                  </label>
+                  <label className="grid gap-1 text-xs font-bold uppercase tracking-widest text-navy">
                     Description
                     <textarea
                       required
@@ -392,6 +439,14 @@ function AdminPage() {
                         {products.map((product) => (
                           <tr key={product.id} className="border-b border-border">
                             <td className="py-3 font-bold text-navy">
+                              {product.image_url ? (
+                                <img
+                                  src={product.image_url}
+                                  alt=""
+                                  className="mb-2 h-12 w-16 rounded object-cover"
+                                  loading="lazy"
+                                />
+                              ) : null}
                               {product.name}
                               <span className="block text-xs font-normal text-muted-foreground">
                                 {product.sku}

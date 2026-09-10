@@ -15,7 +15,7 @@ The anonymous key is designed for browser use when Row Level Security is correct
 
 ## 2. Create the database schema
 
-Open the Supabase SQL Editor and run [`supabase/schema.sql`](./supabase/schema.sql). It creates `profiles`, `products`, `orders`, and `order_items`, enables Row Level Security, adds the admin-role function, and creates the new-user profile trigger.
+Open the Supabase SQL Editor and run [`supabase/schema.sql`](./supabase/schema.sql). It creates `profiles`, `products`, `orders`, and `order_items`, enables Row Level Security, adds the admin-role function, creates the new-user profile trigger, creates the public `product-images` Storage bucket, and restricts image uploads, updates, and deletes to admins.
 
 The public catalog reads active products from Supabase when the environment variables are configured, with the verified starter catalog as a local fallback. Checkout calls the server-side `public.create_order_with_items(...)` RPC, which re-reads active product prices and stock before creating the order and order items. Customers can view only their own order records. Admins are identified by `profiles.role = 'admin'` and can manage products, orders, and order items through RLS-protected operations.
 
@@ -37,7 +37,7 @@ If you ran an older version of `supabase/schema.sql`, run the updated file again
 
 The Shop page uses active Supabase `products` rows when configured and falls back to a small verified starter catalog from `src/lib/shop.ts` when Supabase is unavailable. Seed the `products` table with real names, SKUs, prices, stock quantities, descriptions, and image URLs. The checkout RPC validates the active row and stock quantity again before creating an order.
 
-The existing images are used as visual banners and starter product imagery. Replace them with approved product or project images when available, preferably using Supabase Storage or another controlled image host.
+The admin product form now supports direct image-file uploads. Choose a JPG, PNG, or WebP file up to 5 MB in `/admin`; the file is uploaded to the `product-images` Supabase Storage bucket and its public URL is saved to `products.image_url`. No image link needs to be pasted into the product form. Run the updated schema once to create the bucket and Storage policies. The existing images remain available as visual banners and starter product imagery.
 
 ## 5. Payment provider
 
@@ -51,10 +51,10 @@ For Kenya-focused checkout, evaluate Paystack, Flutterwave, or M-Pesa/Daraja. St
 | ---------- | -------------------------------------------------------------------------- |
 | Supabase   | Project URL, anon key, schema applied, Auth provider enabled               |
 | Admin      | First verified account promoted to `admin`                                 |
-| Catalog    | Real products, prices, stock, images, and SKU values seeded                |
+| Catalog    | Real products, prices, stock, uploaded images, and SKU values seeded       |
 | Checkout   | Payment provider selected and server-side webhook implemented              |
 | Security   | RLS tested for anonymous, customer, and admin sessions                     |
-| Media      | Product and banner images moved to an approved production storage location |
+| Media      | `product-images` bucket created; admin upload tested; banner images approved |
 | Monitoring | Auth, order, payment, and webhook failures logged and alerted              |
 | Legal      | Delivery, returns, privacy, terms, and payment notices published           |
 
