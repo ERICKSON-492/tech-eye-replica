@@ -9,10 +9,61 @@ type QuoteFormProps = {
   compact?: boolean;
 };
 
+type QuoteDraft = {
+  name: string;
+  phone: string;
+  email: string;
+  service: string;
+  location: string;
+  projectType: string;
+  timeline: string;
+  message: string;
+};
+
+const emptyDraft: QuoteDraft = {
+  name: "",
+  phone: "",
+  email: "",
+  service: "",
+  location: "",
+  projectType: "",
+  timeline: "",
+  message: "",
+};
+
 export function QuoteForm({ initialService = "", compact = false }: QuoteFormProps) {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [draft, setDraft] = useState<QuoteDraft>({ ...emptyDraft, service: initialService });
+
+  const syncDraft = (form: HTMLFormElement) => {
+    const data = new FormData(form);
+    setDraft({
+      name: String(data.get("name") || ""),
+      phone: String(data.get("phone") || ""),
+      email: String(data.get("email") || ""),
+      service: String(data.get("service") || ""),
+      location: String(data.get("location") || ""),
+      projectType: String(data.get("projectType") || ""),
+      timeline: String(data.get("timeline") || ""),
+      message: String(data.get("message") || ""),
+    });
+  };
+
+  const previewRows: [string, string][] = [
+    ["Name", draft.name],
+    ["Phone", draft.phone],
+    ["Email", draft.email],
+    ["Service", draft.service],
+    ["Location", draft.location],
+    ["Project type", draft.projectType],
+    ["Timeline", draft.timeline],
+  ];
+  const filledCount =
+    previewRows.filter(([, value]) => value.trim()).length + (draft.message.trim() ? 1 : 0);
+  const completion = Math.round((filledCount / 8) * 100);
+
 
   const submitQuote = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
