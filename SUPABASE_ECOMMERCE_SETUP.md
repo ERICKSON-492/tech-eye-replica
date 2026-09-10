@@ -66,7 +66,7 @@ The public shop is available at `/shop`, the checkout-ready cart is at `/shop/ch
 
 The SQL schema also creates `public.blog_posts`. Run the updated `supabase/schema.sql` in the Supabase SQL editor before using blog management. The table stores the slug, title, excerpt, category, image URL, image alt text, read time, JSON article body, publication state, publication timestamp, author reference, and timestamps.
 
-The `/admin` dashboard now includes a Blog posts section for authenticated administrators. Admins can create drafts, edit existing posts, publish or unpublish posts, and delete posts. The public `/blog` and `/blog/:slug` routes query published Supabase posts when the Supabase environment is configured. If Supabase is not configured or has no published rows, the existing local article catalog remains visible as a safe fallback.
+The `/admin` dashboard now includes Blog posts and Quotation requests sections for authenticated administrators. Admins can create drafts, edit existing posts, publish or unpublish posts, and delete posts. They can also review public quotation requests, move them through `new`, `reviewing`, `quoted`, `sent`, `approved`, `declined`, and `closed` statuses, add internal notes, enter subtotal and discount values, and use the browser print dialog to save a quote-ready summary as PDF. The public `/blog` and `/blog/:slug` routes query published Supabase posts when the Supabase environment is configured. If Supabase is not configured or has no published rows, the existing local article catalog remains visible as a safe fallback.
 
 Only published posts are readable publicly through Row Level Security. All inserts, updates, and deletes require the `admin` role verified by `public.is_admin()`. Promote the intended Supabase Auth account by updating its row in `public.profiles`:
 
@@ -77,3 +77,9 @@ where email = 'your-admin-email@example.com';
 ```
 
 The editor currently stores the article body as paragraphs under a single `Article` section. This keeps the public renderer compatible with the existing site while allowing a richer block editor to be added later.
+
+## 9. Quotation portal
+
+The updated SQL creates `quotation_requests` and `quotation_items`. Public visitors can submit a request without creating an account; anonymous visitors can insert only, while administrators can read and manage all requests through RLS. The request stores the customer contact details, service, location, project type, timeline, description, status, internal notes, subtotal, discount, total, and timestamps.
+
+Run the updated `supabase/schema.sql` before using quotation intake. The public form on `/contact` and on service pages saves to Supabase when the environment variables are configured. If Supabase is unavailable, it retains the WhatsApp fallback. Administrators can manage requests from `/admin`, and the print control can be used to choose “Save as PDF” in the browser dialog. A future release can add customer login, secure quote approval, email delivery, invoices, and payment collection.

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { services } from "@/lib/services";
+import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 
 const WHATSAPP = "https://wa.me/254717614427";
 
@@ -10,30 +11,53 @@ type QuoteFormProps = {
 
 export function QuoteForm({ initialService = "", compact = false }: QuoteFormProps) {
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  const submitQuote = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const message = [
+      `Hello Eyetech, I'm ${data.get("name")} (${data.get("phone")}).`,
+      `Service: ${data.get("service") || "Not specified"}.`,
+      `Project location: ${data.get("location") || "Not specified"}.`,
+      `Project type: ${data.get("projectType") || "Not specified"}.`,
+      `Timeline: ${data.get("timeline") || "Not specified"}.`,
+      `Details: ${data.get("message")}`,
+    ].join(" ");
+
+    setError("");
+    setSubmitting(true);
+    if (isSupabaseConfigured) {
+      const { error: requestError } = await supabase.from("quotation_requests").insert({
+        customer_name: String(data.get("name") || ""),
+        customer_email: String(data.get("email") || ""),
+        customer_phone: String(data.get("phone") || ""),
+        service: String(data.get("service") || ""),
+        project_location: String(data.get("location") || ""),
+        project_type: String(data.get("projectType") || ""),
+        timeline: String(data.get("timeline") || ""),
+        details: String(data.get("message") || ""),
+      });
+      if (requestError) {
+        setSubmitting(false);
+        setError(requestError.message);
+        return;
+      }
+    } else {
+      window.open(`${WHATSAPP}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+    }
+
+    setSubmitting(false);
+    setSent(true);
+    form.reset();
+  };
 
   return (
     <form
       className={`motion-section border border-border bg-surface ${compact ? "p-6" : "p-6 sm:p-8"}`}
-      onSubmit={(event) => {
-        event.preventDefault();
-        const form = event.currentTarget;
-        const data = new FormData(form);
-        const message = [
-          `Hello Eyetech, I'm ${data.get("name")} (${data.get("phone")}).`,
-          `Service: ${data.get("service") || "Not specified"}.`,
-          `Project location: ${data.get("location") || "Not specified"}.`,
-          `Project type: ${data.get("projectType") || "Not specified"}.`,
-          `Timeline: ${data.get("timeline") || "Not specified"}.`,
-          `Details: ${data.get("message")}`,
-        ].join(" ");
-        window.open(
-          `${WHATSAPP}?text=${encodeURIComponent(message)}`,
-          "_blank",
-          "noopener,noreferrer",
-        );
-        setSent(true);
-        form.reset();
-      }}
+      onSubmit={submitQuote}
     >
       <h2 className="text-lg font-bold text-navy">Request a Quote</h2>
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -74,6 +98,21 @@ export function QuoteForm({ initialService = "", compact = false }: QuoteFormPro
             required
             type="tel"
             autoComplete="tel"
+            className="w-full border border-border bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-gold focus:ring-2 focus:ring-gold/30"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="quote-email"
+            className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-navy"
+          >
+            Email
+          </label>
+          <input
+            id="quote-email"
+            name="email"
+            type="email"
+            autoComplete="email"
             className="w-full border border-border bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-gold focus:ring-2 focus:ring-gold/30"
           />
         </div>
@@ -170,17 +209,25 @@ export function QuoteForm({ initialService = "", compact = false }: QuoteFormPro
         </div>
         <button
           type="submit"
-          className="motion-link w-full bg-navy px-6 py-3.5 text-sm font-bold text-white transition-colors hover:bg-navy-deep focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
+          disabled={submitting}
+          className="motion-link w-full bg-navy px-6 py-3.5 text-sm font-bold text-white transition-colors hover:bg-navy-deep focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 disabled:cursor-wait disabled:opacity-60"
         >
-          Send via WhatsApp →
+          {submitting ? "Submitting request…" : "Submit quotation request →"}
         </button>
+        {error && (
+          <p role="alert" className="border-l-2 border-red-600 bg-red-50 p-3 text-sm text-red-900">
+            {error}
+          </p>
+        )}
         {sent && (
           <p
             role="status"
             aria-live="polite"
             className="motion-card border border-gold/50 bg-gold/10 p-3 text-sm text-navy"
           >
-            Your WhatsApp message has been prepared. We look forward to discussing your project.
+            {isSupabaseConfigured
+              ? "Your quotation request has been submitted. Our team will review it and contact you shortly."
+              : "Your WhatsApp message has been prepared. We look forward to discussing your project."}
           </p>
         )}
       </div>

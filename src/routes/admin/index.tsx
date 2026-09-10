@@ -32,6 +32,24 @@ type OrderRow = {
   total_kes: number;
   created_at: string;
 };
+type QuotationRow = {
+  id: string;
+  quote_number: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  service: string | null;
+  project_location: string | null;
+  project_type: string | null;
+  timeline: string | null;
+  details: string;
+  status: string;
+  admin_notes: string;
+  subtotal_kes: number;
+  discount_kes: number;
+  total_kes: number;
+  created_at: string;
+};
 const productFields = [
   ["sku", "SKU"],
   ["name", "Name"],
@@ -82,6 +100,8 @@ function AdminPage() {
   const [role, setRole] = useState<string | null>(null);
   const [products, setProducts] = useState<ProductRow[]>([]);
   const [orders, setOrders] = useState<OrderRow[]>([]);
+  const [quotations, setQuotations] = useState<QuotationRow[]>([]);
+  const [selectedQuotationId, setSelectedQuotationId] = useState<string | null>(null);
   const [blogPosts, setBlogPosts] = useState<BlogRow[]>([]);
   const [blogDraft, setBlogDraft] = useState<BlogDraft>(emptyBlogDraft);
   const [message, setMessage] = useState("");
@@ -106,7 +126,7 @@ function AdminPage() {
       setLoading(false);
       return;
     }
-    const [{ data: productRows }, { data: orderRows }, { data: blogRows }] = await Promise.all([
+    const [{ data: productRows }, { data: orderRows }, { data: quotationRows }, { data: blogRows }] = await Promise.all([
       supabase
         .from("products")
         .select("id, sku, name, category, price_kes, stock_quantity, active")
@@ -117,6 +137,13 @@ function AdminPage() {
         .order("created_at", { ascending: false })
         .limit(20),
       supabase
+        .from("quotation_requests")
+        .select(
+          "id, quote_number, customer_name, customer_email, customer_phone, service, project_location, project_type, timeline, details, status, admin_notes, subtotal_kes, discount_kes, total_kes, created_at",
+        )
+        .order("created_at", { ascending: false })
+        .limit(50),
+      supabase
         .from("blog_posts")
         .select(
           "id, slug, title, excerpt, category, image_url, image_alt, read_time, body, published, published_at",
@@ -125,6 +152,9 @@ function AdminPage() {
     ]);
     setProducts((productRows ?? []) as ProductRow[]);
     setOrders((orderRows ?? []) as OrderRow[]);
+    const nextQuotations = (quotationRows ?? []) as QuotationRow[];
+    setQuotations(nextQuotations);
+    setSelectedQuotationId((current) => current ?? nextQuotations[0]?.id ?? null);
     setBlogPosts((blogRows ?? []) as BlogRow[]);
     setLoading(false);
   };
@@ -150,8 +180,32 @@ function AdminPage() {
     setRole(null);
     setProducts([]);
     setOrders([]);
+    setQuotations([]);
+    setSelectedQuotationId(null);
     setBlogPosts([]);
     setBlogDraft(emptyBlogDraft);
+  };
+
+  const updateQuotation = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!selectedQuotationId) return;
+    const form = new FormData(event.currentTarget);
+    const subtotal = Number(form.get("subtotal_kes")) || 0;
+    const discount = Number(form.get("discount_kes")) || 0;
+    const total = Math.max(0, subtotal - discount);
+    const { error } = await supabase
+      .from("quotation_requests")
+      .update({
+        status: String(form.get("status")),
+        admin_notes: String(form.get("admin_notes") || ""),
+        subtotal_kes: subtotal,
+        discount_kes: discount,
+        total_kes: total,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", selectedQuotationId);
+    setMessage(error ? error.message : "Quotation updated.");
+    if (!error) void loadDashboard();
   };
 
   const createProduct = async (event: FormEvent<HTMLFormElement>) => {
@@ -493,6 +547,100 @@ function AdminPage() {
                 </section>
               </div>
             </div>
+            <section className="border border-border bg-white p-6">
+              <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-gold">Lead management</p>
+                  <h2 className="mt-2 text-2xl font-black text-navy">Quotation requests</h2>
+                  <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+                    Review public requests, price a scope, update the workflow status and print a quote-ready summary.
+                  </p>
+                </div>
+                <span className="text-sm font-bold text-navy">{quotations.length} requests</span>
+              </div>
+              {quotations.length === 0 ? (
+                <p className="mt-6 border border-dashed border-border p-6 text-sm text-muted-foreground">
+                  No quotation requests yet. New submissions from the public contact and service forms will appear here.
+                </p>
+              ) : (
+                <div className="mt-6 grid gap-8 lg:grid-cols-[0.75fr_1.25fr]">
+                  <div className="space-y-2">
+                    {quotations.map((quotation) => (
+                      <button
+                        key={quotation.id}
+                        type="button"
+                        onClick={() => setSelectedQuotationId(quotation.id)}
+                        className={`w-full border p-4 text-left transition-colors ${selectedQuotationId === quotation.id ? "border-gold bg-gold/10" : "border-border bg-background hover:border-gold"}`}
+                      >
+                        <span className="flex items-center justify-between gap-3">
+                          <strong className="text-sm text-navy">{quotation.quote_number}</strong>
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-gold">{quotation.status}</span>
+                        </span>
+                        <span className="mt-2 block text-sm font-bold text-navy">{quotation.customer_name}</span>
+                        <span className="mt-1 block text-xs text-muted-foreground">
+                          {quotation.service || "General enquiry"} · {new Date(quotation.created_at).toLocaleDateString()}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                  {(() => {
+                    const quotation = quotations.find((item) => item.id === selectedQuotationId) ?? quotations[0];
+                    if (!quotation) return null;
+                    return (
+                      <div key={quotation.id} className="border border-border bg-background p-5">
+                        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+                          <div>
+                            <p className="text-xs font-bold uppercase tracking-widest text-gold">Quotation {quotation.quote_number}</p>
+                            <h3 className="mt-2 text-2xl font-black text-navy">{quotation.customer_name}</h3>
+                            <p className="mt-1 text-sm text-muted-foreground">
+                              {quotation.customer_phone}{quotation.customer_email ? ` · ${quotation.customer_email}` : ""}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => window.print()}
+                            className="min-h-10 border border-navy px-4 py-2 text-xs font-bold uppercase tracking-widest text-navy"
+                          >
+                            Print / Save PDF
+                          </button>
+                        </div>
+                        <dl className="mt-6 grid gap-4 border-y border-border py-5 text-sm sm:grid-cols-2">
+                          <div><dt className="text-xs font-bold uppercase tracking-widest text-gold">Service</dt><dd className="mt-1 text-navy">{quotation.service || "—"}</dd></div>
+                          <div><dt className="text-xs font-bold uppercase tracking-widest text-gold">Location</dt><dd className="mt-1 text-navy">{quotation.project_location || "—"}</dd></div>
+                          <div><dt className="text-xs font-bold uppercase tracking-widest text-gold">Project type</dt><dd className="mt-1 text-navy">{quotation.project_type || "—"}</dd></div>
+                          <div><dt className="text-xs font-bold uppercase tracking-widest text-gold">Timeline</dt><dd className="mt-1 text-navy">{quotation.timeline || "—"}</dd></div>
+                        </dl>
+                        <div className="mt-5 border-l-2 border-gold bg-white p-4 text-sm leading-relaxed text-navy">{quotation.details}</div>
+                        <form onSubmit={updateQuotation} className="mt-6 grid gap-4 sm:grid-cols-2">
+                          <label className="grid gap-2 text-sm font-bold text-navy">
+                            Status
+                            <select name="status" defaultValue={quotation.status} className="border border-border bg-white px-3 py-2.5 font-normal">
+                              {['new', 'reviewing', 'quoted', 'sent', 'approved', 'declined', 'closed'].map((status) => <option key={status} value={status}>{status}</option>)}
+                            </select>
+                          </label>
+                          <label className="grid gap-2 text-sm font-bold text-navy">
+                            Subtotal (KES)
+                            <input name="subtotal_kes" type="number" min="0" defaultValue={quotation.subtotal_kes} className="border border-border bg-white px-3 py-2.5 font-normal" />
+                          </label>
+                          <label className="grid gap-2 text-sm font-bold text-navy">
+                            Discount (KES)
+                            <input name="discount_kes" type="number" min="0" defaultValue={quotation.discount_kes} className="border border-border bg-white px-3 py-2.5 font-normal" />
+                          </label>
+                          <div className="flex items-end border border-navy bg-navy p-3 text-white">
+                            <span><span className="block text-[10px] font-bold uppercase tracking-widest text-gold">Current total</span><strong className="mt-1 block text-xl">{formatKes(quotation.total_kes)}</strong></span>
+                          </div>
+                          <label className="grid gap-2 text-sm font-bold text-navy sm:col-span-2">
+                            Admin notes
+                            <textarea name="admin_notes" rows={3} defaultValue={quotation.admin_notes} placeholder="Add scope, exclusions, payment terms or follow-up notes" className="border border-border bg-white px-3 py-2.5 font-normal" />
+                          </label>
+                          <button type="submit" className="min-h-11 bg-gold px-5 py-3 text-sm font-bold text-navy-deep sm:col-span-2">Save quotation update</button>
+                        </form>
+                      </div>
+                    );
+                  })()}
+                </div>
+              )}
+            </section>
             <section className="border border-border bg-white p-6">
               <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
                 <div>

@@ -281,3 +281,73 @@ drop policy if exists "Admins delete product images" on storage.objects;
 create policy "Admins delete product images"
 on storage.objects for delete to authenticated
 using (bucket_id = 'product-images' and public.is_admin());
+
+
+-- Quotation portal: public requests and admin-managed quote details.
+create table if not exists public.quotation_requests (
+  id uuid primary key default uuid_generate_v4(),
+  quote_number text not null unique default ('QT-' || to_char(now(), 'YYYYMMDDHH24MISSMS')),
+  customer_id uuid references auth.users(id) on delete set null,
+  customer_name text not null,
+  customer_email text not null default '',
+  customer_phone text not null,
+  service text,
+  project_location text,
+  project_type text,
+  timeline text,
+  details text not null,
+  status text not null default 'new' check (status in ('new', 'reviewing', 'quoted', 'sent', 'approved', 'declined', 'closed')),
+  admin_notes text not null default '',
+  subtotal_kes integer not null default 0 check (subtotal_kes >= 0),
+  discount_kes integer not null default 0 check (discount_kes >= 0),
+  total_kes integer not null default 0 check (total_kes >= 0),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.quotation_items (
+  id uuid primary key default uuid_generate_v4(),
+  quotation_id uuid not null references public.quotation_requests(id) on delete cascade,
+  description text not null,
+  model text,
+  quantity integer not null default 1 check (quantity > 0),
+  unit_price_kes integer not null default 0 check (unit_price_kes >= 0),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists quotation_requests_status_idx
+  on public.quotation_requests (status, created_at desc);
+
+alter table public.quotation_requests enable row level security;
+alter table public.quotation_items enable row level security;
+
+drop policy if exists "Public can submit quotation requests" on public.quotation_requests;
+create policy "Public can submit quotation requests"
+on public.quotation_requests for insert
+with check (customer_id = auth.uid() or customer_id is null);
+
+drop policy if exists "Customers view own quotations" on public.quotation_requests;
+create policy "Customers view own quotations"
+on public.quotation_requests for select
+using (customer_id = auth.uid() or public.is_admin());
+
+drop policy if exists "Admins manage quotations" on public.quotation_requests;
+create policy "Admins manage quotations"
+on public.quotation_requests for all
+using (public.is_admin()) with check (public.is_admin());
+
+drop policy if exists "Customers view own quotation items" on public.quotation_items;
+create policy "Customers view own quotation items"
+on public.quotation_items for select
+using (
+  public.is_admin() or exists (
+    select 1 from public.quotation_requests
+    where quotation_requests.id = quotation_items.quotation_id
+      and quotation_requests.customer_id = auth.uid()
+  )
+);
+
+drop policy if exists "Admins manage quotation items" on public.quotation_items;
+create policy "Admins manage quotation items"
+on public.quotation_items for all
+using (public.is_admin()) with check (public.is_admin());
