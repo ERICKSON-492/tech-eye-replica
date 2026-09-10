@@ -113,6 +113,9 @@ function AdminPage() {
   ]);
   const [blogPosts, setBlogPosts] = useState<BlogRow[]>([]);
   const [blogDraft, setBlogDraft] = useState<BlogDraft>(emptyBlogDraft);
+  const [liveStatus, setLiveStatus] = useState<"connecting" | "live">("connecting");
+  const [liveCount, setLiveCount] = useState(0);
+  const [lastLiveAt, setLastLiveAt] = useState<Date | null>(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
 
