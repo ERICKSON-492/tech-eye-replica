@@ -284,6 +284,36 @@ export function QuoteForm({ initialService = "", compact = false }: QuoteFormPro
               : "Your WhatsApp message has been prepared. We look forward to discussing your project."}
           </p>
         )}
+        <div className="border border-border bg-white p-5" aria-live="polite">
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-navy">
+              Live request preview
+            </h3>
+            <span className="text-xs font-bold text-gold">{completion}% complete</span>
+          </div>
+          <div className="mt-3 h-1 w-full bg-border">
+            <div className="h-1 bg-gold transition-all" style={{ width: `${completion}%` }} />
+          </div>
+          <dl className="mt-4 space-y-2 text-sm">
+            {previewRows.map(([label, value]) => (
+              <div key={label} className="flex gap-3">
+                <dt className="w-32 shrink-0 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                  {label}
+                </dt>
+                <dd className={value.trim() ? "text-navy" : "text-muted-foreground/60"}>
+                  {value.trim() || "—"}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-4 whitespace-pre-wrap border-l-2 border-gold pl-3 text-sm leading-relaxed text-navy">
+            {draft.message.trim() || (
+              <span className="text-muted-foreground/60">
+                Your project description will appear here as you type.
+              </span>
+            )}
+          </p>
+        </div>
       </div>
     </form>
   );
