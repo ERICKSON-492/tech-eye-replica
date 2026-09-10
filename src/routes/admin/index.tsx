@@ -46,7 +46,6 @@ type QuotationRow = {
   status: string;
   admin_notes: string;
   subtotal_kes: number;
-  discount_kes: number;
   total_kes: number;
   created_at: string;
 };
@@ -149,7 +148,7 @@ function AdminPage() {
       supabase
         .from("quotation_requests")
         .select(
-          "id, quote_number, customer_name, customer_email, customer_phone, service, project_location, project_type, timeline, details, status, admin_notes, subtotal_kes, discount_kes, total_kes, created_at",
+          "id, quote_number, customer_name, customer_email, customer_phone, service, project_location, project_type, timeline, details, status, admin_notes, subtotal_kes, total_kes, created_at",
         )
         .order("created_at", { ascending: false })
         .limit(50),
@@ -200,7 +199,6 @@ function AdminPage() {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const subtotal = quotationItems.reduce((sum, item) => sum + item.quantity * item.unit_price_kes, 0);
-    const discount = Number(form.get("discount_kes")) || 0;
     const { data: quotation, error } = await supabase
       .from("quotation_requests")
       .insert({
@@ -215,8 +213,7 @@ function AdminPage() {
         status: String(form.get("status") || "quoted"),
         admin_notes: String(form.get("admin_notes") || ""),
         subtotal_kes: subtotal,
-        discount_kes: discount,
-        total_kes: Math.max(0, subtotal - discount),
+        total_kes: subtotal,
       })
       .select("id")
       .single();
@@ -245,15 +242,13 @@ function AdminPage() {
     if (!selectedQuotationId) return;
     const form = new FormData(event.currentTarget);
     const subtotal = Number(form.get("subtotal_kes")) || 0;
-    const discount = Number(form.get("discount_kes")) || 0;
-    const total = Math.max(0, subtotal - discount);
+    const total = subtotal;
     const { error } = await supabase
       .from("quotation_requests")
       .update({
         status: String(form.get("status")),
         admin_notes: String(form.get("admin_notes") || ""),
         subtotal_kes: subtotal,
-        discount_kes: discount,
         total_kes: total,
         updated_at: new Date().toISOString(),
       })
@@ -653,7 +648,6 @@ function AdminPage() {
                     </div>
                   </div>
                   <div className="mt-6 grid gap-4 sm:grid-cols-3">
-                    <label className="grid gap-2 text-sm font-bold text-navy">Discount (KES)<input name="discount_kes" type="number" min="0" defaultValue="0" className="border border-border bg-white px-3 py-2.5 font-normal" /></label>
                     <label className="grid gap-2 text-sm font-bold text-navy">Status<select name="status" defaultValue="quoted" className="border border-border bg-white px-3 py-2.5 font-normal"><option value="new">New</option><option value="reviewing">Reviewing</option><option value="quoted">Quoted</option><option value="sent">Sent</option></select></label>
                     <div className="flex items-end border border-navy bg-navy p-3 text-white"><span><span className="block text-[10px] font-bold uppercase tracking-widest text-gold">Calculated subtotal</span><strong className="mt-1 block text-xl">{formatKes(quotationItems.reduce((sum, item) => sum + item.quantity * item.unit_price_kes, 0))}</strong></span></div>
                   </div>
@@ -727,10 +721,6 @@ function AdminPage() {
                           <label className="grid gap-2 text-sm font-bold text-navy">
                             Subtotal (KES)
                             <input name="subtotal_kes" type="number" min="0" defaultValue={quotation.subtotal_kes} className="border border-border bg-white px-3 py-2.5 font-normal" />
-                          </label>
-                          <label className="grid gap-2 text-sm font-bold text-navy">
-                            Discount (KES)
-                            <input name="discount_kes" type="number" min="0" defaultValue={quotation.discount_kes} className="border border-border bg-white px-3 py-2.5 font-normal" />
                           </label>
                           <div className="flex items-end border border-navy bg-navy p-3 text-white">
                             <span><span className="block text-[10px] font-bold uppercase tracking-widest text-gold">Current total</span><strong className="mt-1 block text-xl">{formatKes(quotation.total_kes)}</strong></span>

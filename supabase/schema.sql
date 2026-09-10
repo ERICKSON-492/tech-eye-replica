@@ -299,7 +299,6 @@ create table if not exists public.quotation_requests (
   status text not null default 'new' check (status in ('new', 'reviewing', 'quoted', 'sent', 'approved', 'declined', 'closed')),
   admin_notes text not null default '',
   subtotal_kes integer not null default 0 check (subtotal_kes >= 0),
-  discount_kes integer not null default 0 check (discount_kes >= 0),
   total_kes integer not null default 0 check (total_kes >= 0),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -314,6 +313,8 @@ create table if not exists public.quotation_items (
   unit_price_kes integer not null default 0 check (unit_price_kes >= 0),
   created_at timestamptz not null default now()
 );
+
+alter table public.quotation_requests drop column if exists discount_kes;
 
 create index if not exists quotation_requests_status_idx
   on public.quotation_requests (status, created_at desc);
