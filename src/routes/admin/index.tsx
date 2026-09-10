@@ -639,6 +639,22 @@ function AdminPage() {
                   <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
                     Review public requests, price a scope, update the workflow status and print a quote-ready summary.
                   </p>
+                  <p
+                    aria-live="polite"
+                    className="mt-3 inline-flex items-center gap-2 border border-border bg-background px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-navy"
+                  >
+                    <span
+                      className={`inline-block h-2 w-2 rounded-full ${liveStatus === "live" ? "animate-pulse bg-green-600" : "bg-muted-foreground"}`}
+                      aria-hidden="true"
+                    />
+                    {liveStatus === "live" ? "Live" : "Connecting…"}
+                    {liveCount > 0 && (
+                      <span className="text-gold">
+                        {liveCount} new
+                        {lastLiveAt ? ` · ${lastLiveAt.toLocaleTimeString()}` : ""}
+                      </span>
+                    )}
+                  </p>
                 </div>
                 <button
                   type="button"
