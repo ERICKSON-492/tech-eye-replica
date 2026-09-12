@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { Footer, Header, TopBar } from "@/components/site-chrome";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { formatKes } from "@/lib/shop";
+import { QuotationBuilder, type QuotationSavePayload } from "@/components/quotation-builder";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminPage,
@@ -48,12 +49,6 @@ type QuotationRow = {
   subtotal_kes: number;
   total_kes: number;
   created_at: string;
-};
-type QuotationItemDraft = {
-  description: string;
-  model: string;
-  quantity: number;
-  unit_price_kes: number;
 };
 const productFields = [
   ["sku", "SKU"],
@@ -108,9 +103,6 @@ function AdminPage() {
   const [quotations, setQuotations] = useState<QuotationRow[]>([]);
   const [selectedQuotationId, setSelectedQuotationId] = useState<string | null>(null);
   const [showNewQuotation, setShowNewQuotation] = useState(false);
-  const [quotationItems, setQuotationItems] = useState<QuotationItemDraft[]>([
-    { description: "", model: "", quantity: 1, unit_price_kes: 0 },
-  ]);
   const [blogPosts, setBlogPosts] = useState<BlogRow[]>([]);
   const [blogDraft, setBlogDraft] = useState<BlogDraft>(emptyBlogDraft);
   const [liveStatus, setLiveStatus] = useState<"connecting" | "live">("connecting");
@@ -230,46 +222,44 @@ function AdminPage() {
     setBlogDraft(emptyBlogDraft);
   };
 
-  const createStandaloneQuotation = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const subtotal = quotationItems.reduce((sum, item) => sum + item.quantity * item.unit_price_kes, 0);
+  const saveBuilderQuotation = async (payload: QuotationSavePayload) => {
     const { data: quotation, error } = await supabase
       .from("quotation_requests")
       .insert({
-        customer_name: String(form.get("customer_name") || "Customer quotation"),
-        customer_email: String(form.get("customer_email") || ""),
-        customer_phone: String(form.get("customer_phone") || ""),
-        service: String(form.get("service") || ""),
-        project_location: String(form.get("project_location") || ""),
-        project_type: String(form.get("project_type") || ""),
-        timeline: String(form.get("timeline") || ""),
-        details: String(form.get("details") || "Quotation created by admin."),
-        status: String(form.get("status") || "quoted"),
-        admin_notes: String(form.get("admin_notes") || ""),
-        subtotal_kes: subtotal,
-        total_kes: subtotal,
+        customer_name: payload.attn.trim() || "Customer quotation",
+        customer_email: "",
+        customer_phone: "",
+        service: payload.company || null,
+        project_location: payload.location || null,
+        project_type: null,
+        timeline: null,
+        details: payload.notes || "Quotation created by admin.",
+        status: "quoted",
+        admin_notes: `Quote no. ${payload.quoteNumber}, dated ${payload.date}.`,
+        subtotal_kes: Math.round(payload.subtotal),
+        total_kes: Math.round(payload.total),
       })
       .select("id")
       .single();
     if (error || !quotation) {
-      setMessage(error?.message ?? "Quotation could not be created.");
-      return;
+      return { error: error?.message ?? "Quotation could not be created." };
     }
-    const validItems = quotationItems.filter((item) => item.description.trim());
+    const validItems = payload.items.filter((item) => item.description.trim());
     if (validItems.length) {
       const { error: itemsError } = await supabase.from("quotation_items").insert(
-        validItems.map((item) => ({ ...item, quotation_id: quotation.id })),
+        validItems.map((item) => ({
+          quotation_id: quotation.id,
+          description: item.description,
+          model: item.model,
+          quantity: item.quantity,
+          unit_price_kes: Math.round(item.unitPrice),
+        })),
       );
-      if (itemsError) {
-        setMessage(itemsError.message);
-        return;
-      }
+      if (itemsError) return { error: itemsError.message };
     }
-    setMessage("Quotation created.");
-    setQuotationItems([{ description: "", model: "", quantity: 1, unit_price_kes: 0 }]);
     setShowNewQuotation(false);
     void loadDashboard();
+    return undefined;
   };
 
   const updateQuotation = async (event: FormEvent<HTMLFormElement>) => {
@@ -433,13 +423,22 @@ function AdminPage() {
             </p>
           </div>
           {sessionEmail && (
-            <button
-              type="button"
-              onClick={signOut}
-              className="min-h-11 border border-border px-4 text-xs font-bold uppercase tracking-widest text-navy"
-            >
-              Sign out
-            </button>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                to="/quotation-builder"
+                target="_blank"
+                className="inline-flex min-h-11 items-center border border-gold bg-gold px-4 text-xs font-bold uppercase tracking-widest text-navy-deep"
+              >
+                Open quotation builder ↗
+              </Link>
+              <button
+                type="button"
+                onClick={signOut}
+                className="min-h-11 border border-border px-4 text-xs font-bold uppercase tracking-widest text-navy"
+              >
+                Sign out
+              </button>
+            </div>
           )}
         </div>
         {!isSupabaseConfigured && (
@@ -665,49 +664,9 @@ function AdminPage() {
                 </button>
               </div>
               {showNewQuotation && (
-                <form onSubmit={createStandaloneQuotation} className="mt-6 border border-gold/60 bg-gold/5 p-5">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h3 className="text-xl font-black text-navy">Build a new quotation</h3>
-                      <p className="mt-1 text-sm text-muted-foreground">Create a quote for a walk-in, phone, WhatsApp or repeat customer.</p>
-                    </div>
-                    <span className="text-xs font-bold uppercase tracking-widest text-gold">Admin created</span>
-                  </div>
-                  <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    <label className="grid gap-2 text-sm font-bold text-navy">Customer name<input required name="customer_name" className="border border-border bg-white px-3 py-2.5 font-normal" /></label>
-                    <label className="grid gap-2 text-sm font-bold text-navy">Phone<input name="customer_phone" className="border border-border bg-white px-3 py-2.5 font-normal" /></label>
-                    <label className="grid gap-2 text-sm font-bold text-navy">Email<input name="customer_email" type="email" className="border border-border bg-white px-3 py-2.5 font-normal" /></label>
-                    <label className="grid gap-2 text-sm font-bold text-navy">Service<input name="service" className="border border-border bg-white px-3 py-2.5 font-normal" /></label>
-                    <label className="grid gap-2 text-sm font-bold text-navy">Project location<input name="project_location" className="border border-border bg-white px-3 py-2.5 font-normal" /></label>
-                    <label className="grid gap-2 text-sm font-bold text-navy">Project type<input name="project_type" className="border border-border bg-white px-3 py-2.5 font-normal" /></label>
-                  </div>
-                  <div className="mt-6">
-                    <div className="flex items-center justify-between gap-4">
-                      <h4 className="text-sm font-bold uppercase tracking-widest text-navy">Line items</h4>
-                      <button type="button" onClick={() => setQuotationItems((items) => [...items, { description: "", model: "", quantity: 1, unit_price_kes: 0 }])} className="text-xs font-bold uppercase tracking-widest text-navy underline">+ Add item</button>
-                    </div>
-                    <div className="mt-3 space-y-3">
-                      {quotationItems.map((item, index) => (
-                        <div key={index} className="grid gap-3 border border-border bg-white p-3 sm:grid-cols-[1.5fr_0.8fr_0.45fr_0.8fr_auto] sm:items-end">
-                          <label className="grid gap-1 text-xs font-bold uppercase tracking-widest text-navy">Description<input required={index === 0} value={item.description} onChange={(event) => setQuotationItems((items) => items.map((current, itemIndex) => itemIndex === index ? { ...current, description: event.target.value } : current))} className="border border-border bg-background px-3 py-2 font-normal normal-case tracking-normal" /></label>
-                          <label className="grid gap-1 text-xs font-bold uppercase tracking-widest text-navy">Model<input value={item.model} onChange={(event) => setQuotationItems((items) => items.map((current, itemIndex) => itemIndex === index ? { ...current, model: event.target.value } : current))} className="border border-border bg-background px-3 py-2 font-normal normal-case tracking-normal" /></label>
-                          <label className="grid gap-1 text-xs font-bold uppercase tracking-widest text-navy">Qty<input type="number" min="1" value={item.quantity} onChange={(event) => setQuotationItems((items) => items.map((current, itemIndex) => itemIndex === index ? { ...current, quantity: Number(event.target.value) || 1 } : current))} className="border border-border bg-background px-3 py-2 font-normal normal-case tracking-normal" /></label>
-                          <label className="grid gap-1 text-xs font-bold uppercase tracking-widest text-navy">Unit KES<input type="number" min="0" value={item.unit_price_kes} onChange={(event) => setQuotationItems((items) => items.map((current, itemIndex) => itemIndex === index ? { ...current, unit_price_kes: Number(event.target.value) || 0 } : current))} className="border border-border bg-background px-3 py-2 font-normal normal-case tracking-normal" /></label>
-                          <button type="button" disabled={quotationItems.length === 1} onClick={() => setQuotationItems((items) => items.filter((_, itemIndex) => itemIndex !== index))} className="min-h-9 px-2 text-xs font-bold text-red-700 disabled:opacity-30">Remove</button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="mt-6 grid gap-4 sm:grid-cols-3">
-                    <label className="grid gap-2 text-sm font-bold text-navy">Status<select name="status" defaultValue="quoted" className="border border-border bg-white px-3 py-2.5 font-normal"><option value="new">New</option><option value="reviewing">Reviewing</option><option value="quoted">Quoted</option><option value="sent">Sent</option></select></label>
-                    <div className="flex items-end border border-navy bg-navy p-3 text-white"><span><span className="block text-[10px] font-bold uppercase tracking-widest text-gold">Calculated subtotal</span><strong className="mt-1 block text-xl">{formatKes(quotationItems.reduce((sum, item) => sum + item.quantity * item.unit_price_kes, 0))}</strong></span></div>
-                  </div>
-                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                    <label className="grid gap-2 text-sm font-bold text-navy">Project details<textarea name="details" rows={3} className="border border-border bg-white px-3 py-2.5 font-normal" /></label>
-                    <label className="grid gap-2 text-sm font-bold text-navy">Admin notes<textarea name="admin_notes" rows={3} className="border border-border bg-white px-3 py-2.5 font-normal" /></label>
-                  </div>
-                  <button type="submit" className="mt-5 min-h-11 bg-navy px-5 py-3 text-sm font-bold text-white">Save new quotation</button>
-                </form>
+                <div className="mt-6 border border-gold/60 bg-gold/5 p-5">
+                  <QuotationBuilder onSave={saveBuilderQuotation} embedded />
+                </div>
               )}
               {quotations.length === 0 ? (
                 <p className="mt-6 border border-dashed border-border p-6 text-sm text-muted-foreground">
