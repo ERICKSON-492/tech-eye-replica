@@ -79,14 +79,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Eyetech Engineering & Supplies | Steel, Aluminium & Glass Kenya" },
+      {
+        name: "description",
+        content:
+          "Steel, aluminium and glass fabrication and supplies for residential, commercial and public projects across Kenya.",
+      },
+      { name: "author", content: "Eyetech Engineering & Supplies" },
+      { property: "og:title", content: "Eyetech Engineering & Supplies" },
+      {
+        property: "og:description",
+        content:
+          "Steel, aluminium and glass fabrication and supplies for residential, commercial and public projects across Kenya.",
+      },
+      { property: "og:image", content: "https://eyetechstainlesssteelexpert.co.ke/eyetech-logo-512.png" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
       { name: "theme-color", content: "#0a1630" },
     ],
     links: [
