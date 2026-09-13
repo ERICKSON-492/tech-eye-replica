@@ -36,6 +36,7 @@ type CompanyInfo = {
   tagline: string;
   phone: string;
   logoUrl: string | null;
+  whatsapp: string;
   terms: string[];
 };
 
@@ -46,6 +47,7 @@ const defaultCompanyInfo: CompanyInfo = {
   tagline: "STEEL, ALUMINIUM & GLASS FABRICATION SOLUTIONS",
   phone: "0717 614 427 / 0759 719 147",
   logoUrl: null,
+  whatsapp: "254717614427",
   terms: [
     "Validity: Prices valid for 30 days from quotation date",
     "Delivery time: 7–14 working days from order confirmation, unless stated otherwise",
@@ -147,6 +149,7 @@ export function QuotationBuilder({
   const [savingPdf, setSavingPdf] = useState(false);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState("");
+  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const previewRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -154,6 +157,34 @@ export function QuotationBuilder({
     setDrafts(loadDrafts());
     setDraft(emptyDraft());
   }, []);
+
+  const whatsappLink = useMemo(() => {
+    const digits = company.whatsapp.replace(/\D/g, "");
+    if (!digits) return "";
+    const message = `Hi, I'd like to follow up on Quotation ${draft.quoteNumber || ""}`.trim();
+    return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
+  }, [company.whatsapp, draft.quoteNumber]);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!whatsappLink) {
+      setQrDataUrl(null);
+      return;
+    }
+    import("qrcode")
+      .then(({ default: QRCode }) =>
+        QRCode.toDataURL(whatsappLink, { margin: 1, width: 160 }),
+      )
+      .then((url) => {
+        if (!cancelled) setQrDataUrl(url);
+      })
+      .catch(() => {
+        if (!cancelled) setQrDataUrl(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [whatsappLink]);
 
   const subtotal = useMemo(
     () => draft.items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0),
@@ -652,15 +683,25 @@ export function QuotationBuilder({
                 {draft.notes}
               </div>
             )}
-            <div className="mt-6">
-              <h3 className="text-[11px] font-black uppercase tracking-widest">
-                General terms of sale
-              </h3>
-              <ol className="mt-2 list-decimal space-y-1 pl-4 text-[11px] leading-relaxed">
-                {company.terms.map((term) => (
-                  <li key={term}>{term}</li>
-                ))}
-              </ol>
+            <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <h3 className="text-[11px] font-black uppercase tracking-widest">
+                  General terms of sale
+                </h3>
+                <ol className="mt-2 list-decimal space-y-1 pl-4 text-[11px] leading-relaxed">
+                  {company.terms.map((term) => (
+                    <li key={term}>{term}</li>
+                  ))}
+                </ol>
+              </div>
+              {qrDataUrl && (
+                <div className="shrink-0 text-center">
+                  <img src={qrDataUrl} alt="WhatsApp follow-up QR code" className="h-24 w-24" />
+                  <p className="mt-1 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">
+                    Scan to WhatsApp us
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -681,6 +722,7 @@ function CompanySettingsPanel({
   const [name, setName] = useState(company.name);
   const [tagline, setTagline] = useState(company.tagline);
   const [phone, setPhone] = useState(company.phone);
+  const [whatsapp, setWhatsapp] = useState(company.whatsapp);
   const [logoUrl, setLogoUrl] = useState(company.logoUrl);
   const [logoError, setLogoError] = useState("");
   const [terms, setTerms] = useState(company.terms.join("\n"));
@@ -767,6 +809,19 @@ function CompanySettingsPanel({
           />
         </label>
         <label className="grid gap-1.5 text-xs font-bold uppercase tracking-widest text-navy">
+          WhatsApp number for QR code
+          <input
+            value={whatsapp}
+            onChange={(event) => setWhatsapp(event.target.value)}
+            placeholder="2547XXXXXXXX"
+            className="border border-border bg-white px-3 py-2 font-normal normal-case tracking-normal"
+          />
+          <p className="font-normal normal-case tracking-normal text-muted-foreground">
+            Country code + number, no spaces or "+". Clients scan the QR code on the quotation to
+            message you on WhatsApp about this quote.
+          </p>
+        </label>
+        <label className="grid gap-1.5 text-xs font-bold uppercase tracking-widest text-navy">
           General terms of sale (one per line)
           <textarea
             rows={5}
@@ -785,6 +840,7 @@ function CompanySettingsPanel({
               tagline: tagline.trim() || defaultCompanyInfo.tagline,
               phone: phone.trim() || defaultCompanyInfo.phone,
               logoUrl,
+              whatsapp: whatsapp.replace(/\D/g, "") || defaultCompanyInfo.whatsapp,
               terms: terms
                 .split("\n")
                 .map((line) => line.trim())
