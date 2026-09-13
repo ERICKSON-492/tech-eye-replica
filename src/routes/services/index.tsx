@@ -8,13 +8,13 @@ export const Route = createFileRoute("/services/")({
   component: ServicesIndex,
   head: () => ({
     meta: [
-      { title: "Services | Eyetech Engineering & Supplies Kenya" },
+      { title: "Services | Eyetech Stainless Steel Expert Kenya" },
       {
         name: "description",
         content:
-          "Explore steel, aluminium, glass and architectural fabrication services from Eyetech Engineering & Supplies in Nairobi and across Kenya.",
+          "Explore steel, aluminium, glass and architectural fabrication services from Eyetech Stainless Steel Expert in Nairobi and across Kenya.",
       },
-      { property: "og:title", content: "Services | Eyetech Engineering & Supplies" },
+      { property: "og:title", content: "Services | Eyetech Stainless Steel Expert" },
       {
         property: "og:description",
         content:

@@ -11,20 +11,20 @@ export const Route = createFileRoute("/services/$slug")({
   component: ServiceDetail,
   head: ({ loaderData }) => ({
     meta: [
-      { title: `${loaderData?.title ?? "Service"} | Eyetech Engineering & Supplies` },
+      { title: `${loaderData?.title ?? "Service"} | Eyetech Stainless Steel Expert` },
       {
         name: "description",
         content:
           loaderData?.description ??
-          "Explore Eyetech Engineering & Supplies fabrication and installation services in Kenya.",
+          "Explore Eyetech Stainless Steel Expert fabrication and installation services in Kenya.",
       },
       {
         property: "og:title",
-        content: `${loaderData?.title ?? "Service"} | Eyetech Engineering & Supplies`,
+        content: `${loaderData?.title ?? "Service"} | Eyetech Stainless Steel Expert`,
       },
       {
         property: "og:description",
-        content: loaderData?.description ?? "Explore Eyetech Engineering & Supplies services.",
+        content: loaderData?.description ?? "Explore Eyetech Stainless Steel Expert services.",
       },
       { property: "og:type", content: "website" },
     ],

@@ -1,4 +1,4 @@
-# EyeTech Mirror
+# Eyetech Stainless Steel Expert
 
 clone https://eyetechengineering.co.ke/ exactly as it is
 

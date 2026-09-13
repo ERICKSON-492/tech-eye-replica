@@ -7,13 +7,13 @@ export const Route = createFileRoute("/about-us")({
   component: AboutPage,
   head: () => ({
     meta: [
-      { title: "About Eyetech Engineering & Supplies | Nairobi" },
+      { title: "About Eyetech Stainless Steel Expert | Nairobi" },
       {
         name: "description",
         content:
-          "Learn about Eyetech Engineering & Supplies, a Nairobi-based steel, aluminium and glass fabrication company established in 2022.",
+          "Learn about Eyetech Stainless Steel Expert, a Nairobi-based steel, aluminium and glass fabrication company established in 2022.",
       },
-      { property: "og:title", content: "About Eyetech Engineering & Supplies" },
+      { property: "og:title", content: "About Eyetech Stainless Steel Expert" },
       {
         property: "og:description",
         content:
@@ -79,7 +79,7 @@ function AboutPage() {
               We Build Trust, <span className="text-gold">Quality, Security &amp; Beauty</span>
             </>
           }
-          description="Eyetech Engineering & Supplies is a Nairobi-based fabrication and supplies company working with steel, aluminium and glass for residential, commercial and public projects."
+          description="Eyetech Stainless Steel Expert is a Nairobi-based fabrication and supplies company working with steel, aluminium and glass for residential, commercial and public projects."
           image={siteImages.building}
           imageAlt="Modern building facade representing Eyetech engineering and fabrication work"
         />
@@ -92,7 +92,7 @@ function AboutPage() {
                 title="Turning ideas and designs into solid reality"
               />
               <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-                Eyetech Engineering &amp; Supplies was established as a sole proprietorship under
+                Eyetech Stainless Steel Expert was established as a sole proprietorship under
                 the ownership of Amos Mwangi in 2022 in Nairobi. From a modest beginning, the
                 company has progressed through the work of a dedicated technical team and a growing
                 understanding of modern steel, aluminium and glass fabrication.

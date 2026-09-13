@@ -10,13 +10,13 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Eyetech Engineering & Supplies | Steel, Aluminium & Glass Kenya" },
+      { title: "Eyetech Stainless Steel Expert | Steel, Aluminium & Glass Kenya" },
       {
         name: "description",
         content:
           "Steel, aluminium and glass fabrication and supplies for residential, commercial and public projects across Kenya. Based in Nairobi since 2022.",
       },
-      { property: "og:title", content: "Eyetech Engineering & Supplies" },
+      { property: "og:title", content: "Eyetech Stainless Steel Expert" },
       {
         property: "og:description",
         content:
@@ -146,7 +146,7 @@ function Index() {
             <div className="relative">
               <img
                 src={siteImages.building}
-                alt="Eyetech Engineering and Supplies workspace"
+                alt="Eyetech Stainless Steel Expert workspace"
                 className="w-full object-cover"
                 loading="lazy"
               />
@@ -165,7 +165,7 @@ function Index() {
                 }
               />
               <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-                Eyetech Engineering &amp; Supplies was established in 2022 in Nairobi as a growing
+                Eyetech Stainless Steel Expert was established in 2022 in Nairobi as a growing
                 engineering and fabrication company specializing in steel, aluminium and glass
                 works.
               </p>
@@ -365,7 +365,7 @@ function Index() {
               Have a Design or Project in Mind?
             </h2>
             <p className="mt-4 text-base text-white/70">
-              Let Eyetech Engineering &amp; Supplies help turn your ideas into reality.
+              Let Eyetech Stainless Steel Expert help turn your ideas into reality.
             </p>
             <Link
               to="/contact"

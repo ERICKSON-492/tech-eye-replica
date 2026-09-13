@@ -12,13 +12,13 @@ export const Route = createFileRoute("/blog/$slug")({
   head: ({ loaderData }) => {
     if (!loaderData) {
       return {
-        meta: [{ title: "Article not found | Eyetech Engineering & Supplies" }],
+        meta: [{ title: "Article not found | Eyetech Stainless Steel Expert" }],
       };
     }
     const { post } = loaderData;
     return {
       meta: [
-        { title: `${post.title} | Eyetech Engineering & Supplies` },
+        { title: `${post.title} | Eyetech Stainless Steel Expert` },
         { name: "description", content: post.excerpt },
         { property: "og:title", content: post.title },
         { property: "og:description", content: post.excerpt },

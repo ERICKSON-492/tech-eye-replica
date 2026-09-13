@@ -6,16 +6,16 @@ export const Route = createFileRoute("/quotation-builder")({
   component: QuotationBuilderPage,
   head: () => ({
     meta: [
-      { title: "Quotation Builder | Eyetech Engineering & Supplies" },
+      { title: "Quotation Builder | Eyetech Stainless Steel Expert" },
       {
         name: "description",
         content:
-          "Build professional quotations, preview them live and export them to PDF for Eyetech Engineering & Supplies customers.",
+          "Build professional quotations, preview them live and export them to PDF for Eyetech Stainless Steel Expert customers.",
       },
-      { property: "og:title", content: "Quotation Builder | Eyetech Engineering & Supplies" },
+      { property: "og:title", content: "Quotation Builder | Eyetech Stainless Steel Expert" },
       {
         property: "og:description",
-        content: "Build and preview a branded Eyetech Engineering & Supplies quotation.",
+        content: "Build and preview a branded Eyetech Stainless Steel Expert quotation.",
       },
       { property: "og:image", content: "https://eyetechstainlesssteelexpert.co.ke/eyetech-logo-512.png" },
       { property: "og:type", content: "website" },

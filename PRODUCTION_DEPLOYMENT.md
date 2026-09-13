@@ -1,6 +1,6 @@
 # Production Deployment Guide
 
-## Eyetech Engineering & Supplies website
+## Eyetech Stainless Steel Expert website
 
 This repository contains a TanStack Start application built with Vite and Nitro. The current Vite configuration uses Nitro’s Cloudflare module target, and a successful production build generates a `.output` directory plus a Wrangler configuration. The repository is also connected to Lovable, where pushes to `main` can synchronize the project.
 

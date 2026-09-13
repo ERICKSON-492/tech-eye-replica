@@ -9,7 +9,7 @@ export const Route = createFileRoute("/shop/checkout")({
   component: CheckoutPage,
   head: () => ({
     meta: [
-      { title: "Checkout | Eyetech Engineering & Supplies" },
+      { title: "Checkout | Eyetech Stainless Steel Expert" },
       {
         name: "description",
         content:

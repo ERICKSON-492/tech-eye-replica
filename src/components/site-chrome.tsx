@@ -87,7 +87,7 @@ export function Header() {
         <Link
           to="/"
           className="motion-link flex items-center gap-3"
-          aria-label="Eyetech Engineering & Supplies home"
+          aria-label="Eyetech Stainless Steel Expert home"
         >
           <span className="flex h-10 w-10 shrink-0 items-center justify-center bg-white p-1 shadow-sm ring-1 ring-border">
             <img
@@ -98,7 +98,7 @@ export function Header() {
             />
           </span>
           <span className="text-sm font-medium text-navy sm:text-base">
-            Eyetech Engineering &amp; Supplies
+            Eyetech Stainless Steel Expert
           </span>
         </Link>
 
@@ -199,12 +199,12 @@ export function Footer() {
             <span className="flex h-12 w-12 shrink-0 items-center justify-center bg-white p-1.5">
               <img
                 src="/eyetech-logo.png"
-                alt="Eyetech Engineering & Supplies logo"
+                alt="Eyetech Stainless Steel Expert logo"
                 className="h-full w-full object-contain"
                 loading="lazy"
               />
             </span>
-            <h3 className="text-base font-bold text-white">Eyetech Engineering &amp; Supplies</h3>
+            <h3 className="text-base font-bold text-white">Eyetech Stainless Steel Expert</h3>
           </div>
           <p className="mt-3 text-sm leading-relaxed">
             Steel, aluminium and glass fabrication and supplies for residential, commercial and
@@ -312,7 +312,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10 py-5 text-center text-xs">
-        © {new Date().getFullYear()} Eyetech Engineering &amp; Supplies. All rights reserved.
+        © {new Date().getFullYear()} Eyetech Stainless Steel Expert. All rights reserved.
       </div>
     </footer>
   );

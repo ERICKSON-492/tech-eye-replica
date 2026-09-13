@@ -9,7 +9,7 @@ export const Route = createFileRoute("/admin/")({
   component: AdminPage,
   head: () => ({
     meta: [
-      { title: "Admin Dashboard | Eyetech Engineering & Supplies" },
+      { title: "Admin Dashboard | Eyetech Stainless Steel Expert" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

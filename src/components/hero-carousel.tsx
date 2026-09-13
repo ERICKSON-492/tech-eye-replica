@@ -18,7 +18,7 @@ type HeroSlide = {
 
 const slides: HeroSlide[] = [
   {
-    eyebrow: "Eyetech Engineering & Supplies",
+    eyebrow: "Eyetech Stainless Steel Expert",
     title: "Designed with Precision.",
     accent: "Fabricated with Strength",
     description:

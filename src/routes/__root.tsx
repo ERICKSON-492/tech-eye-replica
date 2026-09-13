@@ -79,14 +79,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Eyetech Engineering & Supplies | Steel, Aluminium & Glass Kenya" },
+      { title: "Eyetech Stainless Steel Expert | Steel, Aluminium & Glass Kenya" },
       {
         name: "description",
         content:
           "Steel, aluminium and glass fabrication and supplies for residential, commercial and public projects across Kenya.",
       },
-      { name: "author", content: "Eyetech Engineering & Supplies" },
-      { property: "og:title", content: "Eyetech Engineering & Supplies" },
+      { name: "author", content: "Eyetech Stainless Steel Expert" },
+      { property: "og:title", content: "Eyetech Stainless Steel Expert" },
       {
         property: "og:description",
         content:

@@ -9,13 +9,13 @@ export const Route = createFileRoute("/blog/")({
   component: BlogIndex,
   head: () => ({
     meta: [
-      { title: "Blog | Eyetech Engineering & Supplies Kenya" },
+      { title: "Blog | Eyetech Stainless Steel Expert Kenya" },
       {
         name: "description",
         content:
           "Practical guides on steel, aluminium and glass works in Kenya — choosing railings, specifying windows, caring for finishes and how a fabrication project runs.",
       },
-      { property: "og:title", content: "Blog | Eyetech Engineering & Supplies" },
+      { property: "og:title", content: "Blog | Eyetech Stainless Steel Expert" },
       {
         property: "og:description",
         content:

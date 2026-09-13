@@ -8,13 +8,13 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
   head: () => ({
     meta: [
-      { title: "Contact | Eyetech Engineering & Supplies Nairobi" },
+      { title: "Contact | Eyetech Stainless Steel Expert Nairobi" },
       {
         name: "description",
         content:
-          "Get a quote for steel, aluminium and glass fabrication from Eyetech Engineering & Supplies in Nairobi. Call +254 717 614 427 or message us on WhatsApp.",
+          "Get a quote for steel, aluminium and glass fabrication from Eyetech Stainless Steel Expert in Nairobi. Call +254 717 614 427 or message us on WhatsApp.",
       },
-      { property: "og:title", content: "Contact Eyetech Engineering & Supplies" },
+      { property: "og:title", content: "Contact Eyetech Stainless Steel Expert" },
       {
         property: "og:description",
         content: "Talk to our Nairobi team about your steel, aluminium or glass project.",
@@ -36,7 +36,7 @@ function ContactPage() {
         <PageBanner
           eyebrow="Contact"
           title="Have a Design or Project in Mind?"
-          description="Let Eyetech Engineering & Supplies help turn your ideas into reality."
+          description="Let Eyetech Stainless Steel Expert help turn your ideas into reality."
           image={siteImages.glazing}
           imageAlt="Glass and aluminium facade representing Eyetech project work"
         />
