@@ -85,6 +85,19 @@ const emptyDraft = (): QuotationDraft => ({
   notes: "",
 });
 
+/** Safe to render identically on the server and before hydration — no random/date values. */
+const blankDraft = (): QuotationDraft => ({
+  quoteNumber: "",
+  date: "",
+  attn: "",
+  company: "",
+  location: "",
+  items: [emptyItem()],
+  discountType: "percent",
+  discountValue: 0,
+  notes: "",
+});
+
 const formatMoney = (value: number) =>
   `KES ${value.toLocaleString("en-KE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
@@ -126,7 +139,7 @@ export function QuotationBuilder({
   hideLocalDrafts = false,
   embedded = false,
 }: QuotationBuilderProps) {
-  const [draft, setDraft] = useState<QuotationDraft>(() => emptyDraft());
+  const [draft, setDraft] = useState<QuotationDraft>(() => blankDraft());
   const [company, setCompany] = useState<CompanyInfo>(defaultCompanyInfo);
   const [showCompanySettings, setShowCompanySettings] = useState(false);
   const [drafts, setDrafts] = useState<StoredDraft[]>([]);
@@ -139,6 +152,7 @@ export function QuotationBuilder({
   useEffect(() => {
     setCompany(loadCompanyInfo());
     setDrafts(loadDrafts());
+    setDraft(emptyDraft());
   }, []);
 
   const subtotal = useMemo(
@@ -221,7 +235,7 @@ export function QuotationBuilder({
     setSavingPdf(true);
     try {
       const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
-        import("html2canvas"),
+        import("html2canvas-pro"),
         import("jspdf"),
       ]);
       const canvas = await html2canvas(previewRef.current, {
