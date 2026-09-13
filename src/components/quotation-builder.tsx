@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 
 export type QuotationLineItem = {
   id: string;
@@ -35,13 +35,17 @@ type CompanyInfo = {
   name: string;
   tagline: string;
   phone: string;
+  logoUrl: string | null;
   terms: string[];
 };
+
+const MAX_LOGO_BYTES = 1024 * 1024; // 1 MB
 
 const defaultCompanyInfo: CompanyInfo = {
   name: "EYETECH ENGINEERING & SUPPLIES",
   tagline: "STEEL, ALUMINIUM & GLASS FABRICATION SOLUTIONS",
   phone: "0717 614 427 / 0759 719 147",
+  logoUrl: null,
   terms: [
     "Validity: Prices valid for 30 days from quotation date",
     "Delivery time: 7–14 working days from order confirmation, unless stated otherwise",
@@ -554,6 +558,14 @@ export function QuotationBuilder({
           </p>
           <div ref={previewRef} className="border border-border bg-white p-8 text-navy">
             <div className="text-center">
+              {company.logoUrl && (
+                <img
+                  src={company.logoUrl}
+                  alt={`${company.name} logo`}
+                  className="mx-auto mb-3 h-16 max-w-[220px] object-contain"
+                  crossOrigin="anonymous"
+                />
+              )}
               <h2 className="text-lg font-black tracking-wide">{company.name}</h2>
               <p className="mt-1 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
                 {company.tagline}
@@ -655,12 +667,67 @@ function CompanySettingsPanel({
   const [name, setName] = useState(company.name);
   const [tagline, setTagline] = useState(company.tagline);
   const [phone, setPhone] = useState(company.phone);
+  const [logoUrl, setLogoUrl] = useState(company.logoUrl);
+  const [logoError, setLogoError] = useState("");
   const [terms, setTerms] = useState(company.terms.join("\n"));
+
+  const handleLogoChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    setLogoError("");
+    if (!file.type.startsWith("image/")) {
+      setLogoError("Please choose an image file.");
+      return;
+    }
+    if (file.size > MAX_LOGO_BYTES) {
+      setLogoError("Logo must be 1 MB or smaller.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => setLogoUrl(typeof reader.result === "string" ? reader.result : null);
+    reader.onerror = () => setLogoError("Could not read that image file.");
+    reader.readAsDataURL(file);
+  };
 
   return (
     <div className="mt-4 border border-gold/60 bg-gold/5 p-5">
       <h3 className="text-sm font-bold uppercase tracking-widest text-navy">Company settings</h3>
       <div className="mt-3 grid gap-3">
+        <div className="grid gap-1.5 text-xs font-bold uppercase tracking-widest text-navy">
+          Logo
+          <div className="flex flex-wrap items-center gap-3">
+            {logoUrl && (
+              <img
+                src={logoUrl}
+                alt="Company logo preview"
+                className="h-12 w-auto max-w-[160px] border border-border bg-white object-contain p-1"
+              />
+            )}
+            <label className="min-h-10 cursor-pointer border border-border bg-white px-3 py-2 font-normal normal-case tracking-normal text-navy">
+              {logoUrl ? "Replace logo" : "Upload logo"}
+              <input
+                type="file"
+                accept="image/png,image/jpeg,image/svg+xml,image/webp"
+                onChange={handleLogoChange}
+                className="hidden"
+              />
+            </label>
+            {logoUrl && (
+              <button
+                type="button"
+                onClick={() => setLogoUrl(null)}
+                className="min-h-10 border border-border px-3 py-2 font-normal normal-case tracking-normal text-navy"
+              >
+                Remove
+              </button>
+            )}
+          </div>
+          {logoError && <p className="font-normal normal-case tracking-normal text-red-600">{logoError}</p>}
+          <p className="font-normal normal-case tracking-normal text-muted-foreground">
+            PNG, JPG, SVG or WebP, up to 1 MB. Shown at the top of the quotation and PDF.
+          </p>
+        </div>
         <label className="grid gap-1.5 text-xs font-bold uppercase tracking-widest text-navy">
           Business name
           <input
@@ -703,6 +770,7 @@ function CompanySettingsPanel({
               name: name.trim() || defaultCompanyInfo.name,
               tagline: tagline.trim() || defaultCompanyInfo.tagline,
               phone: phone.trim() || defaultCompanyInfo.phone,
+              logoUrl,
               terms: terms
                 .split("\n")
                 .map((line) => line.trim())
