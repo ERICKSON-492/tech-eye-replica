@@ -12,6 +12,14 @@ export const Route = createFileRoute("/quotation-builder")({
         content:
           "Build professional quotations, preview them live and export them to PDF for Eyetech Engineering & Supplies customers.",
       },
+      { property: "og:title", content: "Quotation Builder | Eyetech Engineering & Supplies" },
+      {
+        property: "og:description",
+        content: "Build and preview a branded Eyetech Engineering & Supplies quotation.",
+      },
+      { property: "og:image", content: "https://eyetechstainlesssteelexpert.co.ke/eyetech-logo-512.png" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
