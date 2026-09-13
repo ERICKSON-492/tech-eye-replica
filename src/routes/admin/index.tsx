@@ -338,6 +338,36 @@ function AdminPage() {
 
   const saveBlogPost = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const image = form.get("image");
+    const imageFile = image instanceof File && image.size > 0 ? image : null;
+    let imageUrl = blogDraft.image_url.trim() || "/images/workshop.jpg";
+    let uploadedPath: string | null = null;
+
+    if (imageFile) {
+      if (!imageFile.type.startsWith("image/")) {
+        setMessage("Please choose an image file.");
+        return;
+      }
+      if (imageFile.size > 5 * 1024 * 1024) {
+        setMessage("Blog images must be 5 MB or smaller.");
+        return;
+      }
+
+      const extension = imageFile.name.split(".").pop()?.toLowerCase() || "jpg";
+      uploadedPath = `${crypto.randomUUID()}.${extension}`;
+      const upload = await supabase.storage.from("blog-images").upload(uploadedPath, imageFile, {
+        cacheControl: "3600",
+        contentType: imageFile.type,
+        upsert: false,
+      });
+      if (upload.error) {
+        setMessage(`Image upload failed: ${upload.error.message}`);
+        return;
+      }
+      imageUrl = supabase.storage.from("blog-images").getPublicUrl(uploadedPath).data.publicUrl;
+    }
+
     const paragraphs = blogDraft.body
       .split(/\n+/)
       .map((item) => item.trim())
@@ -347,7 +377,7 @@ function AdminPage() {
       title: blogDraft.title.trim(),
       excerpt: blogDraft.excerpt.trim(),
       category: blogDraft.category.trim() || "Guides",
-      image_url: blogDraft.image_url.trim() || "/images/workshop.jpg",
+      image_url: imageUrl,
       image_alt: blogDraft.image_alt.trim() || blogDraft.title.trim(),
       read_time: blogDraft.read_time.trim() || "5 min read",
       body: [{ heading: "Article", paragraphs }],
@@ -357,6 +387,9 @@ function AdminPage() {
     const result = blogDraft.id
       ? await supabase.from("blog_posts").update(payload).eq("id", blogDraft.id)
       : await supabase.from("blog_posts").insert(payload);
+    if (result.error && uploadedPath) {
+      await supabase.storage.from("blog-images").remove([uploadedPath]);
+    }
     setMessage(
       result.error
         ? result.error.message
@@ -366,6 +399,7 @@ function AdminPage() {
     );
     if (!result.error) {
       setBlogDraft(emptyBlogDraft);
+      event.currentTarget.reset();
       void loadDashboard();
     }
   };
@@ -826,14 +860,26 @@ function AdminPage() {
                   />
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-navy">
-                  Image URL
-                  <input
-                    value={blogDraft.image_url}
-                    onChange={(event) =>
-                      setBlogDraft((draft) => ({ ...draft, image_url: event.target.value }))
-                    }
-                    className="border border-border bg-background px-4 py-3 font-normal"
-                  />
+                  Image
+                  <div className="flex flex-wrap items-center gap-3">
+                    {blogDraft.image_url && (
+                      <img
+                        src={blogDraft.image_url}
+                        alt=""
+                        className="h-14 w-20 border border-border object-cover"
+                      />
+                    )}
+                    <input
+                      type="file"
+                      name="image"
+                      accept="image/jpeg,image/png,image/webp"
+                      className="border border-border bg-background px-4 py-3 font-normal"
+                    />
+                  </div>
+                  <p className="text-xs font-normal text-muted-foreground">
+                    Upload a JPG, PNG or WebP image up to 5 MB.
+                    {blogDraft.id ? " Leave blank to keep the current image." : ""}
+                  </p>
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-navy">
                   Image alt text
