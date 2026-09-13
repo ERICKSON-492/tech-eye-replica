@@ -64,7 +64,6 @@ export function QuoteForm({ initialService = "", compact = false }: QuoteFormPro
     previewRows.filter(([, value]) => value.trim()).length + (draft.message.trim() ? 1 : 0);
   const completion = Math.round((filledCount / 8) * 100);
 
-
   const submitQuote = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -97,7 +96,11 @@ export function QuoteForm({ initialService = "", compact = false }: QuoteFormPro
         return;
       }
     } else {
-      window.open(`${WHATSAPP}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+      window.open(
+        `${WHATSAPP}?text=${encodeURIComponent(message)}`,
+        "_blank",
+        "noopener,noreferrer",
+      );
     }
 
     setSubmitting(false);

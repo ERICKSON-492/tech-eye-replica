@@ -17,7 +17,10 @@ export const Route = createFileRoute("/quotation-builder")({
         property: "og:description",
         content: "Build and preview a branded Eyetech Stainless Steel Expert quotation.",
       },
-      { property: "og:image", content: "https://eyetechstainlesssteelexpert.co.ke/eyetech-logo-512.png" },
+      {
+        property: "og:image",
+        content: "https://eyetechstainlesssteelexpert.co.ke/eyetech-logo-512.png",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex, nofollow" },

@@ -16,7 +16,6 @@ export type Service = {
   faqs: { question: string; answer: string }[];
 };
 
-
 export const services: Service[] = [
   {
     slug: "stainless-steel-fabrication",

@@ -92,7 +92,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Steel, aluminium and glass fabrication and supplies for residential, commercial and public projects across Kenya.",
       },
-      { property: "og:image", content: "https://eyetechstainlesssteelexpert.co.ke/eyetech-logo-512.png" },
+      {
+        property: "og:image",
+        content: "https://eyetechstainlesssteelexpert.co.ke/eyetech-logo-512.png",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#0a1630" },

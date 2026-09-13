@@ -61,7 +61,10 @@ function CheckoutPage() {
             Your order request has been received
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Your order reference is {orderId ? `${orderId.slice(0, 8).toUpperCase()}` : "being prepared"}. The Eyetech team can now review the request and confirm final pricing, delivery, installation and payment details.
+            Your order reference is{" "}
+            {orderId ? `${orderId.slice(0, 8).toUpperCase()}` : "being prepared"}. The Eyetech team
+            can now review the request and confirm final pricing, delivery, installation and payment
+            details.
           </p>
           <Link
             to="/shop"
@@ -150,7 +153,9 @@ function CheckoutPage() {
               event.preventDefault();
               setError("");
               if (!isSupabaseConfigured) {
-                setError("Supabase is not configured for this deployment yet. Add the required VITE_SUPABASE variables before submitting an order.");
+                setError(
+                  "Supabase is not configured for this deployment yet. Add the required VITE_SUPABASE variables before submitting an order.",
+                );
                 return;
               }
 
@@ -226,7 +231,10 @@ function CheckoutPage() {
                 payment.
               </p>
               {error && (
-                <p role="alert" className="mt-5 border-l-2 border-red-600 bg-red-50 p-3 text-sm leading-relaxed text-red-900">
+                <p
+                  role="alert"
+                  className="mt-5 border-l-2 border-red-600 bg-red-50 p-3 text-sm leading-relaxed text-red-900"
+                >
                   {error}
                 </p>
               )}

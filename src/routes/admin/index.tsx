@@ -130,7 +130,12 @@ function AdminPage() {
       setLoading(false);
       return;
     }
-    const [{ data: productRows }, { data: orderRows }, { data: quotationRows }, { data: blogRows }] = await Promise.all([
+    const [
+      { data: productRows },
+      { data: orderRows },
+      { data: quotationRows },
+      { data: blogRows },
+    ] = await Promise.all([
       supabase
         .from("products")
         .select("id, sku, name, category, price_kes, stock_quantity, active")
@@ -573,7 +578,8 @@ function AdminPage() {
                       className="border border-border bg-background px-3 py-2.5 text-sm font-normal normal-case tracking-normal"
                     />
                     <span className="text-[11px] font-normal normal-case tracking-normal text-muted-foreground">
-                      Upload a JPG, PNG or WebP image up to 5 MB. The file is stored in Supabase Storage.
+                      Upload a JPG, PNG or WebP image up to 5 MB. The file is stored in Supabase
+                      Storage.
                     </span>
                   </label>
                   <label className="grid gap-1 text-xs font-bold uppercase tracking-widest text-navy">
@@ -667,10 +673,13 @@ function AdminPage() {
             <section className="border border-border bg-white p-6">
               <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-widest text-gold">Lead management</p>
+                  <p className="text-xs font-bold uppercase tracking-widest text-gold">
+                    Lead management
+                  </p>
                   <h2 className="mt-2 text-2xl font-black text-navy">Quotation requests</h2>
                   <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-                    Review public requests, price a scope, update the workflow status and print a quote-ready summary.
+                    Review public requests, price a scope, update the workflow status and print a
+                    quote-ready summary.
                   </p>
                   <p
                     aria-live="polite"
@@ -704,7 +713,8 @@ function AdminPage() {
               )}
               {quotations.length === 0 ? (
                 <p className="mt-6 border border-dashed border-border p-6 text-sm text-muted-foreground">
-                  No quotation requests yet. New submissions from the public contact and service forms will appear here.
+                  No quotation requests yet. New submissions from the public contact and service
+                  forms will appear here.
                 </p>
               ) : (
                 <div className="mt-6 grid gap-8 lg:grid-cols-[0.75fr_1.25fr]">
@@ -718,26 +728,37 @@ function AdminPage() {
                       >
                         <span className="flex items-center justify-between gap-3">
                           <strong className="text-sm text-navy">{quotation.quote_number}</strong>
-                          <span className="text-[10px] font-bold uppercase tracking-widest text-gold">{quotation.status}</span>
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-gold">
+                            {quotation.status}
+                          </span>
                         </span>
-                        <span className="mt-2 block text-sm font-bold text-navy">{quotation.customer_name}</span>
+                        <span className="mt-2 block text-sm font-bold text-navy">
+                          {quotation.customer_name}
+                        </span>
                         <span className="mt-1 block text-xs text-muted-foreground">
-                          {quotation.service || "General enquiry"} · {new Date(quotation.created_at).toLocaleDateString()}
+                          {quotation.service || "General enquiry"} ·{" "}
+                          {new Date(quotation.created_at).toLocaleDateString()}
                         </span>
                       </button>
                     ))}
                   </div>
                   {(() => {
-                    const quotation = quotations.find((item) => item.id === selectedQuotationId) ?? quotations[0];
+                    const quotation =
+                      quotations.find((item) => item.id === selectedQuotationId) ?? quotations[0];
                     if (!quotation) return null;
                     return (
                       <div key={quotation.id} className="border border-border bg-background p-5">
                         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
                           <div>
-                            <p className="text-xs font-bold uppercase tracking-widest text-gold">Quotation {quotation.quote_number}</p>
-                            <h3 className="mt-2 text-2xl font-black text-navy">{quotation.customer_name}</h3>
+                            <p className="text-xs font-bold uppercase tracking-widest text-gold">
+                              Quotation {quotation.quote_number}
+                            </p>
+                            <h3 className="mt-2 text-2xl font-black text-navy">
+                              {quotation.customer_name}
+                            </h3>
                             <p className="mt-1 text-sm text-muted-foreground">
-                              {quotation.customer_phone}{quotation.customer_email ? ` · ${quotation.customer_email}` : ""}
+                              {quotation.customer_phone}
+                              {quotation.customer_email ? ` · ${quotation.customer_email}` : ""}
                             </p>
                           </div>
                           <button
@@ -749,31 +770,93 @@ function AdminPage() {
                           </button>
                         </div>
                         <dl className="mt-6 grid gap-4 border-y border-border py-5 text-sm sm:grid-cols-2">
-                          <div><dt className="text-xs font-bold uppercase tracking-widest text-gold">Service</dt><dd className="mt-1 text-navy">{quotation.service || "—"}</dd></div>
-                          <div><dt className="text-xs font-bold uppercase tracking-widest text-gold">Location</dt><dd className="mt-1 text-navy">{quotation.project_location || "—"}</dd></div>
-                          <div><dt className="text-xs font-bold uppercase tracking-widest text-gold">Project type</dt><dd className="mt-1 text-navy">{quotation.project_type || "—"}</dd></div>
-                          <div><dt className="text-xs font-bold uppercase tracking-widest text-gold">Timeline</dt><dd className="mt-1 text-navy">{quotation.timeline || "—"}</dd></div>
+                          <div>
+                            <dt className="text-xs font-bold uppercase tracking-widest text-gold">
+                              Service
+                            </dt>
+                            <dd className="mt-1 text-navy">{quotation.service || "—"}</dd>
+                          </div>
+                          <div>
+                            <dt className="text-xs font-bold uppercase tracking-widest text-gold">
+                              Location
+                            </dt>
+                            <dd className="mt-1 text-navy">{quotation.project_location || "—"}</dd>
+                          </div>
+                          <div>
+                            <dt className="text-xs font-bold uppercase tracking-widest text-gold">
+                              Project type
+                            </dt>
+                            <dd className="mt-1 text-navy">{quotation.project_type || "—"}</dd>
+                          </div>
+                          <div>
+                            <dt className="text-xs font-bold uppercase tracking-widest text-gold">
+                              Timeline
+                            </dt>
+                            <dd className="mt-1 text-navy">{quotation.timeline || "—"}</dd>
+                          </div>
                         </dl>
-                        <div className="mt-5 border-l-2 border-gold bg-white p-4 text-sm leading-relaxed text-navy">{quotation.details}</div>
+                        <div className="mt-5 border-l-2 border-gold bg-white p-4 text-sm leading-relaxed text-navy">
+                          {quotation.details}
+                        </div>
                         <form onSubmit={updateQuotation} className="mt-6 grid gap-4 sm:grid-cols-2">
                           <label className="grid gap-2 text-sm font-bold text-navy">
                             Status
-                            <select name="status" defaultValue={quotation.status} className="border border-border bg-white px-3 py-2.5 font-normal">
-                              {['new', 'reviewing', 'quoted', 'sent', 'approved', 'declined', 'closed'].map((status) => <option key={status} value={status}>{status}</option>)}
+                            <select
+                              name="status"
+                              defaultValue={quotation.status}
+                              className="border border-border bg-white px-3 py-2.5 font-normal"
+                            >
+                              {[
+                                "new",
+                                "reviewing",
+                                "quoted",
+                                "sent",
+                                "approved",
+                                "declined",
+                                "closed",
+                              ].map((status) => (
+                                <option key={status} value={status}>
+                                  {status}
+                                </option>
+                              ))}
                             </select>
                           </label>
                           <label className="grid gap-2 text-sm font-bold text-navy">
                             Subtotal (KES)
-                            <input name="subtotal_kes" type="number" min="0" defaultValue={quotation.subtotal_kes} className="border border-border bg-white px-3 py-2.5 font-normal" />
+                            <input
+                              name="subtotal_kes"
+                              type="number"
+                              min="0"
+                              defaultValue={quotation.subtotal_kes}
+                              className="border border-border bg-white px-3 py-2.5 font-normal"
+                            />
                           </label>
                           <div className="flex items-end border border-navy bg-navy p-3 text-white">
-                            <span><span className="block text-[10px] font-bold uppercase tracking-widest text-gold">Current total</span><strong className="mt-1 block text-xl">{formatKes(quotation.total_kes)}</strong></span>
+                            <span>
+                              <span className="block text-[10px] font-bold uppercase tracking-widest text-gold">
+                                Current total
+                              </span>
+                              <strong className="mt-1 block text-xl">
+                                {formatKes(quotation.total_kes)}
+                              </strong>
+                            </span>
                           </div>
                           <label className="grid gap-2 text-sm font-bold text-navy sm:col-span-2">
                             Admin notes
-                            <textarea name="admin_notes" rows={3} defaultValue={quotation.admin_notes} placeholder="Add scope, exclusions, payment terms or follow-up notes" className="border border-border bg-white px-3 py-2.5 font-normal" />
+                            <textarea
+                              name="admin_notes"
+                              rows={3}
+                              defaultValue={quotation.admin_notes}
+                              placeholder="Add scope, exclusions, payment terms or follow-up notes"
+                              className="border border-border bg-white px-3 py-2.5 font-normal"
+                            />
                           </label>
-                          <button type="submit" className="min-h-11 bg-gold px-5 py-3 text-sm font-bold text-navy-deep sm:col-span-2">Save quotation update</button>
+                          <button
+                            type="submit"
+                            className="min-h-11 bg-gold px-5 py-3 text-sm font-bold text-navy-deep sm:col-span-2"
+                          >
+                            Save quotation update
+                          </button>
                         </form>
                       </div>
                     );

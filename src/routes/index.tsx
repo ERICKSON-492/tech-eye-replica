@@ -115,7 +115,6 @@ const projectClips = [
   },
 ];
 
-
 function Index() {
   return (
     <div className="min-h-screen bg-background">
@@ -293,7 +292,9 @@ function Index() {
                     preload="metadata"
                     className="h-72 w-full object-cover"
                   />
-                  <figcaption className="px-5 py-3 text-sm font-bold text-white">{clip.title}</figcaption>
+                  <figcaption className="px-5 py-3 text-sm font-bold text-white">
+                    {clip.title}
+                  </figcaption>
                 </figure>
               ))}
             </div>
@@ -356,7 +357,6 @@ function Index() {
             </div>
           </div>
         </section>
-
 
         <section className="motion-section bg-navy-deep py-20">
           <div className="mx-auto max-w-3xl px-4 text-center">

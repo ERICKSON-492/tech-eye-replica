@@ -172,9 +172,7 @@ export function QuotationBuilder({
       return;
     }
     import("qrcode")
-      .then(({ default: QRCode }) =>
-        QRCode.toDataURL(whatsappLink, { margin: 1, width: 160 }),
-      )
+      .then(({ default: QRCode }) => QRCode.toDataURL(whatsappLink, { margin: 1, width: 160 }))
       .then((url) => {
         if (!cancelled) setQrDataUrl(url);
       })
@@ -779,7 +777,9 @@ function CompanySettingsPanel({
               </button>
             )}
           </div>
-          {logoError && <p className="font-normal normal-case tracking-normal text-red-600">{logoError}</p>}
+          {logoError && (
+            <p className="font-normal normal-case tracking-normal text-red-600">{logoError}</p>
+          )}
           <p className="font-normal normal-case tracking-normal text-muted-foreground">
             PNG, JPG, SVG or WebP, up to 1 MB. Shown at the top of the quotation and PDF.
           </p>

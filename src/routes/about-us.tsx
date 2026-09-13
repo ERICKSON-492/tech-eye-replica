@@ -92,9 +92,9 @@ function AboutPage() {
                 title="Turning ideas and designs into solid reality"
               />
               <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-                Eyetech Stainless Steel Expert was established as a sole proprietorship under
-                the ownership of Amos Mwangi in 2022 in Nairobi. From a modest beginning, the
-                company has progressed through the work of a dedicated technical team and a growing
+                Eyetech Stainless Steel Expert was established as a sole proprietorship under the
+                ownership of Amos Mwangi in 2022 in Nairobi. From a modest beginning, the company
+                has progressed through the work of a dedicated technical team and a growing
                 understanding of modern steel, aluminium and glass fabrication.
               </p>
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
