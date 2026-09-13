@@ -35,6 +35,9 @@ type CompanyInfo = {
   name: string;
   tagline: string;
   phone: string;
+  address: string;
+  email: string;
+  website: string;
   logoUrl: string | null;
   whatsapp: string;
   terms: string[];
@@ -43,9 +46,12 @@ type CompanyInfo = {
 const MAX_LOGO_BYTES = 1024 * 1024; // 1 MB
 
 const defaultCompanyInfo: CompanyInfo = {
-  name: "EYETECH ENGINEERING & SUPPLIES",
+  name: "Eyetech Stainless Steel Expert",
   tagline: "STEEL, ALUMINIUM & GLASS FABRICATION SOLUTIONS",
-  phone: "0717 614 427 / 0759 719 147",
+  phone: "+254 717 614 427 / +254 759 719 147",
+  address: "1st Floor B2, Elema Plaza, off North Airport Road, Pipeline, Embakasi, Nairobi",
+  email: "eyetechengineering3@gmail.com",
+  website: "https://eyetechstainlesssteelexpert.co.ke",
   logoUrl: null,
   whatsapp: "254717614427",
   terms: [
@@ -613,7 +619,10 @@ export function QuotationBuilder({
               <p className="mt-1 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
                 {company.tagline}
               </p>
-              <p className="mt-1 text-[11px] text-muted-foreground">MOBILE: {company.phone}</p>
+              <p className="mt-1 text-[11px] text-muted-foreground">{company.address}</p>
+              <p className="text-[11px] text-muted-foreground">PHONE: {company.phone}</p>
+              <p className="text-[11px] text-muted-foreground">EMAIL: {company.email}</p>
+              <p className="text-[11px] text-muted-foreground">WEB: {company.website}</p>
             </div>
             <div className="mt-6 grid gap-1 text-xs">
               <p>
@@ -720,6 +729,9 @@ function CompanySettingsPanel({
   const [name, setName] = useState(company.name);
   const [tagline, setTagline] = useState(company.tagline);
   const [phone, setPhone] = useState(company.phone);
+  const [address, setAddress] = useState(company.address);
+  const [email, setEmail] = useState(company.email);
+  const [website, setWebsite] = useState(company.website);
   const [whatsapp, setWhatsapp] = useState(company.whatsapp);
   const [logoUrl, setLogoUrl] = useState(company.logoUrl);
   const [logoError, setLogoError] = useState("");
@@ -809,6 +821,32 @@ function CompanySettingsPanel({
           />
         </label>
         <label className="grid gap-1.5 text-xs font-bold uppercase tracking-widest text-navy">
+          Address
+          <input
+            value={address}
+            onChange={(event) => setAddress(event.target.value)}
+            className="border border-border bg-white px-3 py-2 font-normal normal-case tracking-normal"
+          />
+        </label>
+        <label className="grid gap-1.5 text-xs font-bold uppercase tracking-widest text-navy">
+          Email
+          <input
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            className="border border-border bg-white px-3 py-2 font-normal normal-case tracking-normal"
+          />
+        </label>
+        <label className="grid gap-1.5 text-xs font-bold uppercase tracking-widest text-navy">
+          Website
+          <input
+            type="url"
+            value={website}
+            onChange={(event) => setWebsite(event.target.value)}
+            className="border border-border bg-white px-3 py-2 font-normal normal-case tracking-normal"
+          />
+        </label>
+        <label className="grid gap-1.5 text-xs font-bold uppercase tracking-widest text-navy">
           WhatsApp number for QR code
           <input
             value={whatsapp}
@@ -839,6 +877,9 @@ function CompanySettingsPanel({
               name: name.trim() || defaultCompanyInfo.name,
               tagline: tagline.trim() || defaultCompanyInfo.tagline,
               phone: phone.trim() || defaultCompanyInfo.phone,
+              address: address.trim() || defaultCompanyInfo.address,
+              email: email.trim() || defaultCompanyInfo.email,
+              website: website.trim() || defaultCompanyInfo.website,
               logoUrl,
               whatsapp: whatsapp.replace(/\D/g, "") || defaultCompanyInfo.whatsapp,
               terms: terms
