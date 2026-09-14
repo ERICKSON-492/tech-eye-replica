@@ -49,7 +49,7 @@ const defaultCompanyInfo: CompanyInfo = {
   name: "Eyetech Stainless Steel Expert",
   tagline: "STEEL, ALUMINIUM & GLASS FABRICATION SOLUTIONS",
   phone: "+254 717 614 427 / +254 759 719 147",
-  address: "1st Floor B2, Elema Plaza, off North Airport Road, Pipeline, Embakasi, Nairobi",
+  address: "Pipeline off Outer-ring Road, Nairobi, Kenya",
   email: "eyetechengineering3@gmail.com",
   website: "https://eyetechstainlesssteelexpert.co.ke",
   logoUrl: null,
