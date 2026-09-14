@@ -92,7 +92,7 @@ function ContactPage() {
                 <li>
                   <p className="text-xs font-bold uppercase tracking-widest text-gold">Location</p>
                   <p className="text-base font-semibold text-navy">
-                    1st Floor B2, Elema Plaza, off North Airport Road, Pipeline, Embakasi, Nairobi
+                    Pipeline off Outer-ring Road, Nairobi, Kenya
                   </p>
                 </li>
               </ul>

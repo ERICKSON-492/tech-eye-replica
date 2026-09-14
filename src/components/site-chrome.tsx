@@ -282,7 +282,7 @@ export function Footer() {
         <div>
           <h4 className="eyebrow text-gold">Get In Touch</h4>
           <ul className="mt-4 space-y-2 text-sm">
-            <li>1st Floor B2, Elema Plaza, off North Airport Road, Pipeline, Embakasi, Nairobi</li>
+            <li>Pipeline off Outer-ring Road, Nairobi, Kenya</li>
             <li>
               <a href="tel:+254717614427" className="motion-link hover:text-gold">
                 {PHONE}
